@@ -1,8 +1,5 @@
 package model;
 
-import static java.lang.Math.min;
-import static java.lang.Math.max;
-
 public class Player implements Character, Cell {
 
     private final static int DEFAULT = 10;
@@ -11,7 +8,6 @@ public class Player implements Character, Cell {
     private int damage;
     private int armor;
     private int experience;
-    private Boolean isDead = false;
     private Position position;
 
     public Player(Position position) {
@@ -23,50 +19,38 @@ public class Player implements Character, Cell {
     }
 
     @Override
-    public void decreaseHealth(int count) {
-        health -= count;
-        if (health <= 0) {
-            isDead = true;
-        }
+    public int getExperience() {
+        return experience;
     }
 
     @Override
-    public void increaseHealth(int count) {
-        health = min(maxHealth, health + count);
-    }
-
-    @Override
-    public void decreaseDamage(int count) {
-        damage = max(damage - count, 0);
-    }
-
-    @Override
-    public void increaseDamage(int count) {
-        damage += count;
-    }
-
-    @Override
-    public void decreaseArmor(int count) {
-        armor = max(armor - count, 0);
-    }
-
-    @Override
-    public void increaseArmor(int count) {
-        armor += count;
-    }
-
-    @Override
-    public void increaseExperience(int count) {
-        experience += count;
+    public int getDamage() {
+        return damage;
     }
 
     @Override
     public Boolean isDead() {
-        return isDead;
+        return health <= 0;
     }
 
     @Override
     public Position getPosition() {
         return position;
+    }
+
+    @Override
+    public void attack(Character character) {
+        experience += character.getExperience();
+        character.beAttacked(this);
+    }
+
+    @Override
+    public void beAttacked(Character character) {
+        health -= character.getDamage() * (1 - (0.06 * armor)/(1 + 0.06 * armor));
+    }
+
+    @Override
+    public void move(Position newPosition) {
+        position = newPosition;
     }
 }

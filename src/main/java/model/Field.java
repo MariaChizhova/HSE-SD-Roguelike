@@ -20,5 +20,10 @@ public class Field {
         return position.getX() < width && position.getX() >= 0 && position.getY() < height && position.getY() >= 0;
     }
 
+    public void movePlayer(Position position, Player player) {
+        field[player.getPosition().getX()][player.getPosition().getY()] = new EmptyCell();
+        field[position.getX()][position.getY()] = player;
+    }
+
 
 }
