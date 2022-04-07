@@ -50,7 +50,8 @@ public class Player implements Character, Cell {
     }
 
     @Override
-    public void move(Position newPosition) {
-        position = newPosition;
+    public Position move(Position position) {
+        this.position = position;
+        return position;
     }
 }

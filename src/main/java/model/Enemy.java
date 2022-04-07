@@ -9,13 +9,15 @@ public class Enemy implements Character, Cell {
     private int armor;
     private int experience;
     private Position position;
+    private StrategyEnemy strategy;
 
-    public Enemy(Position position) {
+    public Enemy(Position position, StrategyEnemy strategy) {
         this.health = maxHealth;
         this.damage = DEFAULT;
         this.armor = DEFAULT;
         this.experience = 5;
         this.position = position;
+        this.strategy = strategy;
     }
 
     @Override
@@ -49,7 +51,9 @@ public class Enemy implements Character, Cell {
     }
 
     @Override
-    public void move(Position newPosition) {
-        position = newPosition;
+    public Position move(Position position) {
+        Position newPosition = strategy.nextMove(position, this.position);
+        this.position = newPosition;
+        return newPosition;
     }
 }

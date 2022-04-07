@@ -25,5 +25,10 @@ public class Field {
         field[position.getX()][position.getY()] = player;
     }
 
+    public void moveEnemy(Position position, Enemy enemy) {
+        field[enemy.getPosition().getX()][enemy.getPosition().getY()] = new EmptyCell();
+        field[position.getX()][position.getY()] = enemy;
+    }
+
 
 }

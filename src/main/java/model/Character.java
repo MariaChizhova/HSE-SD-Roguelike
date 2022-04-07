@@ -14,6 +14,6 @@ public interface Character {
 
     public void beAttacked(Character character);
 
-    public void move(Position newPosition);
+    public Position move(Position position);
 
 }

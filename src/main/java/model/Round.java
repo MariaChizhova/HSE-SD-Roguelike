@@ -4,12 +4,14 @@ import java.util.List;
 
 public class Round {
 
-    private Player player;
-    private List<Enemy> enemies;
-    private Field field;
+    private final Player player;
+    private final List<Enemy> enemies;
+    private final Field field;
 
-    public Round() {
-
+    public Round(Player player, List<Enemy> enemies, Field field) {
+        this.player = player;
+        this.enemies = enemies;
+        this.field = field;
     }
 
     public void movePlayerRight() {
@@ -32,7 +34,7 @@ public class Round {
         movePlayer(new Position(position.getX(), position.getY() + 1));
     }
 
-    public void movePlayer(Position position) {
+    private void movePlayer(Position position) {
         if (field.isValidPosition(position)) {
             Cell cell = field.getCell(position);
             if (cell instanceof EmptyCell) {
@@ -45,6 +47,13 @@ public class Round {
                     player.move(position);
                 }
             } // если предмет лежит
+        }
+    }
+
+    private void moveEnemies() {
+        for (Enemy enemy: enemies) {
+            Position newPosition = enemy.move(player.getPosition());
+            field.moveEnemy(newPosition, enemy);
         }
     }
 
