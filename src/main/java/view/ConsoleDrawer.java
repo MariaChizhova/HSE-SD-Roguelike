@@ -6,7 +6,7 @@ import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
-import model.Field;
+import model.*;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 
@@ -30,15 +30,48 @@ public class ConsoleDrawer {
         }
     }
 
-    /**
-     * Function that draws field in the terminal
-     * @param field that will be drawn in the terminal
-     */
-    public void drawMap(Field field) {
-        
+    private void drawBorder() {
+        TerminalSize terminalSize = screen.getTerminalSize();
+        System.out.println(terminalSize.getColumns());
+        System.out.println(terminalSize.getRows());
+        for (int column = 0; column < terminalSize.getColumns(); column++) {
+            screen.setCharacter(column, 0, new TextCharacter(
+                    '#', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+            screen.setCharacter(column, terminalSize.getRows() - 1, new TextCharacter(
+                    '#', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+        }
+        for (int row = 0; row < terminalSize.getRows(); row++) {
+            screen.setCharacter(0, row, new TextCharacter(
+                    '#', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+            screen.setCharacter(terminalSize.getColumns() - 1, row, new TextCharacter(
+                    '#', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+        }
     }
 
-    private void addTextButton(TextGraphics textGraphics, String textLabel, int column, int row) {
+    private void drawGameBorder(int start_column, int start_row) {
+        for (int column = start_column + 1; column < start_column + Field.FIELD_WIDTH * 3 + 1; column++) {
+            screen.setCharacter(column, start_row, new TextCharacter(
+                    Symbols.DOUBLE_LINE_HORIZONTAL, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+            screen.setCharacter(column, start_row + Field.FIELD_HEIGHT + 1, new TextCharacter(
+                    Symbols.DOUBLE_LINE_HORIZONTAL, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+        }
+        for (int row = start_row + 1; row < start_row + Field.FIELD_HEIGHT + 1; row++) {
+            screen.setCharacter(start_column, row, new TextCharacter(
+                    Symbols.DOUBLE_LINE_VERTICAL, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+            screen.setCharacter(start_column + Field.FIELD_WIDTH * 3 + 1, row, new TextCharacter(
+                    Symbols.DOUBLE_LINE_VERTICAL, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+        }
+        screen.setCharacter(start_column, start_row + Field.FIELD_HEIGHT + 1, new TextCharacter(
+                Symbols.DOUBLE_LINE_BOTTOM_LEFT_CORNER, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+        screen.setCharacter(start_column, start_row, new TextCharacter(
+                Symbols.DOUBLE_LINE_TOP_LEFT_CORNER, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+        screen.setCharacter(start_column + Field.FIELD_WIDTH * 3 + 1, start_row, new TextCharacter(
+                Symbols.DOUBLE_LINE_TOP_RIGHT_CORNER, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+        screen.setCharacter(start_column + Field.FIELD_WIDTH * 3 + 1, start_row + Field.FIELD_HEIGHT + 1, new TextCharacter(
+                Symbols.DOUBLE_LINE_BOTTOM_RIGHT_CORNER, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+    }
+
+    private void addTextButton(TextGraphics textGraphics, String textLabel, int column, int row, boolean selected) {
         TerminalPosition labelBoxTopLeft = new TerminalPosition(column, row);
         TerminalSize labelBoxSize = new TerminalSize(textLabel.length() + 2, 3);
         TerminalPosition labelBoxTopRightCorner = labelBoxTopLeft.withRelativeColumn(labelBoxSize.getColumns() - 1);
@@ -69,7 +102,11 @@ public class ConsoleDrawer {
         /*
         Finally put the text inside the box
          */
-        textGraphics.putString(labelBoxTopLeft.withRelative(1, 1), textLabel);
+        if (selected) {
+            textGraphics.putString(labelBoxTopLeft.withRelative(1, 1), textLabel, SGR.REVERSE);
+        } else {
+            textGraphics.putString(labelBoxTopLeft.withRelative(1, 1), textLabel);
+        }
     }
 
     private void drawCat(int column, int row) {
@@ -166,37 +203,124 @@ public class ConsoleDrawer {
                 ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
     }
 
+    private void drawLives(int health, int experience) {
+        TextGraphics livesGraphics = screen.newTextGraphics();
+        livesGraphics.setForegroundColor(TextColor.ANSI.RED);
+        String livesLabel = "LIVES: ";
+        livesGraphics.putString(8, 2, livesLabel);
+        for (int i = 0; i < 10; i++) {
+            if ((i + 1) * 10 <= health) {
+                screen.setCharacter(8 + livesLabel.length() + 2 * i, 2, new TextCharacter(
+                        Symbols.HEART, TextColor.ANSI.RED, TextColor.ANSI.DEFAULT));
+            }
+        }
+
+        TextGraphics expGraphics = screen.newTextGraphics();
+        expGraphics.setForegroundColor(TextColor.ANSI.GREEN);
+        String expLabel = "EXP: " + String.valueOf(experience);
+        expGraphics.putString(29 + livesLabel.length(), 2, expLabel);
+
+    }
+
     /**
-     * Function that draws menu in the terminal
+     * Function that draws field in the terminal
+     * @param field that will be drawn in the terminal
      */
-    public void drawMenu(MenuState menuState) {
+    public void drawMap(Field field) {
         try {
             screen.setCursorPosition(null);
+            screen.clear();
 
-            TerminalSize terminalSize = screen.getTerminalSize();
-            for (int column = 0; column < terminalSize.getColumns(); column++) {
-                screen.setCharacter(column, 0, new TextCharacter(
-                        '#', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-                screen.setCharacter(column, terminalSize.getRows() - 1, new TextCharacter(
-                        '#', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+            TextGraphics textGraphics = screen.newTextGraphics();
+            int start_column = 9;
+            int start_row = 5;
+            drawGameBorder(start_column - 1, start_row - 1);
+            Player player = null;
+
+            for (int i = 0; i < Field.FIELD_HEIGHT; i++) {
+                for (int j = 0; j < Field.FIELD_WIDTH; j++) {
+                    var cell = field.getCell(new Position(j, i));
+                    if (cell instanceof Player) {
+                        screen.setCharacter(start_column + 3 * j, start_row + i, new TextCharacter(
+                                '<', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+                        screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                                Symbols.FACE_WHITE, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+                        screen.setCharacter(start_column + 3 * j + 2, start_row + i, new TextCharacter(
+                                '>', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+
+                        player = (Player) cell;
+                    } else if (cell instanceof Enemy) {
+                        screen.setCharacter(start_column + 3 * j, start_row + i, new TextCharacter(
+                                Symbols.ARROW_LEFT, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+                        screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                                Symbols.FACE_BLACK, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+                        screen.setCharacter(start_column + 3 * j + 2, start_row + i, new TextCharacter(
+                                Symbols.ARROW_RIGHT, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+                    } else if (cell instanceof Wall) {
+                        for (int k = 0; k < 3; k++) {
+                            screen.setCharacter(start_column + 3 * j + k, start_row + i, new TextCharacter(
+                                    Symbols.BLOCK_DENSE, TextColor.ANSI.GREEN, TextColor.ANSI.DEFAULT));
+                        }
+                    }
+                }
             }
-            for (int row = 0; row < terminalSize.getRows(); row++) {
-                screen.setCharacter(0, row, new TextCharacter(
-                        '#', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-                screen.setCharacter(terminalSize.getColumns() - 1, row, new TextCharacter(
-                        '#', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-            }
+            drawLives(player == null ? 100 : player.getHealth(), player == null ? 0 : player.getExperience());
+
+            screen.refresh();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Function that draws menu in the terminal
+     * @param mainMenuState tell information about selected button
+     */
+    public void drawMainMenu(MainMenuState mainMenuState) {
+        try {
+            screen.setCursorPosition(null);
+            screen.clear();
+
+            drawBorder();
 
             TextGraphics textGraphics = screen.newTextGraphics();
             String startLabel = "  Start game  ";
             String loadLabel  = "  Load game   ";
             String exitLabel  = "  Exit game   ";
-            addTextButton(textGraphics, startLabel, 7, 4);
-            addTextButton(textGraphics, loadLabel, 7, 10);
-            addTextButton(textGraphics, exitLabel, 7, 16);
+            addTextButton(textGraphics, startLabel, 7, 4, mainMenuState.equals(MainMenuState.START));
+            addTextButton(textGraphics, loadLabel, 7, 10, mainMenuState.equals(MainMenuState.LOAD_GAME));
+            addTextButton(textGraphics, exitLabel, 7, 16, mainMenuState.equals(MainMenuState.EXIT));
 
             drawCat(33, 4);
             drawCat(53, 4);
+
+            screen.refresh();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Function that draws menu
+     * @param menuState tell information about selected button
+     */
+    public void drawMenu(MenuState menuState) {
+        try {
+            screen.setCursorPosition(null);
+            screen.clear();
+
+            drawBorder();
+
+            TextGraphics textGraphics = screen.newTextGraphics();
+            String continueLabel     = "     Continue     ";
+            String exitLabel         = "    Exit game     ";
+            String saveAndExitLabel  = "Save and exit game";
+            addTextButton(textGraphics, continueLabel, 7, 4, menuState.equals(MenuState.CONTINUE));
+            addTextButton(textGraphics, exitLabel, 7, 10, menuState.equals(MenuState.EXIT));
+            addTextButton(textGraphics, saveAndExitLabel, 7, 16, menuState.equals(MenuState.SAVE_AND_EXIT));
+
+            drawCat(35, 4);
+            drawCat(55, 4);
 
             screen.refresh();
         } catch (Exception e) {

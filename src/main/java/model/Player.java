@@ -18,6 +18,10 @@ public class Player implements Character, Cell {
         this.position = position;
     }
 
+    public int getHealth() {
+        return health;
+    }
+
     @Override
     public int getExperience() {
         return experience;

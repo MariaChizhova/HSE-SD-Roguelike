@@ -1,9 +1,12 @@
+import model.Field;
 import view.ConsoleDrawer;
+import view.MainMenuState;
 import view.MenuState;
 
 public class Main {
     public static void main(String[] args) {
         var consoleDrawer = new ConsoleDrawer();
-        consoleDrawer.drawMenu(MenuState.START);
+        var field = new Field(Field.FIELD_WIDTH, Field.FIELD_HEIGHT);
+        consoleDrawer.drawMap(field);
     }
 }

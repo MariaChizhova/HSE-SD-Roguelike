@@ -2,14 +2,19 @@ package model;
 
 public class Field {
 
-    private int width;
-    private int height;
+    public static final int FIELD_WIDTH = 20;
+    public static final int FIELD_HEIGHT = 15;
+
+    private final int width;
+    private final int height;
     private Cell[][] field;
 
     public Field(int width, int height) {
         this.width = width;
         this.height = height;
         field = new Cell[width][height];
+        //field[4][4] = new Player(new Position(4, 4));
+        //field[4][6] = new Wall();
     }
 
     public Cell getCell(Position position) {
