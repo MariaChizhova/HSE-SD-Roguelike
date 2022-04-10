@@ -8,6 +8,8 @@ import model.*;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import model.inventory.Artifact;
+import model.inventory.ArtifactName;
+import model.inventory.Food;
 
 import java.io.IOException;
 
@@ -129,6 +131,92 @@ public class ConsoleDrawer {
                 Symbols.BULLET, TextColor.ANSI.GREEN, TextColor.ANSI.DEFAULT));
         screen.setCharacter(start_column + 6, start_row + 3, new TextCharacter(
                 Symbols.TRIANGLE_DOWN_POINTING_BLACK, TextColor.ANSI.MAGENTA, TextColor.ANSI.DEFAULT));
+    }
+
+    private void drawInventory(int start_column, int start_row, Player player) {
+        if (player == null) {
+            return;
+        }
+        if (player.hasArtifact(ArtifactName.BOOTS)) {
+            screen.setCharacter(start_column + 4, start_row + 13, new TextCharacter(
+                    Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+            screen.setCharacter(start_column + 8, start_row + 13, new TextCharacter(
+                    Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+            for (int i = 0; i < 3; i++) {
+                screen.setCharacter(start_column + 5, start_row + 11 + i, new TextCharacter(
+                        Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+                screen.setCharacter(start_column + 7, start_row + 11 + i, new TextCharacter(
+                        Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+            }
+        }
+        if (player.hasArtifact(ArtifactName.HELMET)) {
+            screen.setCharacter(start_column + 3, start_row + 1, new TextCharacter(
+                    Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+            screen.setCharacter(start_column + 9, start_row + 1, new TextCharacter(
+                    Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+            for (int i = 0; i < 7; i++) {
+                screen.setCharacter(start_column + 3 + i, start_row, new TextCharacter(
+                        Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+            }
+        }
+        if (player.hasArtifact(ArtifactName.GLOVES)) {
+            for (int i = 0; i < 2; i++) {
+                screen.setCharacter(start_column + i, start_row + 5, new TextCharacter(
+                        Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+                screen.setCharacter(start_column + 11 + i, start_row + 5, new TextCharacter(
+                        Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+            }
+        }
+        if (player.hasArtifact(ArtifactName.CUIRASS)) {
+            for (int i = 0; i < 5; i++) {
+                screen.setCharacter(start_column + 4 + i, start_row + 5, new TextCharacter(
+                        Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+            }
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 3; j++) {
+                    screen.setCharacter(start_column + 5 + j, start_row + 6 + i, new TextCharacter(
+                            Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+                }
+            }
+        }
+        if (player.hasArtifact(ArtifactName.RAPIER)) {
+            for (int i = 0; i < 6; i++) {
+                if (i != 4) {
+                    screen.setCharacter(start_column + 11, start_row + 1 + i, new TextCharacter(
+                            Symbols.BOLD_SINGLE_LINE_VERTICAL, TextColor.ANSI.CYAN, TextColor.ANSI.DEFAULT));
+                }
+            }
+        }
+        if (player.hasArtifact(ArtifactName.STEEL_SWORD)) {
+            for (int i = 0; i < 6; i++) {
+                if (i != 4) {
+                    screen.setCharacter(start_column + 11, start_row + 1 + i, new TextCharacter(
+                            Symbols.DOUBLE_LINE_VERTICAL, TextColor.ANSI.CYAN, TextColor.ANSI.DEFAULT));
+                }
+            }
+            screen.setCharacter(start_column + 11, start_row + 3, new TextCharacter(
+                    Symbols.DOUBLE_LINE_VERTICAL_SINGLE_LINE_CROSS, TextColor.ANSI.CYAN, TextColor.ANSI.DEFAULT));
+        }
+        if (player.hasArtifact(ArtifactName.COPPER_SWORD)) {
+            for (int i = 0; i < 6; i++) {
+                if (i != 4) {
+                    screen.setCharacter(start_column + 11, start_row + 1 + i, new TextCharacter(
+                            Symbols.DOUBLE_LINE_VERTICAL, TextColor.ANSI.RED, TextColor.ANSI.DEFAULT));
+                }
+            }
+            screen.setCharacter(start_column + 11, start_row + 3, new TextCharacter(
+                    Symbols.DOUBLE_LINE_VERTICAL_SINGLE_LINE_CROSS, TextColor.ANSI.RED, TextColor.ANSI.DEFAULT));
+        }
+        if (player.hasArtifact(ArtifactName.WOODEN_SWORD)) {
+            for (int i = 0; i < 6; i++) {
+                if (i != 4) {
+                    screen.setCharacter(start_column + 11, start_row + 1 + i, new TextCharacter(
+                            Symbols.DOUBLE_LINE_VERTICAL, TextColor.ANSI.YELLOW, TextColor.ANSI.DEFAULT));
+                }
+            }
+            screen.setCharacter(start_column + 11, start_row + 3, new TextCharacter(
+                    Symbols.DOUBLE_LINE_VERTICAL_SINGLE_LINE_CROSS, TextColor.ANSI.YELLOW, TextColor.ANSI.DEFAULT));
+        }
     }
 
     private void addTextButton(TextGraphics textGraphics, String textLabel, int column, int row, boolean selected) {
@@ -361,6 +449,9 @@ public class ConsoleDrawer {
                                         Symbols.ARROW_UP, TextColor.ANSI.YELLOW, TextColor.ANSI.DEFAULT));
                                 break;
                         }
+                    } else if (cell instanceof Food) {
+                        screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                                Symbols.DIAMOND, TextColor.ANSI.GREEN, TextColor.ANSI.DEFAULT));
                     }
                 }
             }
@@ -368,6 +459,7 @@ public class ConsoleDrawer {
                     player == null ? 0 : player.getExperience(),
                     start_column, start_row);
             drawHero(63, start_row);
+            drawInventory(63, start_row, player);
 
             screen.refresh();
         } catch (Exception e) {
