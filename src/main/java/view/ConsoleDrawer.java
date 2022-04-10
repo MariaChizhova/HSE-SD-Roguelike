@@ -200,14 +200,14 @@ public class ConsoleDrawer {
                 ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
     }
 
-    private void drawLives(int health, int experience) {
+    private void drawLives(int health, int experience, int start_column, int start_row) {
         TextGraphics livesGraphics = screen.newTextGraphics();
         livesGraphics.setForegroundColor(TextColor.ANSI.RED);
         String livesLabel = "LIVES: ";
-        livesGraphics.putString(8, 2, livesLabel);
+        livesGraphics.putString(start_column + 1, start_row - 3, livesLabel);
         for (int i = 0; i < 10; i++) {
             if ((i + 1) * 10 <= health) {
-                screen.setCharacter(8 + livesLabel.length() + 2 * i, 2, new TextCharacter(
+                screen.setCharacter(start_column + livesLabel.length() + 2 * i + 1, start_row - 3, new TextCharacter(
                         Symbols.HEART, TextColor.ANSI.RED, TextColor.ANSI.DEFAULT));
             }
         }
@@ -215,7 +215,7 @@ public class ConsoleDrawer {
         TextGraphics expGraphics = screen.newTextGraphics();
         expGraphics.setForegroundColor(TextColor.ANSI.GREEN);
         String expLabel = "EXP: " + String.valueOf(experience);
-        expGraphics.putString(29 + livesLabel.length(), 2, expLabel);
+        expGraphics.putString(start_column + 23 + livesLabel.length(), start_row - 3, expLabel);
 
     }
 
@@ -229,8 +229,8 @@ public class ConsoleDrawer {
             screen.clear();
 
             TextGraphics textGraphics = screen.newTextGraphics();
-            int start_column = 9;
-            int start_row = 5;
+            int start_column = 10;
+            int start_row = 6;
             drawGameBorder(start_column - 1, start_row - 1);
             Player player = null;
 
@@ -261,7 +261,9 @@ public class ConsoleDrawer {
                     }
                 }
             }
-            drawLives(player == null ? 100 : player.getHealth(), player == null ? 0 : player.getExperience());
+            drawLives(player == null ? 100 : player.getHealth(),
+                    player == null ? 0 : player.getExperience(),
+                    start_column, start_row);
 
             screen.refresh();
         } catch (Exception e) {

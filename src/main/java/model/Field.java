@@ -5,10 +5,9 @@ import java.util.Random;
 import static model.WallDirection.getRandomDirection;
 
 public class Field {
-
-    public static final int FIELD_WIDTH = 20;
-    public static final int FIELD_HEIGHT = 15;
-    public static final int MAX_NUM_OF_ENEMIES = 10;
+    public static final int FIELD_WIDTH = 19;
+    public static final int FIELD_HEIGHT = 13;
+    public static final int MAX_NUM_OF_ENEMIES = 15;
 
     private final int width;
     private final int height;
@@ -56,7 +55,9 @@ public class Field {
     private void generateEnemies() {
         int cnt = 0;
         Random rand = new Random();
-        while (cnt != MAX_NUM_OF_ENEMIES) {
+
+        int numOfEnemies = rand.nextInt(MAX_NUM_OF_ENEMIES);
+        while (cnt != numOfEnemies) {
             int enemyXPos = rand.nextInt(FIELD_WIDTH);
             int enemyYPos = rand.nextInt(FIELD_HEIGHT);
             if (!isFilled[enemyXPos][enemyYPos]) {
