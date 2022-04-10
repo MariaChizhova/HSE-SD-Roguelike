@@ -1,45 +1,65 @@
 package controller;
 
+import com.googlecode.lanterna.input.KeyType;
 import model.Round;
-
-import java.io.FileNotFoundException;
+import view.MainMenuState;
+import view.MenuState;
 
 public class InputHandler {
-    private final Round round;
+    //private final Round round;
 
     /**
      * Creates InputHandler instance
      */
-    public InputHandler(Round round) {
-        this.round = round;
+    public InputHandler(/*Round round*/) {
+      //  this.round = round;
     }
 
     /**
      * Processing main menu commands
      * @param command Input command
      */
-    public void processMainMenuCommand(Command command) throws FileNotFoundException {
+    public MainMenuState processMainMenuCommand(KeyType command, MainMenuState mainMenuState) {
+        MainMenuState nextMainMenuState;
         switch (command) {
-            case NEW_GAME:
-                // TODO: run startGame();
+            case ArrowUp:
+                nextMainMenuState = MainMenuState.values()[(mainMenuState.ordinal() + 1 + 3) % 3];
                 break;
-            case LOAD_GAME:
-                GameSaverLoader.loadGame(round);
+            case ArrowDown:
+                nextMainMenuState = MainMenuState.values()[(mainMenuState.ordinal() - 1 + 3) % 3];
                 break;
-            case SAVE_GAME:
-                GameSaverLoader.saveGame(round);
-                break;
-            case EXIT_GAME:
-                // TODO: run exitGame();
-                break;
+            // case Enter:
+            default:
+                nextMainMenuState = mainMenuState;
         }
+        return nextMainMenuState;
+    }
+
+    /**
+     * Processing menu commands
+     * @param command Input command
+     */
+    public MenuState processMenuCommand(KeyType command, MenuState menuState) {
+        MenuState nextMenuState;
+        switch (command) {
+            case ArrowUp:
+                nextMenuState = MenuState.values()[(menuState.ordinal() + 1 + 3) % 3];
+                break;
+            case ArrowDown:
+                nextMenuState = MenuState.values()[(menuState.ordinal() - 1 + 3) % 3];
+                break;
+            //  case Enter:
+            default:
+                nextMenuState = menuState;
+        }
+        return nextMenuState;
     }
 
     /**
      * Processing game commands
-     * @param command Input command
      */
-    public void processGameCommand(Command command) {
+    /*
+    public void processGameCommand(command) {
         switch (command) {
             case LEFT:
                 round.movePlayerLeft();
@@ -57,5 +77,5 @@ public class InputHandler {
                 round.changeEquipment();
                 break;
         }
-    }
+    }*/
 }
