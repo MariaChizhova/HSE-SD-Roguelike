@@ -106,5 +106,9 @@ public class Field {
         field[position.getX()][position.getY()] = enemy;
     }
 
+    public void clearCage(Position position) {
+        field[position.getX()][position.getY()] = new EmptyCell();
+    }
+
 
 }
