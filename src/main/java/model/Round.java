@@ -1,5 +1,8 @@
 package model;
 
+import model.inventory.Artifact;
+import model.inventory.Food;
+
 import java.util.List;
 
 public class Round {
@@ -46,7 +49,11 @@ public class Round {
                     field.movePlayer(position, player);
                     player.move(position);
                 }
-            } // если предмет лежит
+            } else if (cell instanceof Artifact) {
+                player.addArtifact( (Artifact) cell);
+            } else if (cell instanceof Food) {
+                player.increaseHealth(((Food) cell).getHealth());
+            }
         }
     }
 

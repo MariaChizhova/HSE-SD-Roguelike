@@ -1,8 +1,9 @@
 package model.inventory;
 
+import model.Cell;
 import model.Position;
 
-public class Food {
+public class Food implements Cell {
 
     private final Position position;
     private final int health;

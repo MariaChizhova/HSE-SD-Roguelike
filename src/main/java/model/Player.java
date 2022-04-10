@@ -1,5 +1,10 @@
 package model;
 
+import model.inventory.Artifact;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Player implements Character, Cell {
 
     private final static int DEFAULT = 10;
@@ -9,6 +14,7 @@ public class Player implements Character, Cell {
     private int armor;
     private int experience;
     private Position position;
+    private List<Artifact> artifacts;
 
     public Player(Position position) {
         this.health = maxHealth;
@@ -16,6 +22,7 @@ public class Player implements Character, Cell {
         this.armor = DEFAULT;
         this.experience = 0;
         this.position = position;
+        this.artifacts = new ArrayList<>();
     }
 
     public int getHealth() {
@@ -57,5 +64,13 @@ public class Player implements Character, Cell {
     public Position move(Position position) {
         this.position = position;
         return position;
+    }
+
+    public void increaseHealth(int count) {
+        health += count;
+    }
+
+    public void addArtifact(Artifact artifact) {
+        artifacts.add(artifact);
     }
 }
