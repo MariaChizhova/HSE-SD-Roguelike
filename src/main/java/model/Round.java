@@ -51,8 +51,10 @@ public class Round {
                 }
             } else if (cell instanceof Artifact) {
                 player.addArtifact( (Artifact) cell);
+                field.clearCage(position);
             } else if (cell instanceof Food) {
                 player.increaseHealth(((Food) cell).getHealth());
+                field.clearCage(position);
             }
         }
     }

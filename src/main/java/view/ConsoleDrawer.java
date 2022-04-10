@@ -7,6 +7,7 @@ import com.googlecode.lanterna.screen.TerminalScreen;
 import model.*;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
+import model.inventory.Artifact;
 
 import java.io.IOException;
 
@@ -290,7 +291,7 @@ public class ConsoleDrawer {
 
         TextGraphics expGraphics = screen.newTextGraphics();
         expGraphics.setForegroundColor(TextColor.ANSI.GREEN);
-        String expLabel = "EXP: " + String.valueOf(experience);
+        String expLabel = "EXP: " + experience;
         expGraphics.putString(start_column + 23 + livesLabel.length(), start_row - 3, expLabel);
 
     }
@@ -334,6 +335,46 @@ public class ConsoleDrawer {
                         for (int k = 0; k < 3; k++) {
                             screen.setCharacter(start_column + 3 * j + k, start_row + i, new TextCharacter(
                                     Symbols.BLOCK_DENSE, TextColor.ANSI.GREEN, TextColor.ANSI.DEFAULT));
+                        }
+                    } else if (cell instanceof Artifact) {
+                        var artifact = (Artifact) cell;
+                        switch (artifact.getName()) {
+                            case BOOTS:
+                                screen.setCharacter(start_column + 3 * j, start_row + i, new TextCharacter(
+                                        Symbols.DOUBLE_LINE_BOTTOM_RIGHT_CORNER, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+                                screen.setCharacter(start_column + 3 * j + 2, start_row + i, new TextCharacter(
+                                        Symbols.DOUBLE_LINE_BOTTOM_LEFT_CORNER, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+                                break;
+                            case GLOVES:
+                                screen.setCharacter(start_column + 3 * j, start_row + i, new TextCharacter(
+                                        Symbols.CLUB, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+                                screen.setCharacter(start_column + 3 * j + 2, start_row + i, new TextCharacter(
+                                        Symbols.CLUB, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+                                break;
+                            case HELMET:
+                                screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                                        Symbols.SINGLE_LINE_T_DOUBLE_UP, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+                                break;
+                            case RAPIER:
+                                screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                                        Symbols.BOLD_SINGLE_LINE_VERTICAL, TextColor.ANSI.CYAN, TextColor.ANSI.DEFAULT));
+                                break;
+                            case CUIRASS:
+                                screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                                        Symbols.DOUBLE_LINE_CROSS, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+                                break;
+                            case STEEL_SWORD:
+                                screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                                        Symbols.ARROW_UP, TextColor.ANSI.CYAN, TextColor.ANSI.DEFAULT));
+                                break;
+                            case COPPER_SWORD:
+                                screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                                        Symbols.ARROW_UP, TextColor.ANSI.RED, TextColor.ANSI.DEFAULT));
+                                break;
+                            case WOODEN_SWORD:
+                                screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                                        Symbols.ARROW_UP, TextColor.ANSI.YELLOW, TextColor.ANSI.DEFAULT));
+                                break;
                         }
                     }
                 }
