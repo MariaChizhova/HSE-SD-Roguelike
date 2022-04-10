@@ -1,36 +1,36 @@
 package controller;
 
-import com.googlecode.lanterna.screen.Screen;
-import model.Game;
-import model.Move;
+import model.Round;
+
+import java.io.FileNotFoundException;
 
 public class InputHandler {
-    private final Game game;
+    private final Round round;
 
     /**
      * Creates InputHandler instance
      */
-    public InputHandler() {
-        this.game = new Game();
+    public InputHandler(Round round) {
+        this.round = round;
     }
 
     /**
      * Processing main menu commands
      * @param command Input command
      */
-    public void processMainMenuCommand(Command command) {
+    public void processMainMenuCommand(Command command) throws FileNotFoundException {
         switch (command) {
             case NEW_GAME:
-                game.startGame();
+                // TODO: run startGame();
                 break;
             case LOAD_GAME:
-                game.loadGame();
+                GameSaverLoader.loadGame(round);
                 break;
             case SAVE_GAME:
-                game.saveGame();
+                GameSaverLoader.saveGame(round);
                 break;
             case EXIT_GAME:
-                game.exitGame();
+                // TODO: run exitGame();
                 break;
         }
     }
@@ -42,19 +42,19 @@ public class InputHandler {
     public void processGameCommand(Command command) {
         switch (command) {
             case LEFT:
-                game.makeMove(Move.LEFT);
+                round.movePlayerLeft();
                 break;
             case RIGHT:
-                game.makeMove(Move.RIGHT);
+                round.movePlayerRight();
                 break;
             case UP:
-                game.makeMove(Move.UP);
+                round.movePlayerUp();
                 break;
             case DOWN:
-                game.makeMove(Move.DOWN);
+                round.movePlayerDown();
                 break;
             case CHANGE_EQUIPMENT:
-                game.changeEquipment();
+                round.changeEquipment();
                 break;
         }
     }

@@ -57,4 +57,8 @@ public class Round {
         }
     }
 
+    public void changeEquipment() {
+        // TODO:
+    }
+
 }
