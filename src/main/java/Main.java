@@ -1,7 +1,5 @@
 import model.Field;
 import view.ConsoleDrawer;
-import view.MainMenuState;
-import view.MenuState;
 
 public class Main {
     public static void main(String[] args) {

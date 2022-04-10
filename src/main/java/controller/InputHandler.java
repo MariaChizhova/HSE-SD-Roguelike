@@ -1,6 +1,5 @@
 package controller;
 
-import com.googlecode.lanterna.screen.Screen;
 import model.Game;
 import model.Move;
 

@@ -1,5 +1,5 @@
 package model;
 
-public class EmptyCell implements Cell{
+public class EmptyCell implements Cell {
 
 }
