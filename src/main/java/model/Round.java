@@ -5,33 +5,55 @@ import model.inventory.Food;
 
 import java.util.List;
 
+/**
+ * This class is responsible for the environment in the round.
+ * Regulates the interaction between players and the field.
+ */
 public class Round {
 
     private final Player player;
     private final List<Enemy> enemies;
     private final Field field;
 
+    /**
+     * Creating Round instance
+     * @param player Its player
+     * @param enemies Its enemies
+     * @param field Its filed
+     */
     public Round(Player player, List<Enemy> enemies, Field field) {
         this.player = player;
         this.enemies = enemies;
         this.field = field;
     }
 
+    /**
+     * Moves the player to the right
+     */
     public void movePlayerRight() {
         Position position = player.getPosition();
         movePlayer(new Position(position.getX() + 1, position.getY()));
     }
 
+    /**
+     * Moves the player to the left
+     */
     public void movePlayerLeft() {
         Position position = player.getPosition();
         movePlayer(new Position(position.getX() - 1, position.getY()));
     }
 
+    /**
+     * Moves the player to the up
+     */
     public void movePlayerUp() {
         Position position = player.getPosition();
         movePlayer(new Position(position.getX(), position.getY() - 1));
     }
 
+    /**
+     * Moves the player to the down
+     */
     public void movePlayerDown() {
         Position position = player.getPosition();
         movePlayer(new Position(position.getX(), position.getY() + 1));
