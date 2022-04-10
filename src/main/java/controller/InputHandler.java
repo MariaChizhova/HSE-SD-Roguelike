@@ -6,13 +6,13 @@ import view.MainMenuState;
 import view.MenuState;
 
 public class InputHandler {
-    //private final Round round;
+    private final Round round;
 
     /**
      * Creates InputHandler instance
      */
-    public InputHandler(/*Round round*/) {
-      //  this.round = round;
+    public InputHandler(Round round) {
+        this.round = round;
     }
 
     /**
@@ -57,25 +57,25 @@ public class InputHandler {
 
     /**
      * Processing game commands
+     * @param command Input command
      */
-    /*
-    public void processGameCommand(command) {
+    public void processGameCommand(KeyType command) {
         switch (command) {
-            case LEFT:
+            case ArrowLeft:
                 round.movePlayerLeft();
                 break;
-            case RIGHT:
+            case ArrowRight:
                 round.movePlayerRight();
                 break;
-            case UP:
+            case ArrowUp:
                 round.movePlayerUp();
                 break;
-            case DOWN:
+            case ArrowDown:
                 round.movePlayerDown();
                 break;
-            case CHANGE_EQUIPMENT:
+            case Escape:
                 round.changeEquipment();
                 break;
         }
-    }*/
+    }
 }
