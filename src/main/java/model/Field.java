@@ -30,15 +30,12 @@ public class Field {
 
     private Cell generateCell(int x, int y) {
         switch (getRandomCellNotPlayer()) {
-            case EMPTY_CELL -> {
+            case EMPTY_CELL:
                 return new EmptyCell();
-            }
-            case WALL -> {
+            case WALL:
                 return new Wall();
-            }
-            case ENEMY -> {
+            case ENEMY:
                 return new Enemy(new Position(x, y), new SimpleStrategy());
-            }
         }
         throw new IllegalStateException(String.format("Failed to generate cell x: %d y: %d", x, y));
     }
