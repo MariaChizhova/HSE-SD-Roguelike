@@ -32,8 +32,8 @@ public class GameController {
         this.screenType = ScreenType.MAIN_MENU;
         this.view = view;
         this.screen = view.getScreen();
-        this.inputHandler = new InputHandler(round);
         this.round = new Round(field.getPlayer(), field.getEnemies(), field);
+        this.inputHandler = new InputHandler(round);
     }
 
     /**
