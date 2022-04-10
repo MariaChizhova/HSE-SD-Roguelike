@@ -6,8 +6,8 @@ import static model.CellType.getRandomCellNotPlayer;
 
 public class Field {
 
-    public static final int FIELD_WIDTH = 20;
-    public static final int FIELD_HEIGHT = 15;
+    public static final int FIELD_WIDTH = 19;
+    public static final int FIELD_HEIGHT = 13;
 
     private final int width;
     private final int height;
@@ -24,7 +24,7 @@ public class Field {
         }
         Random rand = new Random();
         int playerXPos = rand.nextInt(FIELD_WIDTH);
-        int playerYPos = rand.nextInt(FIELD_WIDTH);
+        int playerYPos = rand.nextInt(FIELD_HEIGHT);
         field[playerXPos][playerYPos] = new Player(new Position(playerXPos, playerYPos));
     }
 
