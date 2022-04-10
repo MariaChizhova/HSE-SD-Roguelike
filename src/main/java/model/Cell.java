@@ -1,5 +1,6 @@
 package model;
 
-public interface Cell {
-
-}
+/**
+ * Represents a field cell
+ */
+public interface Cell { }

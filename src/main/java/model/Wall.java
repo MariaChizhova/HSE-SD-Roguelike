@@ -1,5 +1,6 @@
 package model;
 
-public class Wall implements Cell {
-
-}
+/**
+ * Represents a wall of the field
+ */
+public class Wall implements Cell { }
