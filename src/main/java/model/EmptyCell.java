@@ -1,5 +1,6 @@
 package model;
 
-public class EmptyCell implements Cell {
-
-}
+/**
+ * Represents an empty cell of the field
+ */
+public class EmptyCell implements Cell { }

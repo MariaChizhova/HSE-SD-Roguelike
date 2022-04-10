@@ -5,6 +5,9 @@ import model.inventory.Artifact;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a player who is a character and who stands on some square of the field
+ */
 public class Player implements Character, Cell {
 
     private final static int DEFAULT = 10;
@@ -16,6 +19,10 @@ public class Player implements Character, Cell {
     private Position position;
     private List<Artifact> artifacts;
 
+    /**
+     * Player Constructor
+     * @param position the player is in
+     */
     public Player(Position position) {
         this.health = maxHealth;
         this.damage = DEFAULT;
@@ -25,51 +32,86 @@ public class Player implements Character, Cell {
         this.artifacts = new ArrayList<>();
     }
 
+    /**
+     * @return the player's health
+     */
     public int getHealth() {
         return health;
     }
 
+    /**
+     * @return the player's experience
+     */
     @Override
     public int getExperience() {
         return experience;
     }
 
+    /**
+     * @return the player's damage
+     */
     @Override
     public int getDamage() {
         return damage;
     }
 
+    /**
+     * @return the player died
+     */
     @Override
     public Boolean isDead() {
         return health <= 0;
     }
 
+    /**
+     * @return the player's position
+     */
     @Override
     public Position getPosition() {
         return position;
     }
 
+    /**
+     * Enemy experience is added
+     * @param character who was attacked
+     */
     @Override
     public void attack(Character character) {
         experience += character.getExperience();
         character.beAttacked(this);
     }
 
+    /**
+     * Health decreases when attacking a player
+     * @param character who made the attack
+     */
     @Override
     public void beAttacked(Character character) {
         health -= character.getDamage() * (1 - (0.06 * armor)/(1 + 0.06 * armor));
     }
 
+    /**
+     * @param position to which the player will move
+     * @return new position
+     */
     @Override
     public Position move(Position position) {
         this.position = position;
         return position;
     }
 
+    /**
+     * Increase health
+     * @param count - how much to increase health
+     */
     public void increaseHealth(int count) {
         health += count;
     }
 
+    /**
+     * Add an artifact
+     * @param artifact
+     */
     public void addArtifact(Artifact artifact) {
         artifacts.add(artifact);
     }
