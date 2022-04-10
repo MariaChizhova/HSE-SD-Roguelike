@@ -7,15 +7,24 @@ import com.googlecode.lanterna.screen.TerminalScreen;
 import model.*;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
+import model.inventory.Artifact;
+import model.inventory.ArtifactName;
+import model.inventory.Food;
 
 import java.io.IOException;
 
+/**
+ * Represents console drawer
+ */
 public class ConsoleDrawer {
 
     DefaultTerminalFactory defaultTerminalFactory = new DefaultTerminalFactory();
     Terminal terminal = null;
     Screen screen = null;
 
+    /**
+     * Creates ConsoleDrawer instance
+     */
     public ConsoleDrawer() {
         try {
             terminal = defaultTerminalFactory.createTerminal();
@@ -27,10 +36,18 @@ public class ConsoleDrawer {
         }
     }
 
+    /**
+     * Getting screen
+     *
+     * @return screen
+     */
     public Screen getScreen() {
         return screen;
     }
 
+    /**
+     * Cloasing screen and terminal
+     */
     public void closeAll() throws IOException {
         screen.close();
         terminal.close();
@@ -128,6 +145,92 @@ public class ConsoleDrawer {
                 Symbols.BULLET, TextColor.ANSI.GREEN, TextColor.ANSI.DEFAULT));
         screen.setCharacter(start_column + 6, start_row + 3, new TextCharacter(
                 Symbols.TRIANGLE_DOWN_POINTING_BLACK, TextColor.ANSI.MAGENTA, TextColor.ANSI.DEFAULT));
+    }
+
+    private void drawInventory(int start_column, int start_row, Player player) {
+        if (player == null) {
+            return;
+        }
+        if (player.hasArtifact(ArtifactName.BOOTS)) {
+            screen.setCharacter(start_column + 4, start_row + 13, new TextCharacter(
+                    Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+            screen.setCharacter(start_column + 8, start_row + 13, new TextCharacter(
+                    Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+            for (int i = 0; i < 3; i++) {
+                screen.setCharacter(start_column + 5, start_row + 11 + i, new TextCharacter(
+                        Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+                screen.setCharacter(start_column + 7, start_row + 11 + i, new TextCharacter(
+                        Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+            }
+        }
+        if (player.hasArtifact(ArtifactName.HELMET)) {
+            screen.setCharacter(start_column + 3, start_row + 1, new TextCharacter(
+                    Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+            screen.setCharacter(start_column + 9, start_row + 1, new TextCharacter(
+                    Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+            for (int i = 0; i < 7; i++) {
+                screen.setCharacter(start_column + 3 + i, start_row, new TextCharacter(
+                        Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+            }
+        }
+        if (player.hasArtifact(ArtifactName.GLOVES)) {
+            for (int i = 0; i < 2; i++) {
+                screen.setCharacter(start_column + i, start_row + 5, new TextCharacter(
+                        Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+                screen.setCharacter(start_column + 11 + i, start_row + 5, new TextCharacter(
+                        Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+            }
+        }
+        if (player.hasArtifact(ArtifactName.CUIRASS)) {
+            for (int i = 0; i < 5; i++) {
+                screen.setCharacter(start_column + 4 + i, start_row + 5, new TextCharacter(
+                        Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+            }
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 3; j++) {
+                    screen.setCharacter(start_column + 5 + j, start_row + 6 + i, new TextCharacter(
+                            Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+                }
+            }
+        }
+        if (player.hasArtifact(ArtifactName.RAPIER)) {
+            for (int i = 0; i < 6; i++) {
+                if (i != 4) {
+                    screen.setCharacter(start_column + 11, start_row + 1 + i, new TextCharacter(
+                            Symbols.BOLD_SINGLE_LINE_VERTICAL, TextColor.ANSI.CYAN, TextColor.ANSI.DEFAULT));
+                }
+            }
+        }
+        if (player.hasArtifact(ArtifactName.STEEL_SWORD)) {
+            for (int i = 0; i < 6; i++) {
+                if (i != 4) {
+                    screen.setCharacter(start_column + 11, start_row + 1 + i, new TextCharacter(
+                            Symbols.DOUBLE_LINE_VERTICAL, TextColor.ANSI.CYAN, TextColor.ANSI.DEFAULT));
+                }
+            }
+            screen.setCharacter(start_column + 11, start_row + 3, new TextCharacter(
+                    Symbols.DOUBLE_LINE_VERTICAL_SINGLE_LINE_CROSS, TextColor.ANSI.CYAN, TextColor.ANSI.DEFAULT));
+        }
+        if (player.hasArtifact(ArtifactName.COPPER_SWORD)) {
+            for (int i = 0; i < 6; i++) {
+                if (i != 4) {
+                    screen.setCharacter(start_column + 11, start_row + 1 + i, new TextCharacter(
+                            Symbols.DOUBLE_LINE_VERTICAL, TextColor.ANSI.RED, TextColor.ANSI.DEFAULT));
+                }
+            }
+            screen.setCharacter(start_column + 11, start_row + 3, new TextCharacter(
+                    Symbols.DOUBLE_LINE_VERTICAL_SINGLE_LINE_CROSS, TextColor.ANSI.RED, TextColor.ANSI.DEFAULT));
+        }
+        if (player.hasArtifact(ArtifactName.WOODEN_SWORD)) {
+            for (int i = 0; i < 6; i++) {
+                if (i != 4) {
+                    screen.setCharacter(start_column + 11, start_row + 1 + i, new TextCharacter(
+                            Symbols.DOUBLE_LINE_VERTICAL, TextColor.ANSI.YELLOW, TextColor.ANSI.DEFAULT));
+                }
+            }
+            screen.setCharacter(start_column + 11, start_row + 3, new TextCharacter(
+                    Symbols.DOUBLE_LINE_VERTICAL_SINGLE_LINE_CROSS, TextColor.ANSI.YELLOW, TextColor.ANSI.DEFAULT));
+        }
     }
 
     private void addTextButton(TextGraphics textGraphics, String textLabel, int column, int row, boolean selected) {
@@ -276,13 +379,14 @@ public class ConsoleDrawer {
 
         TextGraphics expGraphics = screen.newTextGraphics();
         expGraphics.setForegroundColor(TextColor.ANSI.GREEN);
-        String expLabel = "EXP: " + String.valueOf(experience);
+        String expLabel = "EXP: " + experience;
         expGraphics.putString(start_column + 23 + livesLabel.length(), start_row - 3, expLabel);
 
     }
 
     /**
      * Function that draws field in the terminal
+     *
      * @param field that will be drawn in the terminal
      */
     public void drawMap(Field field) {
@@ -292,7 +396,7 @@ public class ConsoleDrawer {
 
             int start_column = 2;
             int start_row = 4;
-            drawGameBorder(start_column - 1, start_row - 1,  3 * Field.FIELD_WIDTH + 2,  Field.FIELD_HEIGHT + 2);
+            drawGameBorder(start_column - 1, start_row - 1, 3 * Field.FIELD_WIDTH + 2, Field.FIELD_HEIGHT + 2);
             drawGameBorder(62, start_row - 1, 15, 16);
             Player player = null;
 
@@ -320,6 +424,49 @@ public class ConsoleDrawer {
                             screen.setCharacter(start_column + 3 * j + k, start_row + i, new TextCharacter(
                                     Symbols.BLOCK_DENSE, TextColor.ANSI.GREEN, TextColor.ANSI.DEFAULT));
                         }
+                    } else if (cell instanceof Artifact) {
+                        var artifact = (Artifact) cell;
+                        switch (artifact.getName()) {
+                            case BOOTS:
+                                screen.setCharacter(start_column + 3 * j, start_row + i, new TextCharacter(
+                                        Symbols.DOUBLE_LINE_BOTTOM_RIGHT_CORNER, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+                                screen.setCharacter(start_column + 3 * j + 2, start_row + i, new TextCharacter(
+                                        Symbols.DOUBLE_LINE_BOTTOM_LEFT_CORNER, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+                                break;
+                            case GLOVES:
+                                screen.setCharacter(start_column + 3 * j, start_row + i, new TextCharacter(
+                                        Symbols.CLUB, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+                                screen.setCharacter(start_column + 3 * j + 2, start_row + i, new TextCharacter(
+                                        Symbols.CLUB, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+                                break;
+                            case HELMET:
+                                screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                                        Symbols.SINGLE_LINE_T_DOUBLE_UP, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+                                break;
+                            case RAPIER:
+                                screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                                        Symbols.BOLD_SINGLE_LINE_VERTICAL, TextColor.ANSI.CYAN, TextColor.ANSI.DEFAULT));
+                                break;
+                            case CUIRASS:
+                                screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                                        Symbols.DOUBLE_LINE_CROSS, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+                                break;
+                            case STEEL_SWORD:
+                                screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                                        Symbols.ARROW_UP, TextColor.ANSI.CYAN, TextColor.ANSI.DEFAULT));
+                                break;
+                            case COPPER_SWORD:
+                                screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                                        Symbols.ARROW_UP, TextColor.ANSI.RED, TextColor.ANSI.DEFAULT));
+                                break;
+                            case WOODEN_SWORD:
+                                screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                                        Symbols.ARROW_UP, TextColor.ANSI.YELLOW, TextColor.ANSI.DEFAULT));
+                                break;
+                        }
+                    } else if (cell instanceof Food) {
+                        screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                                Symbols.DIAMOND, TextColor.ANSI.GREEN, TextColor.ANSI.DEFAULT));
                     }
                 }
             }
@@ -327,6 +474,7 @@ public class ConsoleDrawer {
                     player == null ? 0 : player.getExperience(),
                     start_column, start_row);
             drawHero(63, start_row);
+            drawInventory(63, start_row, player);
 
             screen.refresh();
         } catch (Exception e) {
@@ -336,6 +484,7 @@ public class ConsoleDrawer {
 
     /**
      * Function that draws menu in the terminal
+     *
      * @param mainMenuState tell information about selected button
      */
     public void drawMainMenu(MainMenuState mainMenuState) {
@@ -347,8 +496,8 @@ public class ConsoleDrawer {
 
             TextGraphics textGraphics = screen.newTextGraphics();
             String startLabel = "  Start game  ";
-            String loadLabel  = "  Load game   ";
-            String exitLabel  = "  Exit game   ";
+            String loadLabel = "  Load game   ";
+            String exitLabel = "  Exit game   ";
             addTextButton(textGraphics, startLabel, 7, 4, mainMenuState.equals(MainMenuState.START));
             addTextButton(textGraphics, loadLabel, 7, 10, mainMenuState.equals(MainMenuState.LOAD_GAME));
             addTextButton(textGraphics, exitLabel, 7, 16, mainMenuState.equals(MainMenuState.EXIT));
@@ -364,6 +513,7 @@ public class ConsoleDrawer {
 
     /**
      * Function that draws menu
+     *
      * @param menuState tell information about selected button
      */
     public void drawMenu(MenuState menuState) {
@@ -374,9 +524,9 @@ public class ConsoleDrawer {
             drawBorder();
 
             TextGraphics textGraphics = screen.newTextGraphics();
-            String continueLabel     = "     Continue     ";
-            String exitLabel         = "    Exit game     ";
-            String saveAndExitLabel  = "Save and exit game";
+            String continueLabel = "     Continue     ";
+            String exitLabel = "    Exit game     ";
+            String saveAndExitLabel = "Save and exit game";
             addTextButton(textGraphics, continueLabel, 7, 4, menuState.equals(MenuState.CONTINUE));
             addTextButton(textGraphics, exitLabel, 7, 10, menuState.equals(MenuState.EXIT));
             addTextButton(textGraphics, saveAndExitLabel, 7, 16, menuState.equals(MenuState.SAVE_AND_EXIT));

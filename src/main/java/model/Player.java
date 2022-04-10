@@ -1,6 +1,7 @@
 package model;
 
 import model.inventory.Artifact;
+import model.inventory.ArtifactName;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,5 +115,16 @@ public class Player implements Character, Cell {
      */
     public void addArtifact(Artifact artifact) {
         artifacts.add(artifact);
+    }
+
+    public boolean hasArtifact(ArtifactName artifactName) {
+        boolean has_artifact = false;
+        for (var artifact: artifacts) {
+            if (artifact.getName().equals(artifactName)) {
+                has_artifact = true;
+                break;
+            }
+        }
+        return has_artifact;
     }
 }
