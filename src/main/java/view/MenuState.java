@@ -1,5 +1,8 @@
 package view;
 
+/**
+ * Represents Menu states
+ */
 public enum MenuState {
     CONTINUE,
     EXIT,
