@@ -1,20 +1,19 @@
 package controller;
 
-import model.Game;
+import model.Round;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
 public class GameSaverLoader {
-    // Почему у нас тут отдельный файл, может это внутри Game?
 
     private final static String filename = "saved_game.txt";
     /**
      * Saving game to the file
-     * @param game The game to save
+     * @param round The round to save
      */
-    public void saveGame(Game game) throws FileNotFoundException {
+    public static void saveGame(Round round) throws FileNotFoundException {
         File file = new File(filename);
         PrintWriter writer = new PrintWriter(file);
         writer.print("");
@@ -24,15 +23,14 @@ public class GameSaverLoader {
 
     /**
      * Loading game from the file
-     * @param game The game to save
+     * @param round The round to save
      */
-    public Game loadGame(Game game) {
+    public static Round loadGame(Round round) {
         File file = new File(filename);
         if (!file.exists()) {
             return null;
         }
-        Game loadedGame = new Game();
         // TODO: load game
-        return loadedGame;
+        return null;
     }
 }

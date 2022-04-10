@@ -1,3 +1,4 @@
+import controller.GameController;
 import model.Field;
 import view.ConsoleDrawer;
 
@@ -6,5 +7,7 @@ public class Main {
         var consoleDrawer = new ConsoleDrawer();
         var field = new Field(Field.FIELD_WIDTH, Field.FIELD_HEIGHT);
         consoleDrawer.drawMap(field);
+        GameController gameController = new GameController(consoleDrawer);
+
     }
 }
