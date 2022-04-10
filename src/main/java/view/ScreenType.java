@@ -5,5 +5,6 @@ package view;
  */
 public enum ScreenType {
     MAIN_MENU,
-    GAME
+    GAME,
+    MENU
 }
