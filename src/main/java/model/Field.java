@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import static model.WallDirection.getRandomDirection;
@@ -13,6 +15,13 @@ public class Field {
     private final int height;
     private final Cell[][] field;
     private final Boolean[][] isFilled;
+
+    private Player player;
+    private final List<Enemy> enemies = new ArrayList<>();
+
+    public Field() {
+        this(FIELD_WIDTH, FIELD_HEIGHT);
+    }
 
     public Field(int width, int height) {
         this.width = width;
@@ -61,7 +70,9 @@ public class Field {
             int enemyXPos = rand.nextInt(FIELD_WIDTH);
             int enemyYPos = rand.nextInt(FIELD_HEIGHT);
             if (!isFilled[enemyXPos][enemyYPos]) {
-                setCellValue(enemyXPos, enemyYPos, new Enemy(new Position(enemyXPos, enemyYPos), new SimpleStrategy()));
+                Enemy enemy = new Enemy(new Position(enemyXPos, enemyYPos), new SimpleStrategy());
+                enemies.add(enemy);
+                setCellValue(enemyXPos, enemyYPos, enemy);
                 cnt++;
             }
         }
@@ -73,7 +84,8 @@ public class Field {
             int playerXPos = rand.nextInt(FIELD_WIDTH);
             int playerYPos = rand.nextInt(FIELD_HEIGHT);
             if (!isFilled[playerXPos][playerYPos]) {
-                field[playerXPos][playerYPos] = new Player(new Position(playerXPos, playerYPos));
+                this.player = new Player(new Position(playerXPos, playerYPos));
+                field[playerXPos][playerYPos] = this.player;
                 break;
             }
         }
@@ -110,5 +122,11 @@ public class Field {
         field[position.getX()][position.getY()] = new EmptyCell();
     }
 
+    public Player getPlayer() {
+        return player;
+    }
 
+    public List<Enemy> getEnemies() {
+        return enemies;
+    }
 }
