@@ -27,6 +27,10 @@ public class ConsoleDrawer {
         }
     }
 
+    public Screen getScreen() {
+        return screen;
+    }
+
     private void drawBorder() {
         TerminalSize terminalSize = screen.getTerminalSize();
         System.out.println(terminalSize.getColumns());
