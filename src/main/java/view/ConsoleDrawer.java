@@ -13,12 +13,18 @@ import model.inventory.Food;
 
 import java.io.IOException;
 
+/**
+ * Represents console drawer
+ */
 public class ConsoleDrawer {
 
     DefaultTerminalFactory defaultTerminalFactory = new DefaultTerminalFactory();
     Terminal terminal = null;
     Screen screen = null;
 
+    /**
+     * Creates ConsoleDrawer instance
+     */
     public ConsoleDrawer() {
         try {
             terminal = defaultTerminalFactory.createTerminal();
@@ -30,10 +36,18 @@ public class ConsoleDrawer {
         }
     }
 
+    /**
+     * Getting screen
+     *
+     * @return screen
+     */
     public Screen getScreen() {
         return screen;
     }
 
+    /**
+     * Cloasing screen and terminal
+     */
     public void closeAll() throws IOException {
         screen.close();
         terminal.close();
@@ -372,6 +386,7 @@ public class ConsoleDrawer {
 
     /**
      * Function that draws field in the terminal
+     *
      * @param field that will be drawn in the terminal
      */
     public void drawMap(Field field) {
@@ -381,7 +396,7 @@ public class ConsoleDrawer {
 
             int start_column = 2;
             int start_row = 4;
-            drawGameBorder(start_column - 1, start_row - 1,  3 * Field.FIELD_WIDTH + 2,  Field.FIELD_HEIGHT + 2);
+            drawGameBorder(start_column - 1, start_row - 1, 3 * Field.FIELD_WIDTH + 2, Field.FIELD_HEIGHT + 2);
             drawGameBorder(62, start_row - 1, 15, 16);
             Player player = null;
 
@@ -469,6 +484,7 @@ public class ConsoleDrawer {
 
     /**
      * Function that draws menu in the terminal
+     *
      * @param mainMenuState tell information about selected button
      */
     public void drawMainMenu(MainMenuState mainMenuState) {
@@ -480,8 +496,8 @@ public class ConsoleDrawer {
 
             TextGraphics textGraphics = screen.newTextGraphics();
             String startLabel = "  Start game  ";
-            String loadLabel  = "  Load game   ";
-            String exitLabel  = "  Exit game   ";
+            String loadLabel = "  Load game   ";
+            String exitLabel = "  Exit game   ";
             addTextButton(textGraphics, startLabel, 7, 4, mainMenuState.equals(MainMenuState.START));
             addTextButton(textGraphics, loadLabel, 7, 10, mainMenuState.equals(MainMenuState.LOAD_GAME));
             addTextButton(textGraphics, exitLabel, 7, 16, mainMenuState.equals(MainMenuState.EXIT));
@@ -497,6 +513,7 @@ public class ConsoleDrawer {
 
     /**
      * Function that draws menu
+     *
      * @param menuState tell information about selected button
      */
     public void drawMenu(MenuState menuState) {
@@ -507,9 +524,9 @@ public class ConsoleDrawer {
             drawBorder();
 
             TextGraphics textGraphics = screen.newTextGraphics();
-            String continueLabel     = "     Continue     ";
-            String exitLabel         = "    Exit game     ";
-            String saveAndExitLabel  = "Save and exit game";
+            String continueLabel = "     Continue     ";
+            String exitLabel = "    Exit game     ";
+            String saveAndExitLabel = "Save and exit game";
             addTextButton(textGraphics, continueLabel, 7, 4, menuState.equals(MenuState.CONTINUE));
             addTextButton(textGraphics, exitLabel, 7, 10, menuState.equals(MenuState.EXIT));
             addTextButton(textGraphics, saveAndExitLabel, 7, 16, menuState.equals(MenuState.SAVE_AND_EXIT));
