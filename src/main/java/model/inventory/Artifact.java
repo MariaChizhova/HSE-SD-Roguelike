@@ -1,11 +1,12 @@
 package model.inventory;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Represents Artifact itself
  */
-public class Artifact {
+public class Artifact implements Serializable {
 
     private final ArtifactName name;
     private final int damage;
@@ -63,5 +64,14 @@ public class Artifact {
                 new Artifact(ArtifactName.GLOVES, 0, 10)
 
         );
+    }
+
+    @Override
+    public String toString() {
+        return "Artifact{" +
+                "name=" + name +
+                ", damage=" + damage +
+                ", armor=" + armor +
+                '}';
     }
 }

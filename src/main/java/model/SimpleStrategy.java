@@ -1,9 +1,11 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * Represents a simple strategy to move enemies
  */
-public class SimpleStrategy implements StrategyEnemy{
+public class SimpleStrategy implements StrategyEnemy, Serializable {
 
     /**
      * The enemy is standing in one place

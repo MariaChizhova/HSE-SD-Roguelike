@@ -3,13 +3,14 @@ package model;
 import model.inventory.Artifact;
 import model.inventory.ArtifactName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Represents a player who is a character and who stands on some square of the field
  */
-public class Player implements Character, Cell {
+public class Player implements Character, Cell, Serializable {
 
     private final static int DEFAULT = 10;
     private final static int maxHealth = 100;
@@ -128,5 +129,17 @@ public class Player implements Character, Cell {
             }
         }
         return has_artifact;
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "health=" + health +
+                ", damage=" + damage +
+                ", armor=" + armor +
+                ", experience=" + experience +
+                ", position=" + position +
+                ", artifacts=" + artifacts +
+                '}';
     }
 }

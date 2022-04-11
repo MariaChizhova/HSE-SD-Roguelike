@@ -7,10 +7,9 @@ import com.googlecode.lanterna.screen.TerminalScreen;
 import model.*;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
-import model.inventory.Artifact;
 import model.inventory.ArtifactName;
 import model.inventory.ArtifactWithPosition;
-import model.inventory.Food;
+import model.inventory.FoodWithPosition;
 
 import java.io.IOException;
 
@@ -465,7 +464,7 @@ public class ConsoleDrawer {
                                         Symbols.ARROW_UP, TextColor.ANSI.YELLOW, TextColor.ANSI.DEFAULT));
                                 break;
                         }
-                    } else if (cell instanceof Food) {
+                    } else if (cell instanceof FoodWithPosition) {
                         screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
                                 Symbols.DIAMOND, TextColor.ANSI.GREEN, TextColor.ANSI.DEFAULT));
                     }

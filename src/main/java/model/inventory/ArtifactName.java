@@ -1,12 +1,12 @@
 package model.inventory;
 
-import java.util.Random;
 
+import java.io.Serializable;
 
 /**
  * Represents all available names of the artifact
  */
-public enum ArtifactName {
+public enum ArtifactName implements Serializable {
     HELMET,
     CUIRASS,
     GLOVES,

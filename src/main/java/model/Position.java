@@ -1,11 +1,13 @@
 package model;
 
+
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Represents a position on the field
  */
-public class Position {
+public class Position implements Serializable {
 
     private final int x;
     private final int y;
@@ -30,6 +32,13 @@ public class Position {
     }
 
     @Override
+    public String toString() {
+        return "Position{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
+
     public boolean equals(Object o) {
         if (this == o)
             return true;
@@ -42,5 +51,6 @@ public class Position {
     @Override
     public int hashCode() {
         return Objects.hash(x, y);
+
     }
 }

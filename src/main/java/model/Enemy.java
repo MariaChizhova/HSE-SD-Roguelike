@@ -1,9 +1,11 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * Represents enemy who is a character and who stands on some square of the field
  */
-public class Enemy implements Character, Cell {
+public class Enemy implements Character, Cell, Serializable {
 
     private final static int DEFAULT = 10;
     private final static int maxHealth = 100;
@@ -87,5 +89,17 @@ public class Enemy implements Character, Cell {
         Position newPosition = strategy.nextMove(position, this.position);
         this.position = newPosition;
         return newPosition;
+    }
+
+    @Override
+    public String toString() {
+        return "Enemy{" +
+                "health=" + health +
+                ", damage=" + damage +
+                ", armor=" + armor +
+                ", experience=" + experience +
+                ", position=" + position +
+                ", strategy=" + strategy +
+                '}';
     }
 }
