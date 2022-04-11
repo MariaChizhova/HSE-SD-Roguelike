@@ -6,14 +6,6 @@ import view.MainMenuState;
 import view.MenuState;
 
 public class InputHandler {
-    private final Round round;
-
-    /**
-     * Creates InputHandler instance
-     */
-    public InputHandler(Round round) {
-        this.round = round;
-    }
 
     /**
      * Processing main menu commands
@@ -59,7 +51,7 @@ public class InputHandler {
      * Processing game commands
      * @param command Input command
      */
-    public void processGameCommand(KeyType command) {
+    public void processGameCommand(KeyType command, Round round) {
         switch (command) {
             case ArrowLeft:
                 round.movePlayerLeft();

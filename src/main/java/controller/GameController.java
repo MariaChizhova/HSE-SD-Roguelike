@@ -33,7 +33,7 @@ public class GameController {
         this.view = view;
         this.screen = view.getScreen();
         this.round = new Round(field.getPlayer(), field.getEnemies(), field);
-        this.inputHandler = new InputHandler(round);
+        this.inputHandler = new InputHandler();
     }
 
     /**
@@ -63,7 +63,7 @@ public class GameController {
                     // Change field
                     field = new Field();
                     view.drawMap(field);
-                    inputHandler.processGameCommand(keyType);
+                    inputHandler.processGameCommand(keyType, round);
                     break;
                 case MENU:
                     menuState = inputHandler.processMenuCommand(keyType, menuState);
