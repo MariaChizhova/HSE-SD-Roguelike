@@ -117,8 +117,4 @@ public class Round implements Serializable {
                 ", field=" + field +
                 '}';
     }
-
-    public Field getField() {
-        return field;
-    }
 }
