@@ -57,7 +57,7 @@
 
 ### Диаграмма случаев использования
 
-![](https://github.com/MariaChizhova/HSE-SD-Roguelike/blob/task-1-disdock/img/Usage.png)
+![](https://github.com/MariaChizhova/HSE-SD-Roguelike/blob/task-2-impl/img/Usage.png)
 
 ### Типичный пользователь
 Имя: Василий Пупкин
@@ -87,7 +87,7 @@
 
 ## Композиция (диаграмма компонентов)
 
-![](https://github.com/MariaChizhova/HSE-SD-Roguelike/blob/task-1-disdock/img/Comp.png)
+![](https://github.com/MariaChizhova/HSE-SD-Roguelike/blob/task-2-impl/img/Comp.png)
 
 Можно выделить 4 основные компоненты:
 
@@ -98,16 +98,22 @@
 
 ## Логическая структура (диаграмма классов)
 
-![](https://github.com/MariaChizhova/HSE-SD-Roguelike/blob/task-1-disdock/img/Logic.png)
+![](https://github.com/MariaChizhova/HSE-SD-Roguelike/blob/task-2-impl/img/Logic.png)
 
 ### Main
-Данный класс отвечает за запуск логики всего процесса. Запускает меню, то есть вызывает Menu.
+Данный класс отвечает за запуск логики всего процесса. Запускает GameController.
 
-### Menu
+### GameController
 Часть Controller. Данный класс отвечает за выбор режима, в котором будет играть игрок, а также за выбор выхода из игры/раунда. Если игрок выберет “начать игру”, то данный класс вызовет Round.
 
 ### InputHandler
 Часть Controller. Данный класс обрабатывает ввод пользователя и передает нужные команды, находящимся в компоненте View.
+
+### Generation
+Часть Model. Генерирует раунд игры.
+
+### GenerationResult
+Часть Model. Результат работы Generation. Хранит в себе информацию о сгенерированной клетке.
 
 ### Round
 Часть Model. Данный класс отвечает за окружающую среду в раунде. Регулирует взаимодействие между игроками и полем.
@@ -118,26 +124,58 @@
 ### Character
 Часть Model. Интерфейс, описывающий основные характеристики и действия всех игроков.
 
+### Position
+Часть Model. Класс, который хранит информацию о позиции на поле.
+
+### Cell
+Часть Model. Интерфейс, хранящий в себе информацию о клетке на поле.
+
+### EmptyCell
+Часть Model. Класс, реализующий интерфейс Cell. Отвечает за пустую клетку.
+
+### Wall
+Часть Model. Класс, реализующий интерфейс Cell. Отвечает за стенку в игре.
+
 ### Player
-Часть Model. Класс, который отвечает за характеристики и действия игрока, который контролируется пользователем. Реализует интерфейс Character.
+Часть Model. Класс, который отвечает за характеристики и действия игрока, который контролируется пользователем. Реализует интерфейс Character и Cell.
 
 ### Enemy
-Часть Model. Класс, который отвечает за характеристики и действия врага. Реализует интерфейс Character.
+Часть Model. Класс, который отвечает за характеристики и действия врага. Реализует интерфейс Character и Cell.
+
+### StrategyEnemy
+Часть Model. Интерфейс, отвечающий за стратегию врага в игре.
+
+### SimpleStrategy
+Часть Model. Класс, реалтзующий интерфейс StrategyEnemy.
+
+### FoodWithPosition
+Часть Model. Класс, который содержит информацию о позиции еды на поле
+и информацию о самой еде (сколько здоровья она восстанавливает).
+
+### Food
+Часть Model. Класс, который содержит информацию о самой еде (сколько здоровья она восстанавливает).
+
+### ArtifactWithPosition
+Часть Model. Класс, который содержит информацию о позиции артефакта на поле
+и информацию о самом артефакте.
+
+### Artifact
+Часть Model. Класс, который содержит информацию о самом артефакте: что за артефакт,
+какие преимущества он дает игроку.
 
 ### ConsoleDrawer
 Часть View. Класс, который отвечает за отрисовку поля и меню в консоле.
 
-### GameSaver
+### GameSaverLoader
 Часть Controller. Класс, который отвечает за сохранение и восстановление игры.
-
 
 ## Диаграмма последовательностей
 
-![](https://github.com/MariaChizhova/HSE-SD-Roguelike/blob/task-1-disdock/img/Subseq.png)
+![](https://github.com/MariaChizhova/HSE-SD-Roguelike/blob/task-2-impl/img/Subseq.png)
 
 ## Диаграмма состояний
 
-![](https://github.com/MariaChizhova/HSE-SD-Roguelike/blob/task-1-disdock/img/States.png)
+![](https://github.com/MariaChizhova/HSE-SD-Roguelike/blob/task-2-impl/img/States.png)
 
 Начинается приложение в главном меню, в котором присутствуют следующие пункты:
 * Новая игра (поле генерируется случайно)
