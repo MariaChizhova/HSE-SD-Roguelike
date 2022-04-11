@@ -59,8 +59,11 @@ public class GameController {
                                 view.drawMap(field);
                                 break;
                             case LOAD_GAME:
-                                GameSaverLoader.loadGame(round);
+                                round = GameSaverLoader.loadGame();
+                                field = round.getField();
                                 screenType = ScreenType.GAME;
+                                inputHandler.processGameCommand(keyType, round);
+                                view.drawMap(field);
                                 break;
                             case EXIT:
                                 view.closeAll();
@@ -110,7 +113,7 @@ public class GameController {
     public void startGame() {
         generation = new Generation();
         field = new Field(generation);
-        this.round = new Round(generation.getPlayer(), generation.getEnemies(), field);
+        round = new Round(generation.getPlayer(), generation.getEnemies(), field);
     }
 
 }

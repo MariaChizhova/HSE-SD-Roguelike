@@ -1,5 +1,7 @@
 package model;
 
+import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 import controller.Generation;
@@ -8,7 +10,7 @@ import controller.Generation;
 /**
  * Stores information about the field: which objects are in the field grid
  */
-public class Field {
+public class Field implements Serializable {
     public static final int FIELD_WIDTH = 19;
     public static final int FIELD_HEIGHT = 13;
 
@@ -93,4 +95,10 @@ public class Field {
         field[position.getX()][position.getY()] = new EmptyCell();
     }
 
+    @Override
+    public String toString() {
+        return "Field{" +
+                "field=" + Arrays.toString(field) +
+                '}';
+    }
 }

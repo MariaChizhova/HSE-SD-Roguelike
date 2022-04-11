@@ -1,9 +1,11 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * Represents a position on the field
  */
-public class Position {
+public class Position implements Serializable {
 
     private final int x;
     private final int y;
@@ -25,5 +27,13 @@ public class Position {
      */
     public int getY() {
         return y;
+    }
+
+    @Override
+    public String toString() {
+        return "Position{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
     }
 }

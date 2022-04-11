@@ -3,13 +3,14 @@ package model;
 import model.inventory.ArtifactWithPosition;
 import model.inventory.Food;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * This class is responsible for the environment in the round.
  * Regulates the interaction between players and the field.
  */
-public class Round {
+public class Round implements Serializable {
 
     private final Player player;
     private final List<Enemy> enemies;
@@ -96,4 +97,16 @@ public class Round {
         // TODO:
     }
 
+    @Override
+    public String toString() {
+        return "Round{" +
+                "player=" + player +
+                ", enemies=" + enemies +
+                ", field=" + field +
+                '}';
+    }
+
+    public Field getField() {
+        return field;
+    }
 }

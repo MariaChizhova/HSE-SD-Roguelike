@@ -2,9 +2,7 @@ package controller;
 
 import model.Round;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
 
 public class GameSaverLoader {
 
@@ -14,23 +12,31 @@ public class GameSaverLoader {
      * @param round The round to save
      */
     public static void saveGame(Round round) throws FileNotFoundException {
-        File file = new File(filename);
-        PrintWriter writer = new PrintWriter(file);
-        writer.print("");
-        writer.close();
-        // TODO: save game
+        try {
+            FileOutputStream fileOut = new FileOutputStream(filename);
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+            objectOut.writeObject(round);
+            objectOut.close();
+            fileOut.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
      * Loading game from the file
-     * @param round The round to save
      */
-    public static Round loadGame(Round round) {
-        File file = new File(filename);
-        if (!file.exists()) {
-            return null;
+    public static Round loadGame() {
+        try {
+            FileInputStream fi = new FileInputStream(filename);
+            ObjectInputStream oi = new ObjectInputStream(fi);
+            Round round = (Round) oi.readObject();
+            oi.close();
+            fi.close();
+            return round;
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        // TODO: load game
         return null;
     }
 }
