@@ -1,10 +1,9 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-import static model.WallDirection.getRandomDirection;
+import controller.Generation;
+
 
 /**
  * Stores information about the field: which objects are in the field grid
@@ -12,101 +11,40 @@ import static model.WallDirection.getRandomDirection;
 public class Field {
     public static final int FIELD_WIDTH = 19;
     public static final int FIELD_HEIGHT = 13;
-    public static final int MAX_NUM_OF_ENEMIES = 15;
 
-    private final int width;
-    private final int height;
-    private final Cell[][] field;
-    private final Boolean[][] isFilled;
-
-    private Player player;
-    private final List<Enemy> enemies = new ArrayList<>();
-
-    public Field() {
-        this(FIELD_WIDTH, FIELD_HEIGHT);
-    }
+    private Cell[][] field;
 
     /**
      * Creating Field instance
-     * @param width - field width
-     * @param height - field height
      */
-    public Field(int width, int height) {
-        this.width = width;
-        this.height = height;
-        field = new Cell[width][height];
-        isFilled = new Boolean[width][height];
-        for (int y = 0; y < FIELD_HEIGHT; y ++) {
-            for (int x = 0; x < FIELD_WIDTH; x ++) {
-                isFilled[x][y] = false;
-            }
-        }
-        generateWalls();
-        generateEnemies();
-        generatePlayer();
+    public Field() {
+        field = new Cell[FIELD_WIDTH][FIELD_HEIGHT];
     }
 
-    private void generateWalls() {
-        for (int y = 1; y < FIELD_HEIGHT; y+=2) {
-            for (int x = 1; x < FIELD_WIDTH; x+=2) {
-                field[x][y] =  new Wall();
-                isFilled[x][y] = true;
-                switch (getRandomDirection()) {
-                    case UP:
-                        setCellValue(x, y - 1, new Wall());
-                        break;
-                    case DOWN:
-                        setCellValue(x, y + 1, new Wall());
-                        break;
-                    case RIGHT:
-                        setCellValue(x + 1, y, new Wall());
-                        break;
-                    case LEFT:
-                        setCellValue(x - 1, y, new Wall());
-                        break;
-                }
-            }
-        }
+
+    /**
+     * Creating Field instance
+     * @param generation - field generation
+     */
+    public Field(Generation generation) {
+        field = new Cell[FIELD_WIDTH][FIELD_HEIGHT];
+        fillField(generation.getGeneration());
     }
 
-    private void generateEnemies() {
-        int cnt = 0;
-        Random rand = new Random();
-
-        int numOfEnemies = rand.nextInt(MAX_NUM_OF_ENEMIES);
-        while (cnt != numOfEnemies) {
-            int enemyXPos = rand.nextInt(FIELD_WIDTH);
-            int enemyYPos = rand.nextInt(FIELD_HEIGHT);
-            if (!isFilled[enemyXPos][enemyYPos]) {
-                Enemy enemy = new Enemy(new Position(enemyXPos, enemyYPos), new SimpleStrategy());
-                enemies.add(enemy);
-                setCellValue(enemyXPos, enemyYPos, enemy);
-                cnt++;
-            }
-        }
+    /**
+     * Updating generation of field
+     * @param generation - field generation
+     */
+    public void updateGeneration(Generation generation) {
+        field = new Cell[FIELD_WIDTH][FIELD_HEIGHT];
+        fillField(generation.getGeneration());
     }
 
-    private void generatePlayer() {
-        Random rand = new Random();
-        while (true) {
-            int playerXPos = rand.nextInt(FIELD_WIDTH);
-            int playerYPos = rand.nextInt(FIELD_HEIGHT);
-            if (!isFilled[playerXPos][playerYPos]) {
-                this.player = new Player(new Position(playerXPos, playerYPos));
-                field[playerXPos][playerYPos] = this.player;
-                break;
-            }
-        }
-
-    }
-
-    private void setCellValue(int x, int y, Cell cell) {
-        if (x >= 0 && y >= 0 && x < FIELD_WIDTH && y < FIELD_HEIGHT) {
-            field[x][y] = cell;
-            isFilled[x][y] = true;
+    private void fillField(List<GenerationResult> fieldGeneration) {
+        for (GenerationResult r : fieldGeneration) {
+            field[r.getX()][r.getY()] = r.getCell();
         }
     }
-
 
     /**
      * @param position on the field
@@ -122,7 +60,7 @@ public class Field {
      * @return whether the position is valid
      */
     public boolean isValidPosition(Position position) {
-        return position.getX() < width && position.getX() >= 0 && position.getY() < height && position.getY() >= 0;
+        return position.getX() < FIELD_WIDTH && position.getX() >= 0 && position.getY() < FIELD_HEIGHT && position.getY() >= 0;
     }
 
     /**
@@ -155,11 +93,4 @@ public class Field {
         field[position.getX()][position.getY()] = new EmptyCell();
     }
 
-    public Player getPlayer() {
-        return player;
-    }
-
-    public List<Enemy> getEnemies() {
-        return enemies;
-    }
 }

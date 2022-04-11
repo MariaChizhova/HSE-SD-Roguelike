@@ -21,19 +21,21 @@ public class GameController {
     private MainMenuState mainMenuState;
     private MenuState menuState;
     private Field field;
+    private Generation generation;
 
     /**
      * Creates GameController instance
      */
     public GameController(ConsoleDrawer view) {
-        field = new Field();
+        generation = new Generation();
+        field = new Field(generation);
         mainMenuState = MainMenuState.START;
         menuState = MenuState.CONTINUE;
         this.screenType = ScreenType.MAIN_MENU;
         view.drawMainMenu(mainMenuState);
         this.view = view;
         this.screen = view.getScreen();
-        this.round = new Round(field.getPlayer(), field.getEnemies(), field);
+        this.round = new Round(generation.getPlayer(), generation.getEnemies(), field);
         this.inputHandler = new InputHandler();
     }
 
@@ -63,7 +65,8 @@ public class GameController {
                     }
                 case GAME:
                     // Change field
-                    field = new Field();
+                    generation = new Generation();
+                    field.updateGeneration(generation);
                     view.drawMap(field);
                     inputHandler.processGameCommand(keyType, round);
                     break;
