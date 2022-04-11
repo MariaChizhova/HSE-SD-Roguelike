@@ -12,11 +12,15 @@ import model.Player;
 import model.Position;
 import model.SimpleStrategy;
 import model.Wall;
+import model.inventory.Artifact;
+import model.inventory.ArtifactWithPosition;
 
 import static model.WallDirection.getRandomDirection;
+import static model.inventory.Artifact.getArtifactList;
 
 public class Generation {
     public static final int MAX_NUM_OF_ENEMIES = 15;
+    public static final int MAX_NUM_OF_ARTIFACTS = 8;
     private Player player;
     private final List<Enemy> enemies = new ArrayList<>();
 
@@ -32,6 +36,7 @@ public class Generation {
         }
         generateWalls();
         generateEnemies();
+        generateArtifacts();
         generatePlayer();
     }
 
@@ -70,7 +75,7 @@ public class Generation {
         int cnt = 0;
         Random rand = new Random();
 
-        int numOfEnemies = rand.nextInt(MAX_NUM_OF_ENEMIES);
+        int numOfEnemies = rand.nextInt(MAX_NUM_OF_ENEMIES) + 1;
         while (cnt != numOfEnemies) {
             int enemyXPos = rand.nextInt(Field.FIELD_WIDTH);
             int enemyYPos = rand.nextInt(Field.FIELD_HEIGHT);
@@ -78,6 +83,24 @@ public class Generation {
                 var enemy = new Enemy(new Position(enemyXPos, enemyYPos), new SimpleStrategy());
                 enemies.add(enemy);
                 setCellValue(enemyXPos, enemyYPos, enemy);
+                cnt++;
+            }
+        }
+    }
+
+    private void generateArtifacts() {
+        int cnt = 0;
+        Random rand = new Random();
+        var artifactList = getArtifactList();
+
+        int numOfArtifacts = rand.nextInt(MAX_NUM_OF_ARTIFACTS) + 1;
+        while (cnt != numOfArtifacts) {
+            int xPos = rand.nextInt(Field.FIELD_WIDTH);
+            int yPos = rand.nextInt(Field.FIELD_HEIGHT);
+            Artifact randomArtifact = artifactList.get(rand.nextInt(artifactList.size()));
+            if (!isFilled[xPos][yPos]) {
+                var artifact = new ArtifactWithPosition(new Position(xPos, yPos), randomArtifact);
+                setCellValue(xPos, yPos, artifact);
                 cnt++;
             }
         }

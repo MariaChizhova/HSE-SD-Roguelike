@@ -1,6 +1,6 @@
 package model;
 
-import model.inventory.Artifact;
+import model.inventory.ArtifactWithPosition;
 import model.inventory.Food;
 
 import java.util.List;
@@ -75,8 +75,8 @@ public class Round {
                     field.movePlayer(position, player);
                     player.move(position);
                 }
-            } else if (cell instanceof Artifact) {
-                player.addArtifact( (Artifact) cell);
+            } else if (cell instanceof ArtifactWithPosition) {
+                player.addArtifact(((ArtifactWithPosition) cell).getArtifact());
                 field.clearCage(position);
             } else if (cell instanceof Food) {
                 player.increaseHealth(((Food) cell).getHealth());

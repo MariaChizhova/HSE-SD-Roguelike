@@ -1,5 +1,8 @@
 package model.inventory;
 
+import java.util.Random;
+
+
 /**
  * Represents all available names of the artifact
  */

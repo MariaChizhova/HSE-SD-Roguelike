@@ -1,14 +1,12 @@
 package model.inventory;
 
-import model.Cell;
-import model.Position;
+import java.util.List;
 
 /**
  * Represents Artifact itself
  */
-public class Artifact implements Cell {
+public class Artifact {
 
-    private final Position position;
     private final ArtifactName name;
     private final int damage;
     private final int armor;
@@ -16,25 +14,14 @@ public class Artifact implements Cell {
     /**
      * Creating Artifact instance
      *
-     * @param position Its position
      * @param name     Its name
      * @param damage   Its damage
      * @param armor    Its armor
      */
-    public Artifact(Position position, ArtifactName name, int damage, int armor) {
-        this.position = position;
+    public Artifact(ArtifactName name, int damage, int armor) {
         this.name = name;
         this.damage = damage;
         this.armor = armor;
-    }
-
-    /**
-     * Getting position of the artifact
-     *
-     * @return position of the artifact
-     */
-    public Position getPosition() {
-        return position;
     }
 
     /**
@@ -62,5 +49,19 @@ public class Artifact implements Cell {
      */
     public ArtifactName getName() {
         return name;
+    }
+
+    public static List<Artifact> getArtifactList() {
+        return List.of(
+                new Artifact(ArtifactName.WOODEN_SWORD, 20, 0),
+                new Artifact(ArtifactName.COPPER_SWORD, 40, 0),
+                new Artifact(ArtifactName.STEEL_SWORD, 60, 0),
+                new Artifact(ArtifactName.RAPIER, 80, 0),
+                new Artifact(ArtifactName.BOOTS, 0, 20),
+                new Artifact(ArtifactName.HELMET, 0, 30),
+                new Artifact(ArtifactName.CUIRASS, 0, 50),
+                new Artifact(ArtifactName.GLOVES, 0, 10)
+
+        );
     }
 }
