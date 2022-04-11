@@ -4,6 +4,7 @@ import model.inventory.ArtifactWithPosition;
 import model.inventory.FoodWithPosition;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ import java.util.List;
 public class Round implements Serializable {
 
     private final Player player;
-    private final List<Enemy> enemies;
+    private final ArrayList<Enemy> enemies;
     private final Field field;
 
     /**
@@ -22,7 +23,7 @@ public class Round implements Serializable {
      * @param enemies Its enemies
      * @param field Its filed
      */
-    public Round(Player player, List<Enemy> enemies, Field field) {
+    public Round(Player player, ArrayList<Enemy> enemies, Field field) {
         this.player = player;
         this.enemies = enemies;
         this.field = field;
@@ -109,12 +110,4 @@ public class Round implements Serializable {
         // TODO:
     }
 
-    @Override
-    public String toString() {
-        return "Round{" +
-                "player=" + player +
-                ", enemies=" + enemies +
-                ", field=" + field +
-                '}';
-    }
 }

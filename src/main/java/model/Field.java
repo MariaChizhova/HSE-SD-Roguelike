@@ -95,10 +95,4 @@ public class Field implements Serializable {
         field[position.getX()][position.getY()] = new EmptyCell();
     }
 
-    @Override
-    public String toString() {
-        return "Field{" +
-                "field=" + Arrays.toString(field) +
-                '}';
-    }
 }

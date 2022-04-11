@@ -31,13 +31,6 @@ public class Position implements Serializable {
         return y;
     }
 
-    @Override
-    public String toString() {
-        return "Position{" +
-                "x=" + x +
-                ", y=" + y +
-                '}';
-    }
 
     public boolean equals(Object o) {
         if (this == o)

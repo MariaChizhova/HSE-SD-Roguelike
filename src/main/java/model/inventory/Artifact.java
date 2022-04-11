@@ -66,12 +66,4 @@ public class Artifact implements Serializable {
         );
     }
 
-    @Override
-    public String toString() {
-        return "Artifact{" +
-                "name=" + name +
-                ", damage=" + damage +
-                ", armor=" + armor +
-                '}';
-    }
 }

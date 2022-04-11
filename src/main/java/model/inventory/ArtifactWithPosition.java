@@ -3,10 +3,12 @@ package model.inventory;
 import model.Cell;
 import model.Position;
 
+import java.io.Serializable;
+
 /**
  * Represents Artifact itself
  */
-public class ArtifactWithPosition implements Cell {
+public class ArtifactWithPosition implements Cell, Serializable {
 
     private final Position position;
     private final Artifact artifact;

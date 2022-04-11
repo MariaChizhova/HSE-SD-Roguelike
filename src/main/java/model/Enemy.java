@@ -91,15 +91,4 @@ public class Enemy implements Character, Cell, Serializable {
         return newPosition;
     }
 
-    @Override
-    public String toString() {
-        return "Enemy{" +
-                "health=" + health +
-                ", damage=" + damage +
-                ", armor=" + armor +
-                ", experience=" + experience +
-                ", position=" + position +
-                ", strategy=" + strategy +
-                '}';
-    }
 }

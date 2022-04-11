@@ -131,15 +131,4 @@ public class Player implements Character, Cell, Serializable {
         return has_artifact;
     }
 
-    @Override
-    public String toString() {
-        return "Player{" +
-                "health=" + health +
-                ", damage=" + damage +
-                ", armor=" + armor +
-                ", experience=" + experience +
-                ", position=" + position +
-                ", artifacts=" + artifacts +
-                '}';
-    }
 }

@@ -26,7 +26,7 @@ public class Generation {
     private final int MAX_NUM_OF_FOOD = 8;
 
     private Player player;
-    private final List<Enemy> enemies = new ArrayList<>();
+    private final ArrayList<Enemy> enemies = new ArrayList<>();
 
     private final List<GenerationResult> generation = new ArrayList<>();
     private final Boolean[][] isFilled;
@@ -155,7 +155,7 @@ public class Generation {
         return player;
     }
 
-    public List<Enemy> getEnemies() {
+    public ArrayList<Enemy> getEnemies() {
         return enemies;
     }
 

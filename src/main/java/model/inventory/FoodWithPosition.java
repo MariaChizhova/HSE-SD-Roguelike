@@ -3,10 +3,12 @@ package model.inventory;
 import model.Cell;
 import model.Position;
 
+import java.io.Serializable;
+
 /**
  * Represents food itself
  */
-public class FoodWithPosition implements Cell {
+public class FoodWithPosition implements Cell, Serializable {
 
     private final Position position;
     private final Food food;
