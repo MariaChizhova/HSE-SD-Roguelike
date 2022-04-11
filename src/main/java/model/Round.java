@@ -62,7 +62,7 @@ public class Round {
     private void movePlayer(Position position) {
         if (field.isValidPosition(position)) {
             Cell cell = field.getCell(position);
-            if (cell instanceof EmptyCell) {
+            if (cell == null) {
                 field.movePlayer(position, player);
                 player.move(position);
             } else if (cell instanceof Enemy) {
@@ -77,9 +77,6 @@ public class Round {
             } else if (cell instanceof Food) {
                 player.increaseHealth(((Food) cell).getHealth());
                 field.clearCage(position);
-            } else {
-                field.movePlayer(position, player);
-                player.move(position);
             }
         }
     }

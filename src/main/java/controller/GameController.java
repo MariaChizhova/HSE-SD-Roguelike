@@ -54,6 +54,8 @@ public class GameController {
                             case START:
                                 startGame();
                                 screenType = ScreenType.GAME;
+                                inputHandler.processGameCommand(keyType, round);
+                                view.drawMap(field);
                                 break;
                             case LOAD_GAME:
                                 GameSaverLoader.loadGame(round);
