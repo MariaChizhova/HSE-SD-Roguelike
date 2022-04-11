@@ -38,10 +38,12 @@ public class GameController {
 
     /**
      * Select screen type
+     *
      * @throws IOException
      */
     public void selectMode() throws IOException {
-       while (true) {
+        boolean notExit = true;
+        while (notExit) {
             KeyType keyType = screen.readInput().getKeyType();
             switch (screenType) {
                 case MAIN_MENU:
@@ -61,7 +63,8 @@ public class GameController {
                                 screenType = ScreenType.GAME;
                                 break;
                             case EXIT:
-                                exitGame();
+                                view.closeAll();
+                                notExit = false;
                                 break;
                         }
                     }
@@ -69,7 +72,7 @@ public class GameController {
                 case GAME:
                     inputHandler.processGameCommand(keyType, round);
                     view.drawMap(field);
-                    if (keyType == KeyType.PageUp) {
+                    if (keyType == KeyType.Escape) {
                         screenType = ScreenType.MENU;
                         view.drawMenu(menuState);
                     }
@@ -87,12 +90,12 @@ public class GameController {
                                 break;
                             case SAVE_AND_EXIT:
                                 GameSaverLoader.saveGame(round);
-                                exitGame();
                                 screenType = ScreenType.MAIN_MENU;
+                                view.drawMainMenu(mainMenuState);
                                 break;
                             case EXIT:
-                                exitGame();
                                 screenType = ScreenType.MAIN_MENU;
+                                view.drawMainMenu(mainMenuState);
                                 break;
                         }
                     }
@@ -108,14 +111,6 @@ public class GameController {
         generation = new Generation();
         field = new Field(generation);
         this.round = new Round(generation.getPlayer(), generation.getEnemies(), field);
-    }
-
-    /**
-     * Exiting the game
-     */
-    public void exitGame() throws IOException {
-        // TODO:
-        view.closeAll();
     }
 
 }
