@@ -30,6 +30,7 @@ public class GameController {
         mainMenuState = MainMenuState.START;
         menuState = MenuState.CONTINUE;
         this.screenType = ScreenType.MAIN_MENU;
+        view.drawMainMenu(mainMenuState);
         this.view = view;
         this.screen = view.getScreen();
         this.round = new Round(field.getPlayer(), field.getEnemies(), field);
@@ -52,12 +53,13 @@ public class GameController {
                         switch (mainMenuState) {
                             case START:
                                 startGame();
+                                screenType = ScreenType.GAME;
                             case LOAD_GAME:
                                 GameSaverLoader.loadGame(round);
+                                screenType = ScreenType.GAME;
                             case EXIT:
                                 exitGame();
                         }
-                        screenType = ScreenType.GAME;
                     }
                 case GAME:
                     // Change field
