@@ -64,6 +64,7 @@ public class GameController {
                                 break;
                         }
                     }
+                    break;
                 case GAME:
                     inputHandler.processGameCommand(keyType, round);
                     view.drawMap(field);
