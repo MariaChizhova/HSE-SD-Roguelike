@@ -78,8 +78,10 @@ public class Player implements Character, Cell {
      */
     @Override
     public void attack(Character character) {
-        experience += character.getExperience();
         character.beAttacked(this);
+        if (character.isDead()) {
+            experience += character.getExperience();
+        }
     }
 
     /**

@@ -43,7 +43,6 @@ public class GameController {
     public void selectMode() throws IOException {
        while (true) {
             KeyType keyType = screen.readInput().getKeyType();
-            System.out.println(screenType);
             switch (screenType) {
                 case MAIN_MENU:
                     mainMenuState = inputHandler.processMainMenuCommand(keyType, mainMenuState);
