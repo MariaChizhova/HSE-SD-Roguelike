@@ -69,6 +69,10 @@ public class GameController {
                 case GAME:
                     inputHandler.processGameCommand(keyType, round);
                     view.drawMap(field);
+                    if (keyType == KeyType.PageUp) {
+                        screenType = ScreenType.MENU;
+                        view.drawMenu(menuState);
+                    }
                     break;
                 case MENU:
                     menuState = inputHandler.processMenuCommand(keyType, menuState);
@@ -78,14 +82,18 @@ public class GameController {
                         switch (menuState) {
                             case CONTINUE:
                                 // TODO: continue game
+                                view.drawMap(field);
                                 screenType = ScreenType.GAME;
+                                break;
                             case SAVE_AND_EXIT:
                                 GameSaverLoader.saveGame(round);
                                 exitGame();
                                 screenType = ScreenType.MAIN_MENU;
+                                break;
                             case EXIT:
                                 exitGame();
                                 screenType = ScreenType.MAIN_MENU;
+                                break;
                         }
                     }
                     break;

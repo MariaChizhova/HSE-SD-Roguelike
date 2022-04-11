@@ -27,6 +27,10 @@ public class Round {
         this.field = field;
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+
     /**
      * Moves the player to the right
      */
