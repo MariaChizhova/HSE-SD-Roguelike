@@ -13,7 +13,7 @@ public class RoundTest {
         Round round = new Round(generation.getPlayer(), generation.getEnemies(), field);
         Position currentPosition = round.getPlayer().getPosition();
         Position movePosition = new Position(currentPosition.getX(), currentPosition.getY() - 1);
-        if (round.getField().isValidPosition(movePosition)) {
+        if (checkPosition(field, movePosition)) {
             System.out.println(currentPosition.getX());
             System.out.println(currentPosition.getY());
             round.movePlayerUp();
@@ -33,7 +33,7 @@ public class RoundTest {
         Round round = new Round(generation.getPlayer(), generation.getEnemies(), field);
         Position currentPosition = round.getPlayer().getPosition();
         Position movePosition = new Position(currentPosition.getX(), currentPosition.getY() + 1);
-        if (round.getField().isValidPosition(movePosition)) {
+        if (checkPosition(field, movePosition)) {
             round.movePlayerDown();
             Assertions.assertEquals(movePosition, round.getPlayer().getPosition());
         } else {
@@ -49,7 +49,7 @@ public class RoundTest {
         Round round = new Round(generation.getPlayer(), generation.getEnemies(), field);
         Position currentPosition = round.getPlayer().getPosition();
         Position movePosition = new Position(currentPosition.getX() - 1, currentPosition.getY());
-        if (round.getField().isValidPosition(movePosition)) {
+        if (checkPosition(field, movePosition)) {
             round.movePlayerLeft();
             Assertions.assertEquals(movePosition, round.getPlayer().getPosition());
         } else {
@@ -64,12 +64,21 @@ public class RoundTest {
         field = new Field(generation);
         Round round = new Round(generation.getPlayer(), generation.getEnemies(), field);
         Position currentPosition = round.getPlayer().getPosition();
-        Position movePosition = new Position(currentPosition.getX() - 1, currentPosition.getY());
-        if (round.getField().isValidPosition(movePosition)) {
+        Position movePosition = new Position(currentPosition.getX() + 1, currentPosition.getY());
+        if (checkPosition(field, movePosition)) {
             round.movePlayerRight();
             Assertions.assertEquals(movePosition, round.getPlayer().getPosition());
         } else {
             Assertions.assertEquals(new Position(currentPosition.getX(), currentPosition.getY()), round.getPlayer().getPosition());
+        }
+    }
+
+    private boolean checkPosition(Field field, Position position) {
+        if (field.isValidPosition(position)) {
+            Cell cell = field.getCell(position);
+            return cell == null || cell instanceof EmptyCell;
+        } else {
+            return false;
         }
     }
 }
