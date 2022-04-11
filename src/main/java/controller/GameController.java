@@ -26,12 +26,12 @@ public class GameController {
     /**
      * Creates GameController instance
      */
-    public GameController(ConsoleDrawer view) {
+    public GameController() {
+        this.view = new ConsoleDrawer();
         mainMenuState = MainMenuState.START;
         menuState = MenuState.CONTINUE;
         this.screenType = ScreenType.MAIN_MENU;
         view.drawMainMenu(mainMenuState);
-        this.view = view;
         this.screen = view.getScreen();
         this.inputHandler = new InputHandler();
     }
