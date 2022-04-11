@@ -27,8 +27,20 @@ public class Round {
         this.field = field;
     }
 
+    /**
+     * Getting Player
+     * @return player
+     */
     public Player getPlayer() {
         return player;
+    }
+
+    /**
+     * Getting field
+     * @return field
+     */
+    public Field getField() {
+        return field;
     }
 
     /**
