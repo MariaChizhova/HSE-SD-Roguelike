@@ -66,7 +66,7 @@ public class Round {
     private void movePlayer(Position position) {
         if (field.isValidPosition(position)) {
             Cell cell = field.getCell(position);
-            if (cell == null) {
+            if (cell == null || cell instanceof EmptyCell) {
                 field.movePlayer(position, player);
                 player.move(position);
             } else if (cell instanceof Enemy) {
