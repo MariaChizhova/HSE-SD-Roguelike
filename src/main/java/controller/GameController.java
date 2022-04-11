@@ -65,8 +65,8 @@ public class GameController {
                         }
                     }
                 case GAME:
-                    view.drawMap(field);
                     inputHandler.processGameCommand(keyType, round);
+                    view.drawMap(field);
                     break;
                 case MENU:
                     menuState = inputHandler.processMenuCommand(keyType, menuState);

@@ -77,6 +77,9 @@ public class Round {
             } else if (cell instanceof Food) {
                 player.increaseHealth(((Food) cell).getHealth());
                 field.clearCage(position);
+            } else {
+                field.movePlayer(position, player);
+                player.move(position);
             }
         }
     }
