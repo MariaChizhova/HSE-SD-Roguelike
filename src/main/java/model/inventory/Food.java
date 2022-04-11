@@ -1,25 +1,19 @@
 package model.inventory;
 
-import model.Cell;
-import model.Position;
-
 import java.io.Serializable;
 
 /**
  * Represents food itself
  */
-public class Food implements Cell, Serializable {
+public class Food implements Serializable {
 
-    private final Position position;
     private final int health;
 
     /**
      * Creating food instance
-     * @param position Its position
      * @param health Its health
      */
-    public Food(Position position, int health) {
-        this.position = position;
+    public Food(int health) {
         this.health = health;
     }
 
@@ -29,14 +23,6 @@ public class Food implements Cell, Serializable {
      */
     public int getHealth() {
         return health;
-    }
-
-    /**
-     * Getting position of the food
-     * @return position of the food
-     */
-    public Position getPosition() {
-        return position;
     }
 
 }

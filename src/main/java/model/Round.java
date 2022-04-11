@@ -1,7 +1,7 @@
 package model;
 
 import model.inventory.ArtifactWithPosition;
-import model.inventory.Food;
+import model.inventory.FoodWithPosition;
 
 import java.io.Serializable;
 import java.util.List;
@@ -79,8 +79,8 @@ public class Round implements Serializable {
             } else if (cell instanceof ArtifactWithPosition) {
                 player.addArtifact(((ArtifactWithPosition) cell).getArtifact());
                 field.clearCage(position);
-            } else if (cell instanceof Food) {
-                player.increaseHealth(((Food) cell).getHealth());
+            } else if (cell instanceof FoodWithPosition) {
+                player.increaseHealth(((FoodWithPosition) cell).getFood().getHealth());
                 field.clearCage(position);
             }
         }

@@ -14,13 +14,17 @@ import model.SimpleStrategy;
 import model.Wall;
 import model.inventory.Artifact;
 import model.inventory.ArtifactWithPosition;
+import model.inventory.Food;
+import model.inventory.FoodWithPosition;
 
 import static model.WallDirection.getRandomDirection;
 import static model.inventory.Artifact.getArtifactList;
 
 public class Generation {
-    public static final int MAX_NUM_OF_ENEMIES = 15;
-    public static final int MAX_NUM_OF_ARTIFACTS = 8;
+    private final int MAX_NUM_OF_ENEMIES = 15;
+    private final int MAX_NUM_OF_ARTIFACTS = 8;
+    private final int MAX_NUM_OF_FOOD = 8;
+
     private Player player;
     private final List<Enemy> enemies = new ArrayList<>();
 
@@ -37,6 +41,7 @@ public class Generation {
         generateWalls();
         generateEnemies();
         generateArtifacts();
+        generateFood();
         generatePlayer();
     }
 
@@ -101,6 +106,23 @@ public class Generation {
             if (!isFilled[xPos][yPos]) {
                 var artifact = new ArtifactWithPosition(new Position(xPos, yPos), randomArtifact);
                 setCellValue(xPos, yPos, artifact);
+                cnt++;
+            }
+        }
+    }
+
+    private void generateFood() {
+        int cnt = 0;
+        Random rand = new Random();
+
+        int numOfFood = rand.nextInt(MAX_NUM_OF_FOOD) + 1;
+        while (cnt != numOfFood) {
+            int xPos = rand.nextInt(Field.FIELD_WIDTH);
+            int yPos = rand.nextInt(Field.FIELD_HEIGHT);
+            Food food = new Food(rand.nextInt(16) + 5);
+            if (!isFilled[xPos][yPos]) {
+                var foodWithPos = new FoodWithPosition(new Position(xPos, yPos), food);
+                setCellValue(xPos, yPos, foodWithPos);
                 cnt++;
             }
         }
