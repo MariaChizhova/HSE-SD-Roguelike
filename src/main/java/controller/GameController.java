@@ -27,15 +27,12 @@ public class GameController {
      * Creates GameController instance
      */
     public GameController(ConsoleDrawer view) {
-        generation = new Generation();
-        field = new Field(generation);
         mainMenuState = MainMenuState.START;
         menuState = MenuState.CONTINUE;
         this.screenType = ScreenType.MAIN_MENU;
         view.drawMainMenu(mainMenuState);
         this.view = view;
         this.screen = view.getScreen();
-        this.round = new Round(generation.getPlayer(), generation.getEnemies(), field);
         this.inputHandler = new InputHandler();
     }
 
@@ -46,6 +43,7 @@ public class GameController {
     public void selectMode() throws IOException {
        while (true) {
             KeyType keyType = screen.readInput().getKeyType();
+            System.out.println(screenType);
             switch (screenType) {
                 case MAIN_MENU:
                     mainMenuState = inputHandler.processMainMenuCommand(keyType, mainMenuState);
@@ -56,17 +54,17 @@ public class GameController {
                             case START:
                                 startGame();
                                 screenType = ScreenType.GAME;
+                                break;
                             case LOAD_GAME:
                                 GameSaverLoader.loadGame(round);
                                 screenType = ScreenType.GAME;
+                                break;
                             case EXIT:
                                 exitGame();
+                                break;
                         }
                     }
                 case GAME:
-                    // Change field
-                    generation = new Generation();
-                    field.updateGeneration(generation);
                     view.drawMap(field);
                     inputHandler.processGameCommand(keyType, round);
                     break;
@@ -96,8 +94,10 @@ public class GameController {
     /**
      * Starting the new game
      */
-    public static void startGame() {
-        // TODO:
+    public void startGame() {
+        generation = new Generation();
+        field = new Field(generation);
+        this.round = new Round(generation.getPlayer(), generation.getEnemies(), field);
     }
 
     /**
