@@ -86,6 +86,7 @@ public class Round implements Serializable {
             } else if (cell instanceof Enemy) {
                 player.attack((Enemy) cell);
                 if (((Enemy) cell).isDead()) {
+                    enemies.remove((Enemy) cell);
                     field.movePlayer(position, player);
                     player.move(position);
                 }

@@ -365,7 +365,7 @@ public class ConsoleDrawer {
                 ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
     }
 
-    private void drawLives(int health, int experience, int start_column, int start_row) {
+    private void drawLives(int health, int experience, int level, int start_column, int start_row) {
         TextGraphics livesGraphics = screen.newTextGraphics();
         livesGraphics.setForegroundColor(TextColor.ANSI.RED);
         String livesLabel = "LIVES: ";
@@ -381,6 +381,11 @@ public class ConsoleDrawer {
         expGraphics.setForegroundColor(TextColor.ANSI.GREEN);
         String expLabel = "EXP: " + experience;
         expGraphics.putString(start_column + 23 + livesLabel.length(), start_row - 3, expLabel);
+
+        TextGraphics levelGraphics = screen.newTextGraphics();
+        levelGraphics.setForegroundColor(TextColor.ANSI.WHITE);
+        String levelLabel = "LVL: " + level;
+        levelGraphics.putString(start_column + 26 + livesLabel.length() + expLabel.length(), start_row - 3, levelLabel);
 
     }
 
@@ -472,6 +477,7 @@ public class ConsoleDrawer {
             }
             drawLives(player == null ? 100 : player.getHealth(),
                     player == null ? 0 : player.getExperience(),
+                    player == null ? 0 : player.getLevel(),
                     start_column, start_row);
             drawHero(63, start_row);
             drawInventory(63, start_row, player);

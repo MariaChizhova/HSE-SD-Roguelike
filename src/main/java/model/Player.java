@@ -146,6 +146,10 @@ public class Player implements Character, Cell, Serializable {
     private void growthOfCharacteristics() {
         damage += 1;
         armor += 1;
+        health += maxHealth;
     }
 
+    public int getLevel() {
+        return level;
+    }
 }
