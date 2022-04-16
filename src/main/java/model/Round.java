@@ -88,6 +88,20 @@ public class Round implements Serializable {
             player.attack(enemy);
             if ((enemy).isDead()) {
                 field.movePlayer(position, player);
+                player.move(position);
+            } else if (cell instanceof Enemy) {
+                player.attack((Enemy) cell);
+                if (((Enemy) cell).isDead()) {
+                    enemies.remove((Enemy) cell);
+                    field.movePlayer(position, player);
+                    player.move(position);
+                }
+            } else if (cell instanceof ArtifactWithPosition) {
+                player.addArtifact(((ArtifactWithPosition) cell).getArtifact());
+                field.clearCage(position);
+            } else if (cell instanceof FoodWithPosition) {
+                player.increaseHealth(((FoodWithPosition) cell).getFood().getHealth());
+                field.clearCage(position);
             }
         } else if (cell instanceof ArtifactWithPosition) {
             player.addArtifact(((ArtifactWithPosition) cell).getArtifact());

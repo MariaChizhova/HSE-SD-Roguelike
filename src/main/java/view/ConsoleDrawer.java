@@ -107,6 +107,7 @@ public class ConsoleDrawer {
     private final int defaultHp = 100;
     private final int hpPerHeart = 10;
     private final int defaultExp = 0;
+    private final int defaultLvl = 0;
 
     private final int buttonsStartColumn = 7;
     private final int button1StartRow = 4;
@@ -262,7 +263,9 @@ public class ConsoleDrawer {
         expGraphics.putString(start_column, start_row, label);
     }
 
-    private void drawHeroInfo(int health, int experience, int start_column, int start_row) {
+    private void drawHeroInfo(int health, int experience, int level, int start_column, int start_row) {
+        TextGraphics livesGraphics = screen.newTextGraphics();
+        livesGraphics.setForegroundColor(TextColor.ANSI.RED);
         String livesLabel = "LIVES: ";
         String expLabel = "EXP: " + experience;
         TextCharacter heart = new TextCharacter(
@@ -279,6 +282,11 @@ public class ConsoleDrawer {
         int expIndent = 23;
 
         drawInfoLabel(expLabel, start_column + expIndent + livesLabel.length(), start_row, TextColor.ANSI.GREEN);
+
+        String levelLabel = "LVL: " + level;
+        int lvlIndent = 26;
+
+        drawInfoLabel(levelLabel, start_column + lvlIndent + livesLabel.length() + expLabel.length(), start_row, TextColor.ANSI.WHITE);
     }
 
     /**
@@ -349,10 +357,10 @@ public class ConsoleDrawer {
             }
             drawHeroInfo(player == null ? defaultHp : player.getHealth(),
                          player == null ? defaultExp : player.getExperience(),
+                         player == null ? defaultLvl : player.getLevel(),
                          heroInfoStartColumn, heroInfoStartRow);
             drawImg(heroStartColumn, heroStartRow, heroHeight, heroWidth, hero);
             drawInventory(heroStartColumn, heroStartRow, player);
-
             screen.refresh();
         } catch (Exception e) {
             e.printStackTrace();
