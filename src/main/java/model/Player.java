@@ -14,12 +14,14 @@ public class Player implements Character, Cell, Serializable {
 
     private final static int DEFAULT = 10;
     private final static int maxHealth = 100;
+    private final static int IS_NEXT_LEVEL = 20;
     private int health;
     private int damage;
     private int armor;
     private int experience;
     private Position position;
     private List<Artifact> artifacts;
+    private int level;
 
     /**
      * Player Constructor
@@ -32,6 +34,7 @@ public class Player implements Character, Cell, Serializable {
         this.experience = 0;
         this.position = position;
         this.artifacts = new ArrayList<>();
+        this.level = 0;
     }
 
     /**
@@ -82,6 +85,7 @@ public class Player implements Character, Cell, Serializable {
         character.beAttacked(this);
         if (character.isDead()) {
             experience += character.getExperience();
+            increaseLevel();
         }
     }
 
@@ -129,6 +133,19 @@ public class Player implements Character, Cell, Serializable {
             }
         }
         return has_artifact;
+    }
+
+    private void increaseLevel() {
+        if (experience >= IS_NEXT_LEVEL) {
+            level += 1;
+            experience = 0;
+            growthOfCharacteristics();
+        }
+    }
+
+    private void growthOfCharacteristics() {
+        damage += 1;
+        armor += 1;
     }
 
 }
