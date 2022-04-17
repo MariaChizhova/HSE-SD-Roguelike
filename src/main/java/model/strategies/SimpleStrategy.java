@@ -1,4 +1,7 @@
-package model;
+package model.strategies;
+
+import model.Position;
+import model.strategies.StrategyEnemy;
 
 import java.io.Serializable;
 

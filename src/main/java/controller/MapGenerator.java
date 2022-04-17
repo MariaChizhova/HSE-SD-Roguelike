@@ -10,7 +10,7 @@ import model.Field;
 import model.GeneratedMap;
 import model.Player;
 import model.Position;
-import model.SimpleStrategy;
+import model.strategies.SimpleStrategy;
 import model.Wall;
 import model.inventory.Artifact;
 import model.inventory.ArtifactWithPosition;

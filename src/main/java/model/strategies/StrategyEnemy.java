@@ -1,4 +1,6 @@
-package model;
+package model.strategies;
+
+import model.Position;
 
 /**
  * Represents an interface for enemy movement strategies
