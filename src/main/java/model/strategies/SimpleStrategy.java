@@ -14,6 +14,7 @@ public class SimpleStrategy implements StrategyEnemy, Serializable {
      * The enemy is standing in one place
      * @param playerPosition - player's position
      * @param enemyPosition - old position
+     * @param visibility - enemy's visibility
      * @return new position
      */
     @Override
