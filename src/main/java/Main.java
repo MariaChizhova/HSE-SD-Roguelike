@@ -1,5 +1,4 @@
 import controller.GameController;
-import view.ConsoleDrawer;
 
 import java.io.IOException;
 

@@ -55,18 +55,23 @@ public class InputHandler {
         switch (command) {
             case ArrowLeft:
                 round.movePlayerLeft();
+                round.moveEnemies();
                 break;
             case ArrowRight:
                 round.movePlayerRight();
+                round.moveEnemies();
                 break;
             case ArrowUp:
                 round.movePlayerUp();
+                round.moveEnemies();
                 break;
             case ArrowDown:
                 round.movePlayerDown();
+                round.moveEnemies();
                 break;
             case Escape:
                 round.changeEquipment();
+                round.moveEnemies();
                 break;
         }
     }

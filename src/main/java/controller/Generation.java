@@ -10,18 +10,22 @@ import model.Field;
 import model.GenerationResult;
 import model.Player;
 import model.Position;
+import model.strategies.AggressiveStrategy;
 import model.strategies.SimpleStrategy;
 import model.Wall;
 import model.inventory.Artifact;
 import model.inventory.ArtifactWithPosition;
 import model.inventory.Food;
 import model.inventory.FoodWithPosition;
+import model.strategies.StrategyEnemy;
 
 import static model.WallDirection.getRandomDirection;
 import static model.inventory.Artifact.getArtifactList;
 
 public class Generation {
-    private final int MAX_NUM_OF_ENEMIES = 15;
+    private final int MAX_NUM_OF_AGGRESSIVE_ENEMIES = 3;
+    private final int MAX_NUM_OF_PASSIVE_ENEMIES = 5;
+    private final int MAX_NUM_OF_COWARD_ENEMIES = 4;
     private final int MAX_NUM_OF_ARTIFACTS = 8;
     private final int MAX_NUM_OF_FOOD = 8;
 
@@ -77,15 +81,20 @@ public class Generation {
     }
 
     private void generateEnemies() {
+        generateEnemiesDependsOnStrategy(MAX_NUM_OF_PASSIVE_ENEMIES, new SimpleStrategy());
+        generateEnemiesDependsOnStrategy(MAX_NUM_OF_AGGRESSIVE_ENEMIES, new AggressiveStrategy());
+    }
+
+    private void generateEnemiesDependsOnStrategy(int maxNum, StrategyEnemy strategyEnemy) {
         int cnt = 0;
         Random rand = new Random();
 
-        int numOfEnemies = rand.nextInt(MAX_NUM_OF_ENEMIES) + 1;
+        int numOfEnemies = rand.nextInt(maxNum) + 1;
         while (cnt != numOfEnemies) {
             int enemyXPos = rand.nextInt(Field.FIELD_WIDTH);
             int enemyYPos = rand.nextInt(Field.FIELD_HEIGHT);
             if (!isFilled[enemyXPos][enemyYPos]) {
-                var enemy = new Enemy(new Position(enemyXPos, enemyYPos), new SimpleStrategy());
+                var enemy = new Enemy(new Position(enemyXPos, enemyYPos), strategyEnemy);
                 enemies.add(enemy);
                 setCellValue(enemyXPos, enemyYPos, enemy);
                 cnt++;
