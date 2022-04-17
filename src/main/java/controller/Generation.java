@@ -11,6 +11,7 @@ import model.GenerationResult;
 import model.Player;
 import model.Position;
 import model.strategies.AggressiveStrategy;
+import model.strategies.CowardStrategy;
 import model.strategies.SimpleStrategy;
 import model.Wall;
 import model.inventory.Artifact;
@@ -83,6 +84,7 @@ public class Generation {
     private void generateEnemies() {
         generateEnemiesDependsOnStrategy(MAX_NUM_OF_PASSIVE_ENEMIES, new SimpleStrategy());
         generateEnemiesDependsOnStrategy(MAX_NUM_OF_AGGRESSIVE_ENEMIES, new AggressiveStrategy());
+        generateEnemiesDependsOnStrategy(MAX_NUM_OF_COWARD_ENEMIES, new CowardStrategy());
     }
 
     private void generateEnemiesDependsOnStrategy(int maxNum, StrategyEnemy strategyEnemy) {

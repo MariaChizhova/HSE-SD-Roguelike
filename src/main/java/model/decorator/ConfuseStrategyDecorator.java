@@ -33,7 +33,7 @@ public class ConfuseStrategyDecorator extends StrategyDecorator implements Seria
     public Position nextMove(Position playerPosition, Position enemyPosition, int visibility) {
         if (confusedNumber > 0) {
             --confusedNumber;
-            return new SimpleStrategy().nextMove(playerPosition, enemyPosition, visibility);
+            return StrategyEnemy.getRandomStrategy().nextMove(playerPosition, enemyPosition, visibility);
         }
         return decorate.nextMove(playerPosition, enemyPosition, visibility);
     }
