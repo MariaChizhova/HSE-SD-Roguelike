@@ -119,7 +119,7 @@ public class Round implements Serializable {
         for (Enemy enemy: enemies) {
             Position oldPosition = enemy.getPosition();
             Position newPosition = enemy.getStrategy().nextMove(player.getPosition(), oldPosition, enemy.getVisibility());
-            if (field.isValidPosition(newPosition)) {
+            if (field.isInsideBounds(newPosition)) {
                 Cell cell = field.getCell(newPosition);
                 if (cell == null || cell instanceof EmptyCell) {
                     enemy.move(newPosition);
