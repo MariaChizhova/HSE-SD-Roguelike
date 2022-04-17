@@ -73,11 +73,16 @@ public class GameController {
                     }
                     break;
                 case GAME:
-                    inputHandler.processGameCommand(keyType, round);
-                    view.drawMap(field);
-                    if (keyType == KeyType.Escape) {
-                        screenType = ScreenType.MENU;
-                        view.drawMenu(menuState);
+                    boolean finished = inputHandler.processGameCommand(keyType, round);
+                    if (finished) {
+                        screenType = ScreenType.MAIN_MENU;
+                        view.drawMainMenu(mainMenuState);
+                    } else {
+                        view.drawMap(field);
+                        if (keyType == KeyType.Escape) {
+                            screenType = ScreenType.MENU;
+                            view.drawMenu(menuState);
+                        }
                     }
                     break;
                 case MENU:
