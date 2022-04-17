@@ -134,7 +134,6 @@ public class Player implements Character, Cell, Serializable {
 
     /**
      * Check the availability of the artifact
-     * @param artifactName
      */
     public boolean hasArtifact(ArtifactName artifactName) {
         return inventory.checkArtifact(artifactName);
