@@ -4,10 +4,10 @@ import java.io.Serializable;
 
 import model.Position;
 
-public class AggressiveStrategy implements StrategyEnemy, Serializable {
+public class CowardStrategy implements StrategyEnemy, Serializable {
 
     /**
-     * The enemy is attacking in visibility radius
+     * The enemy is running away from player in visibility radius
      * @param playerPosition - player's position
      * @param enemyPosition - old position
      * @param visibility - enemy's visibility
@@ -21,22 +21,19 @@ public class AggressiveStrategy implements StrategyEnemy, Serializable {
         int diffX = playerPosition.getX() - enemyPosition.getX();
         int diffY = playerPosition.getY() - enemyPosition.getY();
 
-        if (Math.abs(diffX) + Math.abs(diffY) == 1) {
-            return playerPosition;
-        }
         // same X line
         if (diffX == 0) {
-            return new Position(enemyPosition.getX(), diffY >= 0 ? enemyPosition.getY() + 1 : enemyPosition.getY() - 1);
+            return new Position(enemyPosition.getX(), diffY >= 0 ? enemyPosition.getY() - 1 : enemyPosition.getY() + 1);
         }
 
         // same Y line
         if (diffY == 0) {
-            return new Position(diffX >= 0 ? enemyPosition.getX() + 1 : enemyPosition.getX() - 1, enemyPosition.getY());
+            return new Position(diffX >= 0 ? enemyPosition.getX() - 1 : enemyPosition.getX() + 1, enemyPosition.getY());
         }
 
         if (diffX < diffY) {
-            return new Position(diffX >= 0 ? enemyPosition.getX() + 1 : enemyPosition.getX() - 1, enemyPosition.getY());
+            return new Position(diffX >= 0 ? enemyPosition.getX() - 1 : enemyPosition.getX() + 1, enemyPosition.getY());
         }
-        return new Position(enemyPosition.getX(), diffY >= 0 ? enemyPosition.getY() + 1 : enemyPosition.getY() - 1);
+        return new Position(enemyPosition.getX(), diffY >= 0 ? enemyPosition.getY() - 1 : enemyPosition.getY() + 1);
     }
 }
