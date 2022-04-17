@@ -26,14 +26,15 @@ public class Inventory {
      * @param artifact will be added if there will be a place in inventory
      * @return if artifact is added
      */
-    public void addArtifact(Artifact artifact) {
+    public boolean addArtifact(Artifact artifact) {
         for (int i = 0; i < INVENTORY_SIZE; i++) {
             if (boxes.get(i) == null && !artifacts.containsKey(artifact.getName())) {
                 boxes.set(i, artifact.getName());
                 artifacts.put(artifact.getName(), artifact);
-                return;
+                return true;
             }
         }
+        return false;
     }
 
     /**
