@@ -17,7 +17,7 @@ public class SimpleStrategy implements StrategyEnemy, Serializable {
      * @return new position
      */
     @Override
-    public Position nextMove(Position playerPosition, Position enemyPosition) {
+    public Position nextMove(Position playerPosition, Position enemyPosition, int visibility) {
         return enemyPosition;
     }
 

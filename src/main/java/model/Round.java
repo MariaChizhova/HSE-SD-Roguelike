@@ -112,10 +112,28 @@ public class Round implements Serializable {
         }
     }
 
-    private void moveEnemies() {
+    /**
+     * Moves enemies after players move
+     */
+    public void moveEnemies() {
         for (Enemy enemy: enemies) {
-            Position newPosition = enemy.move(player.getPosition());
-            field.moveEnemy(newPosition, enemy);
+            Position oldPosition = enemy.getPosition();
+            Position newPosition = enemy.getStrategy().nextMove(player.getPosition(), oldPosition, enemy.getVisibility());
+            if (field.isValidPosition(newPosition)) {
+                Cell cell = field.getCell(newPosition);
+                if (cell == null || cell instanceof EmptyCell) {
+                    enemy.move(newPosition);
+                    if (newPosition != oldPosition) {
+                        field.clearCage(oldPosition);
+                    }
+                    field.moveEnemy(newPosition, enemy);
+                } else if (cell instanceof Player) {
+                    enemy.attack((Player) cell);
+                    // todo if player is dead
+                }
+            }
+
+
         }
     }
 

@@ -15,6 +15,7 @@ public class Enemy implements Character, Cell, Serializable {
     private int damage;
     private int armor;
     private int experience;
+    private int visibility;
     private Position position;
     private StrategyEnemy strategy;
 
@@ -28,6 +29,7 @@ public class Enemy implements Character, Cell, Serializable {
         this.damage = DEFAULT;
         this.armor = DEFAULT;
         this.experience = 5;
+        this.visibility = 5;
         this.position = position;
         this.strategy = strategy;
     }
@@ -88,9 +90,15 @@ public class Enemy implements Character, Cell, Serializable {
      */
     @Override
     public Position move(Position position) {
-        Position newPosition = strategy.nextMove(position, this.position);
-        this.position = newPosition;
-        return newPosition;
+        this.position = position;
+        return position;
     }
 
+    public StrategyEnemy getStrategy() {
+        return strategy;
+    }
+
+    public int getVisibility() {
+        return visibility;
+    }
 }

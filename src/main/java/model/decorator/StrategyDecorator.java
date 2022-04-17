@@ -26,7 +26,7 @@ public abstract class StrategyDecorator implements StrategyEnemy, Serializable {
      * @return new position
      */
     @Override
-    public Position nextMove(Position playerPosition, Position enemyPosition) {
-        return decorate.nextMove(playerPosition, enemyPosition);
+    public Position nextMove(Position playerPosition, Position enemyPosition, int visibility) {
+        return decorate.nextMove(playerPosition, enemyPosition, visibility);
     }
 }
