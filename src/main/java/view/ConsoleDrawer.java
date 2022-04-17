@@ -152,7 +152,7 @@ public class ConsoleDrawer {
         if (player == null) {
             return;
         }
-        if (player.hasArtifact(ArtifactName.BOOTS)) {
+        if (player.hasArtifact(ArtifactName.BOOTS) && player.isArtifactOn(ArtifactName.BOOTS)) {
             screen.setCharacter(start_column + 4, start_row + 13, new TextCharacter(
                     Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
             screen.setCharacter(start_column + 8, start_row + 13, new TextCharacter(
@@ -164,7 +164,7 @@ public class ConsoleDrawer {
                         Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
             }
         }
-        if (player.hasArtifact(ArtifactName.HELMET)) {
+        if (player.hasArtifact(ArtifactName.HELMET) && player.isArtifactOn(ArtifactName.HELMET)) {
             screen.setCharacter(start_column + 3, start_row + 1, new TextCharacter(
                     Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
             screen.setCharacter(start_column + 9, start_row + 1, new TextCharacter(
@@ -174,7 +174,7 @@ public class ConsoleDrawer {
                         Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
             }
         }
-        if (player.hasArtifact(ArtifactName.GLOVES)) {
+        if (player.hasArtifact(ArtifactName.GLOVES) && player.isArtifactOn(ArtifactName.GLOVES)) {
             for (int i = 0; i < 2; i++) {
                 screen.setCharacter(start_column + i, start_row + 5, new TextCharacter(
                         Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
@@ -182,7 +182,7 @@ public class ConsoleDrawer {
                         Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
             }
         }
-        if (player.hasArtifact(ArtifactName.CUIRASS)) {
+        if (player.hasArtifact(ArtifactName.CUIRASS) && player.isArtifactOn(ArtifactName.CUIRASS)) {
             for (int i = 0; i < 5; i++) {
                 screen.setCharacter(start_column + 4 + i, start_row + 5, new TextCharacter(
                         Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
@@ -194,7 +194,7 @@ public class ConsoleDrawer {
                 }
             }
         }
-        if (player.hasArtifact(ArtifactName.RAPIER)) {
+        if (player.hasArtifact(ArtifactName.RAPIER) && player.isArtifactOn(ArtifactName.RAPIER)) {
             for (int i = 0; i < 6; i++) {
                 if (i != 4) {
                     screen.setCharacter(start_column + 11, start_row + 1 + i, new TextCharacter(
@@ -202,27 +202,7 @@ public class ConsoleDrawer {
                 }
             }
         }
-        if (player.hasArtifact(ArtifactName.STEEL_SWORD)) {
-            for (int i = 0; i < 6; i++) {
-                if (i != 4) {
-                    screen.setCharacter(start_column + 11, start_row + 1 + i, new TextCharacter(
-                            Symbols.DOUBLE_LINE_VERTICAL, TextColor.ANSI.CYAN, TextColor.ANSI.DEFAULT));
-                }
-            }
-            screen.setCharacter(start_column + 11, start_row + 3, new TextCharacter(
-                    Symbols.DOUBLE_LINE_VERTICAL_SINGLE_LINE_CROSS, TextColor.ANSI.CYAN, TextColor.ANSI.DEFAULT));
-        }
-        if (player.hasArtifact(ArtifactName.COPPER_SWORD)) {
-            for (int i = 0; i < 6; i++) {
-                if (i != 4) {
-                    screen.setCharacter(start_column + 11, start_row + 1 + i, new TextCharacter(
-                            Symbols.DOUBLE_LINE_VERTICAL, TextColor.ANSI.RED, TextColor.ANSI.DEFAULT));
-                }
-            }
-            screen.setCharacter(start_column + 11, start_row + 3, new TextCharacter(
-                    Symbols.DOUBLE_LINE_VERTICAL_SINGLE_LINE_CROSS, TextColor.ANSI.RED, TextColor.ANSI.DEFAULT));
-        }
-        if (player.hasArtifact(ArtifactName.WOODEN_SWORD)) {
+        if (player.hasArtifact(ArtifactName.WOODEN_SWORD) && player.isArtifactOn(ArtifactName.WOODEN_SWORD)) {
             for (int i = 0; i < 6; i++) {
                 if (i != 4) {
                     screen.setCharacter(start_column + 11, start_row + 1 + i, new TextCharacter(
@@ -232,22 +212,48 @@ public class ConsoleDrawer {
             screen.setCharacter(start_column + 11, start_row + 3, new TextCharacter(
                     Symbols.DOUBLE_LINE_VERTICAL_SINGLE_LINE_CROSS, TextColor.ANSI.YELLOW, TextColor.ANSI.DEFAULT));
         }
+        if (player.hasArtifact(ArtifactName.COPPER_SWORD) && player.isArtifactOn(ArtifactName.COPPER_SWORD)) {
+            for (int i = 0; i < 6; i++) {
+                if (i != 4) {
+                    screen.setCharacter(start_column + 11, start_row + 1 + i, new TextCharacter(
+                            Symbols.DOUBLE_LINE_VERTICAL, TextColor.ANSI.RED, TextColor.ANSI.DEFAULT));
+                }
+            }
+            screen.setCharacter(start_column + 11, start_row + 3, new TextCharacter(
+                    Symbols.DOUBLE_LINE_VERTICAL_SINGLE_LINE_CROSS, TextColor.ANSI.RED, TextColor.ANSI.DEFAULT));
+        }
+        if (player.hasArtifact(ArtifactName.STEEL_SWORD) && player.isArtifactOn(ArtifactName.STEEL_SWORD)) {
+            for (int i = 0; i < 6; i++) {
+                if (i != 4) {
+                    screen.setCharacter(start_column + 11, start_row + 1 + i, new TextCharacter(
+                            Symbols.DOUBLE_LINE_VERTICAL, TextColor.ANSI.CYAN, TextColor.ANSI.DEFAULT));
+                }
+            }
+            screen.setCharacter(start_column + 11, start_row + 3, new TextCharacter(
+                    Symbols.DOUBLE_LINE_VERTICAL_SINGLE_LINE_CROSS, TextColor.ANSI.CYAN, TextColor.ANSI.DEFAULT));
+        }
     }
 
     private void drawFullInventory(int start_column, int start_row, Player player) {
         List<ArtifactName> artifacts;
+        List<Boolean> isOn;
         if (player == null) {
             artifacts = new ArrayList<>();
+            isOn = new ArrayList<>();
             for (int i = 0; i < Inventory.INVENTORY_SIZE; i++) {
                 artifacts.add(null);
+                isOn.add(false);
             }
         } else {
             artifacts = player.getInventory();
+            isOn = player.getArtifactsOn();
         }
         TextGraphics inventoryGraphics = screen.newTextGraphics();
         inventoryGraphics.setForegroundColor(TextColor.ANSI.MAGENTA);
         for (int i = 0; i < Inventory.INVENTORY_SIZE; i++) {
-            String label = "0" + (i + 1) + " " + (artifacts.get(i) == null ? "----------" : artifacts.get(i).interfaceName);
+            String labelIsOn = isOn.get(i) ? "^" : " ";
+            String label = "0" + (i + 1) + " " +
+                    labelIsOn + (artifacts.get(i) == null ? "--------" : artifacts.get(i).interfaceName) + labelIsOn;
             inventoryGraphics.putString(start_column + 15 * (i / 2), start_row + 2 * (i % 2), label);
         }
     }

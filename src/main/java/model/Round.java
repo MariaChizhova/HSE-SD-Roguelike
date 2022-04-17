@@ -125,7 +125,7 @@ public class Round implements Serializable {
     }
 
     public void changeEquipment(int k) {
-        player.removeArtifact(k - 1);
+        player.putOnTakeOffArtifact(k - 1);
     }
 
 }
