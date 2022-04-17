@@ -129,19 +129,21 @@ public class Player implements Character, Cell, Serializable {
      * @param artifact
      */
     public void addArtifact(Artifact artifact) {
-        boolean isAdded = inventory.addArtifact(artifact);
-        if (isAdded) {
-            damage += artifact.getDamage();
-            armor += artifact.getArmor();
-        }
+        inventory.addArtifact(artifact);
     }
 
     /**
      * Check the availability of the artifact
-     * @param artifactName
      */
     public boolean hasArtifact(ArtifactName artifactName) {
         return inventory.checkArtifact(artifactName);
+    }
+
+    /**
+     * Check the if artifact is on
+     */
+    public boolean isArtifactOn(ArtifactName artifactName) {
+        return inventory.checkPutOnArtifact(artifactName);
     }
 
     /**
@@ -149,6 +151,13 @@ public class Player implements Character, Cell, Serializable {
      */
     public List<ArtifactName> getInventory() {
         return inventory.getFullInventory();
+    }
+
+    /**
+     * Check the artifacts on from inventory
+     */
+    public List<Boolean> getArtifactsOn() {
+        return inventory.getArtifactsOn();
     }
 
     private void increaseLevel() {
@@ -170,13 +179,15 @@ public class Player implements Character, Cell, Serializable {
     }
 
     /**
-     * Remove artifact from inventory
+     * Put on artifact from inventory if it wasn't and take off otherwise
      */
-    public void removeArtifact(int i) {
-        var artifact = inventory.removeArtifact(i);
+    public void putOnTakeOffArtifact(int i) {
+        var artifact = inventory.putOnTakeOffArtifact(i);
         if (artifact != null) {
-            damage -= artifact.getDamage();
-            armor -= artifact.getArmor();
+            boolean isOn = inventory.checkPutOnArtifact(i);
+            var sign = isOn ? 1 : -1;
+            damage += sign * artifact.getDamage();
+            armor += sign * artifact.getArmor();
         }
     }
 }

@@ -29,6 +29,7 @@ import static model.inventory.Artifact.getArtifactList;
 public class MapGenerator {
     private final int MAX_NUM_OF_AGGRESSIVE_ENEMIES = 3;
     private final int MAX_NUM_OF_PASSIVE_ENEMIES = 5;
+    private final int MAX_NUM_OF_COWARD_ENEMIES = 4;
     private final int MAX_NUM_OF_ARTIFACTS = 8;
     private final int MAX_NUM_OF_FOOD = 8;
 

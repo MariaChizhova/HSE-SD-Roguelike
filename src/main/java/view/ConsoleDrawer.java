@@ -194,46 +194,52 @@ public class ConsoleDrawer {
         if (player == null) {
             return;
         }
-        if (player.hasArtifact(ArtifactName.BOOTS)) {
+        if (player.hasArtifact(ArtifactName.BOOTS) && player.isArtifactOn(ArtifactName.BOOTS)) {
             ArtifactDrawer.bootsDrawer(start_column, start_row, screen);
         }
-        if (player.hasArtifact(ArtifactName.HELMET)) {
+        if (player.hasArtifact(ArtifactName.HELMET) && player.isArtifactOn(ArtifactName.HELMET)) {
             ArtifactDrawer.helmetDrawer(start_column, start_row, screen);
         }
-        if (player.hasArtifact(ArtifactName.GLOVES)) {
+        if (player.hasArtifact(ArtifactName.GLOVES) && player.isArtifactOn(ArtifactName.GLOVES)) {
             ArtifactDrawer.glovesDrawer(start_column, start_row, screen);
         }
-        if (player.hasArtifact(ArtifactName.CUIRASS)) {
+        if (player.hasArtifact(ArtifactName.CUIRASS) && player.isArtifactOn(ArtifactName.CUIRASS)) {
             ArtifactDrawer.cuirassDrawer(start_column, start_row, screen);
         }
-        if (player.hasArtifact(ArtifactName.RAPIER)) {
+        if (player.hasArtifact(ArtifactName.RAPIER) && player.isArtifactOn(ArtifactName.RAPIER)) {
             ArtifactDrawer.rapierDrawer(start_column, start_row, screen);
         }
-        if (player.hasArtifact(ArtifactName.STEEL_SWORD)) {
+        if (player.hasArtifact(ArtifactName.STEEL_SWORD) && player.isArtifactOn(ArtifactName.STEEL_SWORD)) {
             ArtifactDrawer.steelSwordDrawer(start_column, start_row, screen);
         }
-        if (player.hasArtifact(ArtifactName.COPPER_SWORD)) {
+        if (player.hasArtifact(ArtifactName.COPPER_SWORD) && player.isArtifactOn(ArtifactName.COPPER_SWORD)) {
             ArtifactDrawer.cooperSwordDrawer(start_column, start_row, screen);
         }
-        if (player.hasArtifact(ArtifactName.WOODEN_SWORD)) {
+        if (player.hasArtifact(ArtifactName.WOODEN_SWORD) && player.isArtifactOn(ArtifactName.WOODEN_SWORD)) {
             ArtifactDrawer.woodenSwordDrawer(start_column, start_row, screen);
         }
     }
 
     private void drawFullInventory(int start_column, int start_row, Player player) {
         List<ArtifactName> artifacts;
+        List<Boolean> isOn;
         if (player == null) {
             artifacts = new ArrayList<>();
+            isOn = new ArrayList<>();
             for (int i = 0; i < Inventory.INVENTORY_SIZE; i++) {
                 artifacts.add(null);
+                isOn.add(false);
             }
         } else {
             artifacts = player.getInventory();
+            isOn = player.getArtifactsOn();
         }
         TextGraphics inventoryGraphics = screen.newTextGraphics();
         inventoryGraphics.setForegroundColor(TextColor.ANSI.MAGENTA);
         for (int i = 0; i < Inventory.INVENTORY_SIZE; i++) {
-            String label = "0" + (i + 1) + " " + (artifacts.get(i) == null ? "----------" : artifacts.get(i).interfaceName);
+            String labelIsOn = isOn.get(i) ? "^" : " ";
+            String label = "0" + (i + 1) + " " +
+                    labelIsOn + (artifacts.get(i) == null ? "--------" : artifacts.get(i).interfaceName) + labelIsOn;
             inventoryGraphics.putString(start_column + 15 * (i / 2), start_row + 2 * (i % 2), label);
         }
     }

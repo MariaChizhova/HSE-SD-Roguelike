@@ -114,7 +114,13 @@ public class PlayerTest {
         var helmet = new Artifact(ArtifactName.HELMET, 0, 30);
         player.addArtifact(woodenSword);
         player.addArtifact(helmet);
+        player.putOnTakeOffArtifact(0);
+        player.putOnTakeOffArtifact(1);
         Assertions.assertEquals(30, player.getArmor() - oldArmor);
         Assertions.assertEquals(20, player.getDamage() - oldDamage);
+        player.putOnTakeOffArtifact(0);
+        player.putOnTakeOffArtifact(1);
+        Assertions.assertEquals(oldArmor, player.getArmor());
+        Assertions.assertEquals(oldDamage, player.getDamage());
     }
 }
