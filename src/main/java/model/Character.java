@@ -6,6 +6,11 @@ package model;
 public interface Character {
 
     /**
+     * @return character's health
+     */
+    public int getHealth();
+
+    /**
      * @return character's experience
      */
     public int getExperience();
@@ -14,6 +19,11 @@ public interface Character {
      * @return character's damage
      */
     public int getDamage();
+
+    /**
+     * @return character's armor
+     */
+    public int getArmor();
 
     /**
      * @return whether the character has died

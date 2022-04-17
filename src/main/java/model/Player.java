@@ -61,6 +61,14 @@ public class Player implements Character, Cell, Serializable {
     }
 
     /**
+     * @return the player's armor
+     */
+    @Override
+    public int getArmor() {
+        return armor;
+    }
+
+    /**
      * @return the player died
      */
     @Override
@@ -146,7 +154,7 @@ public class Player implements Character, Cell, Serializable {
     private void growthOfCharacteristics() {
         damage += 1;
         armor += 1;
-        health += maxHealth;
+        health = maxHealth;
     }
 
     public int getLevel() {

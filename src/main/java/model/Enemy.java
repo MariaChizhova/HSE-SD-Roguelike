@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 public class Enemy implements Character, Cell, Serializable {
 
-    private final static int DEFAULT = 10;
+    private final static int DEFAULT = 5;
     private final static int maxHealth = 100;
     private int health;
     private int damage;
@@ -35,6 +35,14 @@ public class Enemy implements Character, Cell, Serializable {
     }
 
     /**
+     * @return enemy health
+     */
+    @Override
+    public int getHealth() {
+        return health;
+    }
+
+    /**
      * @return the experience that the player will get when killing this enemy
      */
     @Override
@@ -48,6 +56,14 @@ public class Enemy implements Character, Cell, Serializable {
     @Override
     public int getDamage() {
         return damage;
+    }
+
+    /**
+     * @return enemy armor
+     */
+    @Override
+    public int getArmor() {
+        return armor;
     }
 
     /**
