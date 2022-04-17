@@ -10,8 +10,11 @@ import com.googlecode.lanterna.terminal.Terminal;
 import model.inventory.ArtifactName;
 import model.inventory.ArtifactWithPosition;
 import model.inventory.FoodWithPosition;
+import model.inventory.Inventory;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents console drawer
@@ -187,7 +190,7 @@ public class ConsoleDrawer {
         }
     }
 
-    private void drawInventory(int start_column, int start_row, Player player) {
+    private void drawPlayerInventory(int start_column, int start_row, Player player) {
         if (player == null) {
             return;
         }
@@ -214,6 +217,24 @@ public class ConsoleDrawer {
         }
         if (player.hasArtifact(ArtifactName.WOODEN_SWORD)) {
             ArtifactDrawer.woodenSwordDrawer(start_column, start_row, screen);
+        }
+    }
+
+    private void drawFullInventory(int start_column, int start_row, Player player) {
+        List<ArtifactName> artifacts;
+        if (player == null) {
+            artifacts = new ArrayList<>();
+            for (int i = 0; i < Inventory.INVENTORY_SIZE; i++) {
+                artifacts.add(null);
+            }
+        } else {
+            artifacts = player.getInventory();
+        }
+        TextGraphics inventoryGraphics = screen.newTextGraphics();
+        inventoryGraphics.setForegroundColor(TextColor.ANSI.MAGENTA);
+        for (int i = 0; i < Inventory.INVENTORY_SIZE; i++) {
+            String label = "0" + (i + 1) + " " + (artifacts.get(i) == null ? "----------" : artifacts.get(i).interfaceName);
+            inventoryGraphics.putString(start_column + 15 * (i / 2), start_row + 2 * (i % 2), label);
         }
     }
 
@@ -302,6 +323,9 @@ public class ConsoleDrawer {
             int fieldStartColumn = 2;
             int fieldStartRow = 4;
 
+            int fullInventoryStartColumn = 2;
+            int fullInventoryStartRow = 19;
+
             int heroStartColumn = 63;
             int heroStartRow = 4;
 
@@ -360,7 +384,8 @@ public class ConsoleDrawer {
                          player == null ? defaultLvl : player.getLevel(),
                          heroInfoStartColumn, heroInfoStartRow);
             drawImg(heroStartColumn, heroStartRow, heroHeight, heroWidth, hero);
-            drawInventory(heroStartColumn, heroStartRow, player);
+            drawPlayerInventory(heroStartColumn, heroStartRow, player);
+            drawFullInventory(fullInventoryStartColumn, fullInventoryStartRow, player);
             screen.refresh();
         } catch (Exception e) {
             e.printStackTrace();

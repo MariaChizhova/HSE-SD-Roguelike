@@ -2,9 +2,9 @@ package model;
 
 import model.inventory.Artifact;
 import model.inventory.ArtifactName;
+import model.inventory.Inventory;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,7 +20,7 @@ public class Player implements Character, Cell, Serializable {
     private int armor;
     private int experience;
     private Position position;
-    private List<Artifact> artifacts;
+    private final Inventory inventory;
     private int level;
 
     /**
@@ -33,7 +33,7 @@ public class Player implements Character, Cell, Serializable {
         this.armor = DEFAULT;
         this.experience = 0;
         this.position = position;
-        this.artifacts = new ArrayList<>();
+        this.inventory = new Inventory();
         this.level = 0;
     }
 
@@ -121,18 +121,26 @@ public class Player implements Character, Cell, Serializable {
      * @param artifact
      */
     public void addArtifact(Artifact artifact) {
-        artifacts.add(artifact);
+        boolean isAdded = inventory.addArtifact(artifact);
+        if (isAdded) {
+            damage += artifact.getDamage();
+            armor += artifact.getArmor();
+        }
     }
 
+    /**
+     * Check the availability of the artifact
+     * @param artifactName
+     */
     public boolean hasArtifact(ArtifactName artifactName) {
-        boolean has_artifact = false;
-        for (var artifact: artifacts) {
-            if (artifact.getName().equals(artifactName)) {
-                has_artifact = true;
-                break;
-            }
-        }
-        return has_artifact;
+        return inventory.checkArtifact(artifactName);
+    }
+
+    /**
+     * Check the availability of the artifact
+     */
+    public List<ArtifactName> getInventory() {
+        return inventory.getFullInventory();
     }
 
     private void increaseLevel() {
@@ -151,5 +159,16 @@ public class Player implements Character, Cell, Serializable {
 
     public int getLevel() {
         return level;
+    }
+
+    /**
+     * Remove artifact from inventory
+     */
+    public void removeArtifact(int i) {
+        var artifact = inventory.removeArtifact(i);
+        if (artifact != null) {
+            damage -= artifact.getDamage();
+            armor -= artifact.getArmor();
+        }
     }
 }
