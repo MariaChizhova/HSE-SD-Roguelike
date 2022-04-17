@@ -26,14 +26,15 @@ public class ConfuseStrategyDecorator extends StrategyDecorator implements Seria
      *  Makes one enemy move
      * @param playerPosition - player's position
      * @param enemyPosition - old position
+     * @param visibility - enemy's visibility radius
      * @return new position
      */
     @Override
-    public Position nextMove(Position playerPosition, Position enemyPosition) {
+    public Position nextMove(Position playerPosition, Position enemyPosition, int visibility) {
         if (confusedNumber > 0) {
             --confusedNumber;
-            return new SimpleStrategy().nextMove(playerPosition, enemyPosition);
+            return StrategyEnemy.getRandomStrategy().nextMove(playerPosition, enemyPosition, visibility);
         }
-        return decorate.nextMove(playerPosition, enemyPosition);
+        return decorate.nextMove(playerPosition, enemyPosition, visibility);
     }
 }

@@ -1,6 +1,5 @@
 package model;
 
-import controller.Generation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

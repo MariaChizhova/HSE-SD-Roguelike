@@ -55,15 +55,19 @@ public class InputHandler {
         switch (command) {
             case ArrowLeft:
                 round.movePlayerLeft();
+                round.moveEnemies();
                 break;
             case ArrowRight:
                 round.movePlayerRight();
+                round.moveEnemies();
                 break;
             case ArrowUp:
                 round.movePlayerUp();
+                round.moveEnemies();
                 break;
             case ArrowDown:
                 round.movePlayerDown();
+                round.moveEnemies();
                 break;
             case F1:
                 round.changeEquipment(1);
@@ -82,6 +86,9 @@ public class InputHandler {
                 break;
             case F6:
                 round.changeEquipment(6);
+                break;
+            case Escape:
+                round.moveEnemies();
                 break;
         }
     }
