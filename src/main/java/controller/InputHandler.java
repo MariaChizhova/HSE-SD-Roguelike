@@ -65,8 +65,23 @@ public class InputHandler {
             case ArrowDown:
                 round.movePlayerDown();
                 break;
-            case Escape:
-                round.changeEquipment();
+            case F1:
+                round.changeEquipment(1);
+                break;
+            case F2:
+                round.changeEquipment(2);
+                break;
+            case F3:
+                round.changeEquipment(3);
+                break;
+            case F4:
+                round.changeEquipment(4);
+                break;
+            case F5:
+                round.changeEquipment(5);
+                break;
+            case F6:
+                round.changeEquipment(6);
                 break;
         }
     }

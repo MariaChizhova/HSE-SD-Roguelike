@@ -10,8 +10,11 @@ import com.googlecode.lanterna.terminal.Terminal;
 import model.inventory.ArtifactName;
 import model.inventory.ArtifactWithPosition;
 import model.inventory.FoodWithPosition;
+import model.inventory.Inventory;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents console drawer
@@ -55,8 +58,6 @@ public class ConsoleDrawer {
 
     private void drawBorder() {
         TerminalSize terminalSize = screen.getTerminalSize();
-        System.out.println(terminalSize.getColumns());
-        System.out.println(terminalSize.getRows());
         for (int column = 0; column < terminalSize.getColumns(); column++) {
             screen.setCharacter(column, 0, new TextCharacter(
                     '#', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
@@ -147,7 +148,7 @@ public class ConsoleDrawer {
                 Symbols.TRIANGLE_DOWN_POINTING_BLACK, TextColor.ANSI.MAGENTA, TextColor.ANSI.DEFAULT));
     }
 
-    private void drawInventory(int start_column, int start_row, Player player) {
+    private void drawPlayerInventory(int start_column, int start_row, Player player) {
         if (player == null) {
             return;
         }
@@ -230,6 +231,24 @@ public class ConsoleDrawer {
             }
             screen.setCharacter(start_column + 11, start_row + 3, new TextCharacter(
                     Symbols.DOUBLE_LINE_VERTICAL_SINGLE_LINE_CROSS, TextColor.ANSI.YELLOW, TextColor.ANSI.DEFAULT));
+        }
+    }
+
+    private void drawFullInventory(int start_column, int start_row, Player player) {
+        List<ArtifactName> artifacts;
+        if (player == null) {
+            artifacts = new ArrayList<>();
+            for (int i = 0; i < Inventory.INVENTORY_SIZE; i++) {
+                artifacts.add(null);
+            }
+        } else {
+            artifacts = player.getInventory();
+        }
+        TextGraphics inventoryGraphics = screen.newTextGraphics();
+        inventoryGraphics.setForegroundColor(TextColor.ANSI.MAGENTA);
+        for (int i = 0; i < Inventory.INVENTORY_SIZE; i++) {
+            String label = "0" + (i + 1) + " " + (artifacts.get(i) == null ? "----------" : artifacts.get(i).interfaceName);
+            inventoryGraphics.putString(start_column + 15 * (i / 2), start_row + 2 * (i % 2), label);
         }
     }
 
@@ -480,7 +499,8 @@ public class ConsoleDrawer {
                     player == null ? 0 : player.getLevel(),
                     start_column, start_row);
             drawHero(63, start_row);
-            drawInventory(63, start_row, player);
+            drawPlayerInventory(63, start_row, player);
+            drawFullInventory(start_column, 19, player);
 
             screen.refresh();
         } catch (Exception e) {
