@@ -174,6 +174,9 @@ public class Player implements Character, Cell, Serializable {
         health = maxHealth;
     }
 
+    /**
+     * @return the player's level
+     */
     public int getLevel() {
         return level;
     }
