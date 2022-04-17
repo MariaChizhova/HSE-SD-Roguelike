@@ -129,11 +129,7 @@ public class Player implements Character, Cell, Serializable {
      * @param artifact
      */
     public void addArtifact(Artifact artifact) {
-        boolean isAdded = inventory.addArtifact(artifact);
-        if (isAdded) {
-            damage += artifact.getDamage();
-            armor += artifact.getArmor();
-        }
+        inventory.addArtifact(artifact);
     }
 
     /**
