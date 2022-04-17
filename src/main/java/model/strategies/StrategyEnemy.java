@@ -1,7 +1,6 @@
 package model.strategies;
 
 import java.util.Random;
-
 import model.Position;
 
 /**
