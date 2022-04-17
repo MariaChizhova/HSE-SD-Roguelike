@@ -50,24 +50,26 @@ public class InputHandler {
     /**
      * Processing game commands
      * @param command Input command
+     * @return is the game over
      */
-    public void processGameCommand(KeyType command, Round round) {
+    public boolean processGameCommand(KeyType command, Round round) {
+        boolean finished = false;
         switch (command) {
             case ArrowLeft:
-                round.movePlayerLeft();
-                round.moveEnemies();
+                finished = round.movePlayerLeft();
+                finished |= round.moveEnemies();
                 break;
             case ArrowRight:
-                round.movePlayerRight();
-                round.moveEnemies();
+                finished = round.movePlayerRight();
+                finished |= round.moveEnemies();
                 break;
             case ArrowUp:
-                round.movePlayerUp();
-                round.moveEnemies();
+                finished = round.movePlayerUp();
+                finished |= round.moveEnemies();
                 break;
             case ArrowDown:
-                round.movePlayerDown();
-                round.moveEnemies();
+                finished = round.movePlayerDown();
+                finished |= round.moveEnemies();
                 break;
             case F1:
                 round.changeEquipment(1);
@@ -88,8 +90,9 @@ public class InputHandler {
                 round.changeEquipment(6);
                 break;
             case Escape:
-                round.moveEnemies();
+                finished = round.moveEnemies();
                 break;
         }
+        return finished;
     }
 }
