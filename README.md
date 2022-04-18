@@ -151,7 +151,13 @@
 Часть Model. Интерфейс, отвечающий за стратегию врага в игре.
 
 ### SimpleStrategy
-Часть Model. Класс, реалтзующий интерфейс StrategyEnemy.
+Часть Model. Класс, реализующий интерфейс StrategyEnemy.
+
+### StrategyDecorator
+Часть Model. Абстрактный класс, который реализует интерфейс StrategyEnemy. Абстрактный декоратор стратегий.
+
+### ConfuseStrategyDecorator
+Часть Model. Класс, отвечающий за возможность конфузить мобов. Класс расширяет StrategyDecorator.
 
 ### FoodWithPosition
 Часть Model. Класс, который содержит информацию о позиции еды на поле
