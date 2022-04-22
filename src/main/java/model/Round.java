@@ -5,6 +5,7 @@ import model.inventory.FoodWithPosition;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * This class is responsible for the environment in the round.
@@ -13,8 +14,9 @@ import java.util.ArrayList;
 public class Round implements Serializable {
 
     private final Player player;
-    private final ArrayList<Enemy> enemies;
+    private ArrayList<Enemy> enemies;
     private final Field field;
+    private final static int p = 4;
 
     /**
      * Creating Round instance
@@ -111,6 +113,7 @@ public class Round implements Serializable {
      * @return is the game over
      */
     public boolean moveEnemies() {
+        ArrayList<Enemy> newEnemies = new ArrayList<>(enemies);
         for (Enemy enemy: enemies) {
             Position oldPosition = enemy.getPosition();
             Position newPosition = enemy.getStrategy().nextMove(player.getPosition(), oldPosition, enemy.getVisibility());
@@ -122,17 +125,59 @@ public class Round implements Serializable {
                         field.clearCage(oldPosition);
                     }
                     field.moveEnemy(newPosition, enemy);
+
+                    if (true) { // если это «ядовитая плесень»
+                        Random rand = new Random();
+                        if (rand.nextInt(p) == 0) {
+                            Position positionEnemy = getEmptyCell(newPosition);
+                            if (positionEnemy != null) {
+                                Enemy newEnemy = enemy.clone(positionEnemy);
+                                newEnemies.add(newEnemy);
+                                field.addEnemy(positionEnemy, newEnemy);
+                            }
+                        }
+                    }
+
                 } else if (cell instanceof Player) {
                     enemy.attack((Player) cell);
                     return player.isDead();
                 }
             }
         }
+        enemies = newEnemies;
         return false;
     }
 
     public void changeEquipment(int k) {
         player.putOnTakeOffArtifact(k - 1);
+    }
+
+    private Position getEmptyCell(Position position) {
+        Position positionUp = new Position(position.getX(), position.getY() - 1);
+        if (isEmptyPosition(positionUp)) {
+            return positionUp;
+        }
+        Position positionDown = new Position(position.getX(), position.getY() + 1);
+        if (isEmptyPosition(positionDown)) {
+            return positionDown;
+        }
+        Position positionRight = new Position(position.getX() + 1, position.getY());
+        if (isEmptyPosition(positionRight)) {
+            return positionRight;
+        }
+        Position positionLeft = new Position(position.getX() - 1, position.getY());
+        if (isEmptyPosition(positionLeft)) {
+            return positionLeft;
+        }
+        return null;
+    }
+
+    private boolean isEmptyPosition(Position position) {
+        if (field.isInsideBounds(position)) {
+            Cell cell = field.getCell(position);
+            return cell == null || cell instanceof EmptyCell;
+        }
+        return false;
     }
 
 }

@@ -138,4 +138,13 @@ public class Field implements Serializable {
         return height;
     }
 
+    /**
+     * Set enemy to position
+     * @param position where enemy will be placed
+     * @param enemy -- the character that will be placed on the field
+     */
+    public void addEnemy(Position position, Enemy enemy) {
+        field[position.getX()][position.getY()] = enemy;
+    }
+
 }
