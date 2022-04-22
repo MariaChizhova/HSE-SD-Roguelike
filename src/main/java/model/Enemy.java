@@ -117,4 +117,8 @@ public class Enemy implements Character, Cell, Serializable {
     public int getVisibility() {
         return visibility;
     }
+
+    public Enemy clone(Position position) {
+        return new Enemy(position, strategy);
+    }
 }

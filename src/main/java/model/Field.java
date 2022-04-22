@@ -94,4 +94,8 @@ public class Field implements Serializable {
         field[position.getX()][position.getY()] = new EmptyCell();
     }
 
+    public void addEnemy(Position position, Enemy enemy) {
+        field[position.getX()][position.getY()] = enemy;
+    }
+
 }
