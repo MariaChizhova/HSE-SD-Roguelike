@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import controller.MapGenerator;
+import model.enemy.Enemy;
 
 
 /**

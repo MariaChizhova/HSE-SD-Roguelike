@@ -1,8 +1,10 @@
 package model;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+
+import model.enemy.Enemy;
 import model.strategies.SimpleStrategy;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
 
 public class EnemyTest {
 
