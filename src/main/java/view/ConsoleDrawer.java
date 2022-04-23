@@ -7,6 +7,7 @@ import com.googlecode.lanterna.screen.TerminalScreen;
 import model.*;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
+import model.enemy.Enemy;
 import model.inventory.ArtifactName;
 import model.inventory.ArtifactWithPosition;
 import model.inventory.FoodWithPosition;

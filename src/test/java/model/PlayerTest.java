@@ -1,5 +1,6 @@
 package model;
 
+import model.enemy.Enemy;
 import model.inventory.Artifact;
 import model.inventory.ArtifactName;
 import model.strategies.SimpleStrategy;

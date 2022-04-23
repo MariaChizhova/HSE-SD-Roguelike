@@ -1,5 +1,6 @@
 package model;
 
+import model.enemy.Enemy;
 import model.inventory.ArtifactWithPosition;
 import model.inventory.FoodWithPosition;
 

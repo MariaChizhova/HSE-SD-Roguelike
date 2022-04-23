@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import model.Cell;
-import model.Enemy;
+import model.enemy.Enemy;
 import model.Field;
 import model.GenerationResult;
 import model.Player;

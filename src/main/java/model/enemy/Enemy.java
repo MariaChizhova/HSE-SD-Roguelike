@@ -1,5 +1,8 @@
-package model;
+package model.enemy;
 
+import model.Cell;
+import model.Character;
+import model.Position;
 import model.strategies.StrategyEnemy;
 
 import java.io.Serializable;

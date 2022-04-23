@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import controller.Generation;
+import model.enemy.Enemy;
 
 
 /**
