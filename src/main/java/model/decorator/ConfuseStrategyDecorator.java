@@ -1,7 +1,6 @@
 package model.decorator;
 
 import model.Position;
-import model.strategies.SimpleStrategy;
 import model.strategies.StrategyEnemy;
 
 import java.io.Serializable;
