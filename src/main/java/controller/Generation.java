@@ -10,20 +10,25 @@ import model.Field;
 import model.GenerationResult;
 import model.Player;
 import model.Position;
-import model.strategies.AggressiveStrategy;
-import model.strategies.CowardStrategy;
-import model.strategies.SimpleStrategy;
+import model.enemy.EnemyFactory;
+import model.enemy.DefaultEnemyFactory;
+import model.strategies.*;
 import model.Wall;
 import model.inventory.Artifact;
 import model.inventory.ArtifactWithPosition;
 import model.inventory.Food;
 import model.inventory.FoodWithPosition;
-import model.strategies.StrategyEnemy;
 
 import static model.WallDirection.getRandomDirection;
 import static model.inventory.Artifact.getArtifactList;
 
 public class Generation {
+    private EnemyFactory enemyFactory = new DefaultEnemyFactory();
+
+    public void setEnemyFactory(EnemyFactory enemyFactory) {
+        this.enemyFactory = enemyFactory;
+    }
+
     private final int MAX_NUM_OF_AGGRESSIVE_ENEMIES = 3;
     private final int MAX_NUM_OF_PASSIVE_ENEMIES = 5;
     private final int MAX_NUM_OF_COWARD_ENEMIES = 4;
@@ -82,12 +87,12 @@ public class Generation {
     }
 
     private void generateEnemies() {
-        generateEnemiesDependsOnStrategy(MAX_NUM_OF_PASSIVE_ENEMIES, new SimpleStrategy());
-        generateEnemiesDependsOnStrategy(MAX_NUM_OF_AGGRESSIVE_ENEMIES, new AggressiveStrategy());
-        generateEnemiesDependsOnStrategy(MAX_NUM_OF_COWARD_ENEMIES, new CowardStrategy());
+        generateEnemiesDependsOnStrategy(MAX_NUM_OF_PASSIVE_ENEMIES, StrategyType.SIMPLE);
+        generateEnemiesDependsOnStrategy(MAX_NUM_OF_AGGRESSIVE_ENEMIES, StrategyType.AGGRESSIVE);
+        generateEnemiesDependsOnStrategy(MAX_NUM_OF_COWARD_ENEMIES, StrategyType.COWARD);
     }
 
-    private void generateEnemiesDependsOnStrategy(int maxNum, StrategyEnemy strategyEnemy) {
+    private void generateEnemiesDependsOnStrategy(int maxNum, StrategyType strategyType) {
         int cnt = 0;
         Random rand = new Random();
 
@@ -96,7 +101,12 @@ public class Generation {
             int enemyXPos = rand.nextInt(Field.FIELD_WIDTH);
             int enemyYPos = rand.nextInt(Field.FIELD_HEIGHT);
             if (!isFilled[enemyXPos][enemyYPos]) {
-                var enemy = new Enemy(new Position(enemyXPos, enemyYPos), strategyEnemy);
+                Enemy enemy = null;
+                switch (strategyType) {
+                    case AGGRESSIVE ->  enemy = enemyFactory.createAggressiveEnemy(new Position(enemyXPos, enemyYPos));
+                    case COWARD -> enemy = enemyFactory.createCowardEnemy(new Position(enemyXPos, enemyYPos));
+                    default -> enemy = enemyFactory.createPassiveEnemy(new Position(enemyXPos, enemyYPos));
+                }
                 enemies.add(enemy);
                 setCellValue(enemyXPos, enemyYPos, enemy);
                 cnt++;
