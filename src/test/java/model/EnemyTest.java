@@ -10,7 +10,7 @@ public class EnemyTest {
     @Test
     public void attackPlayerTest() {
         var player = new Player(new Position(5, 5));
-        var enemy = new Enemy(new Position(5, 4), new SimpleStrategy());
+        var enemy = new Enemy(new Position(5, 4), new SimpleStrategy(), "white");
         enemy.attack(player);
         Assertions.assertEquals(96, player.getHealth());
     }
@@ -18,7 +18,7 @@ public class EnemyTest {
     @Test
     public void killPlayerTest() {
         var player = new Player(new Position(5, 5));
-        var enemy = new Enemy(new Position(5, 4), new SimpleStrategy());
+        var enemy = new Enemy(new Position(5, 4), new SimpleStrategy(), "white");
         for(int i = 0; i < 24; i++) {
             enemy.attack(player);
             Assertions.assertFalse(player.isDead());

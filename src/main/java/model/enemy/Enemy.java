@@ -12,6 +12,7 @@ import java.io.Serializable;
  */
 public class Enemy implements Character, Cell, Serializable {
 
+    private String color;
     private final static int DEFAULT = 5;
     private final static int maxHealth = 100;
     private int health;
@@ -26,8 +27,9 @@ public class Enemy implements Character, Cell, Serializable {
      * Enemy Constructor
      * @param position the enemy is in
      * @param strategy that the enemy will follow
+     * @param color enemy color
      */
-    public Enemy(Position position, StrategyEnemy strategy) {
+    public Enemy(Position position, StrategyEnemy strategy, String color) {
         this.health = maxHealth;
         this.damage = DEFAULT;
         this.armor = DEFAULT;
@@ -35,8 +37,15 @@ public class Enemy implements Character, Cell, Serializable {
         this.visibility = 5;
         this.position = position;
         this.strategy = strategy;
+        this.color = color;
     }
 
+    /**
+     * @return enemy color
+     */
+    public String getColor() {
+        return color;
+    }
     /**
      * @return enemy health
      */
@@ -122,6 +131,6 @@ public class Enemy implements Character, Cell, Serializable {
     }
 
     public Enemy clone(Position position) {
-        return new Enemy(position, strategy);
+        return new Enemy(position, strategy, color);
     }
 }
