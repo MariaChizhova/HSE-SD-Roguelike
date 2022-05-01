@@ -147,5 +147,4 @@ public class Field implements Serializable {
     public void addEnemy(Position position, Enemy enemy) {
         field[position.getX()][position.getY()] = enemy;
     }
-
 }
