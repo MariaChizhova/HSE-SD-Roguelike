@@ -426,12 +426,12 @@ public class ConsoleDrawer {
 
             int start_column = 2;
             int start_row = 4;
-            drawGameBorder(start_column - 1, start_row - 1, 3 * Field.FIELD_WIDTH + 2, Field.FIELD_HEIGHT + 2);
+            drawGameBorder(start_column - 1, start_row - 1, 3 * field.getWidth() + 2, field.getHeight() + 2);
             drawGameBorder(62, start_row - 1, 15, 16);
             Player player = null;
 
-            for (int i = 0; i < Field.FIELD_HEIGHT; i++) {
-                for (int j = 0; j < Field.FIELD_WIDTH; j++) {
+            for (int i = 0; i < field.getHeight(); i++) {
+                for (int j = 0; j < field.getWidth(); j++) {
                     var cell = field.getCell(new Position(j, i));
                     if (cell instanceof Player) {
                         screen.setCharacter(start_column + 3 * j, start_row + i, new TextCharacter(

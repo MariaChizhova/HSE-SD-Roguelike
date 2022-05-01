@@ -10,16 +10,17 @@ import controller.Generation;
  * Stores information about the field: which objects are in the field grid
  */
 public class Field implements Serializable {
-    public static final int FIELD_WIDTH = 19;
-    public static final int FIELD_HEIGHT = 13;
-
     private Cell[][] field;
+    private int width;
+    private int height;
 
     /**
      * Creating Field instance
      */
-    public Field() {
-        field = new Cell[FIELD_WIDTH][FIELD_HEIGHT];
+    public Field(int width, int height) {
+        this.width = width;
+        this.height = height;
+        field = new Cell[width][height];
     }
 
 
@@ -28,16 +29,9 @@ public class Field implements Serializable {
      * @param generation - field generation
      */
     public Field(Generation generation) {
-        field = new Cell[FIELD_WIDTH][FIELD_HEIGHT];
-        fillField(generation.getGeneration());
-    }
-
-    /**
-     * Updating generation of field
-     * @param generation - field generation
-     */
-    public void updateGeneration(Generation generation) {
-        field = new Cell[FIELD_WIDTH][FIELD_HEIGHT];
+        this.width = generation.getWidth();
+        this.height = generation.getHeight();
+        field = new Cell[width][height];
         fillField(generation.getGeneration());
     }
 
@@ -61,7 +55,7 @@ public class Field implements Serializable {
      * @return whether the position is valid
      */
     public boolean isValidPosition(Position position) {
-        return position.getX() < FIELD_WIDTH && position.getX() >= 0 && position.getY() < FIELD_HEIGHT && position.getY() >= 0;
+        return position.getX() < width && position.getX() >= 0 && position.getY() < height && position.getY() >= 0;
     }
 
     /**
@@ -92,6 +86,24 @@ public class Field implements Serializable {
      */
     public void clearCage(Position position) {
         field[position.getX()][position.getY()] = new EmptyCell();
+    }
+
+    /**
+     * Getting width of map
+     *
+     * @return width
+     */
+    public int getWidth() {
+        return width;
+    }
+
+    /**
+     * Getting width of map
+     *
+     * @return width
+     */
+    public int getHeight() {
+        return height;
     }
 
 }

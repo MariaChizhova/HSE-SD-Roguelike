@@ -6,7 +6,6 @@ import java.util.Random;
 
 import model.Cell;
 import model.Enemy;
-import model.Field;
 import model.GenerationResult;
 import model.Player;
 import model.Position;
@@ -36,10 +35,18 @@ public class Generation {
     private final List<GenerationResult> generation = new ArrayList<>();
     private final Boolean[][] isFilled;
 
-    public Generation() {
-        isFilled = new Boolean[Field.FIELD_WIDTH][Field.FIELD_HEIGHT];
-        for (int y = 0; y < Field.FIELD_HEIGHT; y++) {
-            for (int x = 0; x < Field.FIELD_WIDTH; x++) {
+    private int width;
+    private int height;
+
+    /**
+     * Creating Generation instance
+     */
+    public Generation(int width, int height) {
+        this.width = width;
+        this.height = height;
+        isFilled = new Boolean[width][height];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 isFilled[x][y] = false;
             }
         }
@@ -51,8 +58,8 @@ public class Generation {
     }
 
     private void generateWalls() {
-        for (int y = 1; y < Field.FIELD_HEIGHT; y += 2) {
-            for (int x = 1; x < Field.FIELD_WIDTH; x += 2) {
+        for (int y = 1; y < height; y += 2) {
+            for (int x = 1; x < width; x += 2) {
                 setCellValue(x, y, new Wall());
 
                 switch (getRandomDirection()) {
@@ -93,8 +100,8 @@ public class Generation {
 
         int numOfEnemies = rand.nextInt(maxNum) + 1;
         while (cnt != numOfEnemies) {
-            int enemyXPos = rand.nextInt(Field.FIELD_WIDTH);
-            int enemyYPos = rand.nextInt(Field.FIELD_HEIGHT);
+            int enemyXPos = rand.nextInt(width);
+            int enemyYPos = rand.nextInt(height);
             if (!isFilled[enemyXPos][enemyYPos]) {
                 var enemy = new Enemy(new Position(enemyXPos, enemyYPos), strategyEnemy);
                 enemies.add(enemy);
@@ -111,8 +118,8 @@ public class Generation {
 
         int numOfArtifacts = rand.nextInt(MAX_NUM_OF_ARTIFACTS) + 1;
         while (cnt != numOfArtifacts) {
-            int xPos = rand.nextInt(Field.FIELD_WIDTH);
-            int yPos = rand.nextInt(Field.FIELD_HEIGHT);
+            int xPos = rand.nextInt(width);
+            int yPos = rand.nextInt(height);
             Artifact randomArtifact = artifactList.get(rand.nextInt(artifactList.size()));
             if (!isFilled[xPos][yPos]) {
                 var artifact = new ArtifactWithPosition(new Position(xPos, yPos), randomArtifact);
@@ -128,8 +135,8 @@ public class Generation {
 
         int numOfFood = rand.nextInt(MAX_NUM_OF_FOOD) + 1;
         while (cnt != numOfFood) {
-            int xPos = rand.nextInt(Field.FIELD_WIDTH);
-            int yPos = rand.nextInt(Field.FIELD_HEIGHT);
+            int xPos = rand.nextInt(width);
+            int yPos = rand.nextInt(height);
             Food food = new Food(rand.nextInt(16) + 5);
             if (!isFilled[xPos][yPos]) {
                 var foodWithPos = new FoodWithPosition(new Position(xPos, yPos), food);
@@ -142,8 +149,8 @@ public class Generation {
     private void generatePlayer() {
         Random rand = new Random();
         while (true) {
-            int playerXPos = rand.nextInt(Field.FIELD_WIDTH);
-            int playerYPos = rand.nextInt(Field.FIELD_HEIGHT);
+            int playerXPos = rand.nextInt(width);
+            int playerYPos = rand.nextInt(height);
             if (!isFilled[playerXPos][playerYPos]) {
                 player = new Player(new Position(playerXPos, playerYPos));
                 setCellValue(playerXPos, playerYPos, player);
@@ -154,7 +161,7 @@ public class Generation {
     }
 
     private boolean checkCell(int x, int y) {
-        return x >= 0 && y >= 0 && x < Field.FIELD_WIDTH && y < Field.FIELD_HEIGHT;
+        return x >= 0 && y >= 0 && x < width && y < height;
     }
 
     private void setCellValue(int x, int y, Cell cell) {
@@ -162,15 +169,49 @@ public class Generation {
         isFilled[x][y] = true;
     }
 
+
+    /**
+     * Getting player
+     *
+     * @return player
+     */
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     * Getting all enemies on map
+     *
+     * @return enemies
+     */
     public ArrayList<Enemy> getEnemies() {
         return enemies;
     }
 
+    /**
+     * Getting generation of map
+     *
+     * @return generation
+     */
     public List<GenerationResult> getGeneration() {
         return generation;
+    }
+
+    /**
+     * Getting width of map
+     *
+     * @return width
+     */
+    public int getWidth() {
+        return width;
+    }
+
+    /**
+     * Getting width of map
+     *
+     * @return width
+     */
+    public int getHeight() {
+        return height;
     }
 }

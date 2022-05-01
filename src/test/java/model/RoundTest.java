@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 public class RoundTest {
     @Test
     public void testMovePlayerUp() {
-        var field = new Field();
-        Generation generation = new Generation();
+        var field = new Field(19, 13);
+        Generation generation = new Generation(19, 13);
         field = new Field(generation);
         Round round = new Round(generation.getPlayer(), generation.getEnemies(), field);
         Position currentPosition = round.getPlayer().getPosition();
@@ -27,8 +27,8 @@ public class RoundTest {
 
     @Test
     public void testMovePlayerDown() {
-        var field = new Field();
-        Generation generation = new Generation();
+        var field = new Field(19, 13);
+        Generation generation = new Generation(19, 13);
         field = new Field(generation);
         Round round = new Round(generation.getPlayer(), generation.getEnemies(), field);
         Position currentPosition = round.getPlayer().getPosition();
@@ -43,8 +43,8 @@ public class RoundTest {
 
     @Test
     public void testMovePlayerLeft() {
-        var field = new Field();
-        Generation generation = new Generation();
+        var field = new Field(19, 13);
+        Generation generation = new Generation(19, 13);
         field = new Field(generation);
         Round round = new Round(generation.getPlayer(), generation.getEnemies(), field);
         Position currentPosition = round.getPlayer().getPosition();
@@ -59,8 +59,8 @@ public class RoundTest {
 
     @Test
     public void testMovePlayerRight() {
-        var field = new Field();
-        Generation generation = new Generation();
+        var field = new Field(19, 13);
+        Generation generation = new Generation(19, 13);
         field = new Field(generation);
         Round round = new Round(generation.getPlayer(), generation.getEnemies(), field);
         Position currentPosition = round.getPlayer().getPosition();

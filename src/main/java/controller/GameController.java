@@ -116,7 +116,7 @@ public class GameController {
      * Starting the new game
      */
     public void startGame() {
-        generation = new Generation();
+        generation = new Generation(19, 13);
         field = new Field(generation);
         round = new Round(generation.getPlayer(), generation.getEnemies(), field);
     }
