@@ -12,6 +12,7 @@ public class RedEnemyFactory implements EnemyFactory {
 
     private String color = "red";
     private final String name = "clone";
+    private final static int DEFAULT = 5;
     /**
      * Creates aggressive enemy
      * @param position position of enemy
@@ -19,7 +20,7 @@ public class RedEnemyFactory implements EnemyFactory {
      */
     @Override
     public Enemy createAggressiveEnemy(Position position) {
-        return new Enemy(position, new AggressiveStrategy(), color);
+        return new Enemy(position, new AggressiveStrategy(), name, DEFAULT, DEFAULT, DEFAULT);
     }
 
     /**
@@ -29,7 +30,7 @@ public class RedEnemyFactory implements EnemyFactory {
      */
     @Override
     public Enemy createCowardEnemy(Position position) {
-        return new Enemy(position, new CowardStrategy(), color);
+        return new Enemy(position, new CowardStrategy(), name, DEFAULT, DEFAULT, DEFAULT);
     }
 
     /**
@@ -39,6 +40,6 @@ public class RedEnemyFactory implements EnemyFactory {
      */
     @Override
     public Enemy createPassiveEnemy(Position position) {
-        return new Enemy(position, new SimpleStrategy(), color);
+        return new Enemy(position, new SimpleStrategy(), name, DEFAULT, DEFAULT, DEFAULT);
     }
 }

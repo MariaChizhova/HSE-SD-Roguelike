@@ -5,14 +5,12 @@ import model.strategies.AggressiveStrategy;
 import model.strategies.CowardStrategy;
 import model.strategies.SimpleStrategy;
 
-/**
- * Default enemy factory
- */
-public class DefaultEnemyFactory implements EnemyFactory {
+public class SkeletonEnemyFactory implements EnemyFactory{
 
-    private String color = "white";
-    private final String name = "default";
+    private final String name = "skeleton";
     private final static int DEFAULT = 5;
+    private final static int SKELETONDAMAGE = 6;
+    private final static int SKELETONEXP = 6;
 
     /**
      * Creates aggressive enemy
@@ -21,7 +19,7 @@ public class DefaultEnemyFactory implements EnemyFactory {
      */
     @Override
     public Enemy createAggressiveEnemy(Position position) {
-        return new Enemy(position, new AggressiveStrategy(), name, DEFAULT, DEFAULT, DEFAULT);
+        return new Enemy(position, new AggressiveStrategy(), name, SKELETONDAMAGE, DEFAULT, SKELETONEXP);
     }
 
     /**
@@ -31,7 +29,7 @@ public class DefaultEnemyFactory implements EnemyFactory {
      */
     @Override
     public Enemy createCowardEnemy(Position position) {
-        return new Enemy(position, new CowardStrategy(), name, DEFAULT, DEFAULT, DEFAULT);
+        return new Enemy(position, new CowardStrategy(), name, SKELETONDAMAGE, DEFAULT, SKELETONEXP);
     }
 
     /**
@@ -41,6 +39,6 @@ public class DefaultEnemyFactory implements EnemyFactory {
      */
     @Override
     public Enemy createPassiveEnemy(Position position) {
-        return new Enemy(position, new SimpleStrategy(), name, DEFAULT, DEFAULT, DEFAULT);
+        return new Enemy(position, new SimpleStrategy(), name, SKELETONDAMAGE, DEFAULT, SKELETONEXP);
     }
 }
