@@ -117,6 +117,7 @@ public class GameController {
      */
     public void startGame() {
         generation = new Generation(19, 13);
+//        generation = new Generation("file.txt");
         field = new Field(generation);
         round = new Round(generation.getPlayer(), generation.getEnemies(), field);
     }

@@ -1,6 +1,9 @@
 package controller;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -55,6 +58,64 @@ public class Generation {
         generateArtifacts();
         generateFood();
         generatePlayer();
+    }
+
+    public Generation(String fileName) {
+        List<List<String>> fieldText = new ArrayList<>();
+        try {
+            BufferedReader in = new BufferedReader(new FileReader(fileName));
+            while (in.ready()) {
+                String line = in.readLine();
+                List<String> characters = Arrays.asList(line.split(""));
+                fieldText.add(characters);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        this.width = fieldText.get(0).size();
+        this.height = fieldText.size();
+        isFilled = new Boolean[width][height];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                isFilled[x][y] = false;
+            }
+        }
+
+        Random rand = new Random();
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                String ch = fieldText.get(y).get(x);
+                if (ch.equals("F")) {
+                    Food food = new Food(rand.nextInt(16) + 5);
+                    var foodWithPos = new FoodWithPosition(new Position(x, y), food);
+                    setCellValue(x, y, foodWithPos);
+                } else if (ch.equals("E")) {
+                    var enemy = new Enemy(new Position(x, y), new AggressiveStrategy());
+                    enemies.add(enemy);
+                    setCellValue(x, y, enemy);
+                } else if (ch.equals("S")) {
+                    var enemy = new Enemy(new Position(x, y), new SimpleStrategy());
+                    enemies.add(enemy);
+                    setCellValue(x, y, enemy);
+                } else if (ch.equals("C")) {
+                    var enemy = new Enemy(new Position(x, y), new CowardStrategy());
+                    enemies.add(enemy);
+                    setCellValue(x, y, enemy);
+                } else if (ch.equals("A")) {
+                    var artifactList = getArtifactList();
+                    Artifact randomArtifact = artifactList.get(rand.nextInt(artifactList.size()));
+                    var artifact = new ArtifactWithPosition(new Position(x, y), randomArtifact);
+                    setCellValue(x, y, artifact);
+                } else if (ch.equals("#")) {
+                    setCellValue(x, y, new Wall());
+                } else if (ch.equals("P")) {
+                    player = new Player(new Position(x, y));
+                    setCellValue(x, y, player);
+                }
+            }
+        }
     }
 
     private void generateWalls() {
