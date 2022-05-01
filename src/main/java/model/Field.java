@@ -140,9 +140,9 @@ public class Field implements Serializable {
     }
 
     /**
-     * Set enemy to position
-     * @param position where enemy will be placed
-     * @param enemy -- the character that will be placed on the field
+     * Create an enemy on the field
+     * @param position - its position
+     * @param enemy - its enemy
      */
     public void addEnemy(Position position, Enemy enemy) {
         field[position.getX()][position.getY()] = enemy;

@@ -16,8 +16,8 @@ public class DefaultEnemyFactory implements EnemyFactory {
      * @return aggressive enemy
      */
     @Override
-    public Enemy createAggressiveEnemy(Position position) {
-        return new Enemy(position, new AggressiveStrategy());
+    public Enemy createAggressiveEnemy(Position position, String name) {
+        return new Enemy(position, new AggressiveStrategy(), name);
     }
 
     /**
@@ -26,8 +26,8 @@ public class DefaultEnemyFactory implements EnemyFactory {
      * @return coward enemy
      */
     @Override
-    public Enemy createCowardEnemy(Position position) {
-        return new Enemy(position, new CowardStrategy());
+    public Enemy createCowardEnemy(Position position, String name) {
+        return new Enemy(position, new CowardStrategy(), name);
     }
 
     /**
@@ -36,7 +36,7 @@ public class DefaultEnemyFactory implements EnemyFactory {
      * @return passive enemy
      */
     @Override
-    public Enemy createPassiveEnemy(Position position) {
-        return new Enemy(position, new SimpleStrategy());
+    public Enemy createPassiveEnemy(Position position, String name) {
+        return new Enemy(position, new SimpleStrategy(), name);
     }
 }

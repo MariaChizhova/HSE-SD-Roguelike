@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Random;
 
 import model.Cell;
-import model.Enemy;
+import model.enemy.Enemy;
 import model.GeneratedMap;
 import model.Player;
 import model.Position;

@@ -11,19 +11,19 @@ public interface EnemyFactory {
      * @param position position of enemy
      * @return aggressive enemy
      */
-    Enemy createAggressiveEnemy(Position position);
+    Enemy createAggressiveEnemy(Position position, String name);
 
     /**
      * Creates coward enemy
      * @param position position of enemy
      * @return coward enemy
      */
-    Enemy createCowardEnemy(Position position);
+    Enemy createCowardEnemy(Position position, String name);
 
     /**
      * Creates passive enemy
      * @param position position of enemy
      * @return coward enemy
      */
-    Enemy createPassiveEnemy(Position position);
+    Enemy createPassiveEnemy(Position position, String name);
 }

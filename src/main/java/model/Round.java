@@ -6,6 +6,7 @@ import model.inventory.FoodWithPosition;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -127,12 +128,12 @@ public class Round implements Serializable {
                     }
                     field.moveEnemy(newPosition, enemy);
 
-                    if (true) { // если это «ядовитая плесень»
+                    if (Objects.equals(enemy.getName(), "ядовитая плесень")) {
                         Random rand = new Random();
                         if (rand.nextInt(p) == 0) {
                             Position positionEnemy = getEmptyCell(newPosition);
                             if (positionEnemy != null) {
-                                Enemy newEnemy = enemy.clone(positionEnemy);
+                                Enemy newEnemy = enemy.clone(positionEnemy, enemy.getName());
                                 newEnemies.add(newEnemy);
                                 field.addEnemy(positionEnemy, newEnemy);
                             }
