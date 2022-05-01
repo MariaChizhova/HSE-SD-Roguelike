@@ -11,6 +11,7 @@ import model.strategies.SimpleStrategy;
 public class CloneEnemyFactory implements EnemyFactory {
 
     private final String name = "clone";
+    private final static int DEFAULT = 5;
     /**
      * Creates aggressive enemy
      * @param position position of enemy
@@ -18,7 +19,7 @@ public class CloneEnemyFactory implements EnemyFactory {
      */
     @Override
     public Enemy createAggressiveEnemy(Position position) {
-        return new Enemy(position, new AggressiveStrategy(), name);
+        return new Enemy(position, new AggressiveStrategy(), name, DEFAULT, DEFAULT, DEFAULT);
     }
 
     /**
@@ -28,7 +29,7 @@ public class CloneEnemyFactory implements EnemyFactory {
      */
     @Override
     public Enemy createCowardEnemy(Position position) {
-        return new Enemy(position, new CowardStrategy(), name);
+        return new Enemy(position, new CowardStrategy(), name, DEFAULT, DEFAULT, DEFAULT);
     }
 
     /**
@@ -38,6 +39,6 @@ public class CloneEnemyFactory implements EnemyFactory {
      */
     @Override
     public Enemy createPassiveEnemy(Position position) {
-        return new Enemy(position, new SimpleStrategy(), name);
+        return new Enemy(position, new SimpleStrategy(), name, DEFAULT, DEFAULT, DEFAULT);
     }
 }
