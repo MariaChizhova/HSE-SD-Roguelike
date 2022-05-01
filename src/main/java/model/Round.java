@@ -127,7 +127,7 @@ public class Round implements Serializable {
                     }
                     field.moveEnemy(newPosition, enemy);
 
-                    if (Objects.equals(enemy.getName(), "ядовитая плесень")) {
+                    if (Objects.equals(enemy.getName(), "clone")) {
                         Random rand = new Random();
                         if (rand.nextInt(p) == 0) {
                             Position positionEnemy = getEmptyCell(newPosition);

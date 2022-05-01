@@ -104,13 +104,13 @@ public class Generation {
                 Enemy enemy;
                 switch (strategyType) {
                     case AGGRESSIVE:
-                        enemy = enemyFactory.createAggressiveEnemy(new Position(enemyXPos, enemyYPos), "ядовитая плесень");
+                        enemy = enemyFactory.createAggressiveEnemy(new Position(enemyXPos, enemyYPos));
                         break;
                     case COWARD:
-                        enemy = enemyFactory.createCowardEnemy(new Position(enemyXPos, enemyYPos), "дракон");
+                        enemy = enemyFactory.createCowardEnemy(new Position(enemyXPos, enemyYPos));
                         break;
                     default:
-                        enemy = enemyFactory.createPassiveEnemy(new Position(enemyXPos, enemyYPos), "скелет");
+                        enemy = enemyFactory.createPassiveEnemy(new Position(enemyXPos, enemyYPos));
                         break;
                 }
                 enemies.add(enemy);

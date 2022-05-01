@@ -6,12 +6,11 @@ import model.strategies.CowardStrategy;
 import model.strategies.SimpleStrategy;
 
 /**
- * Default enemy factory
+ * Red enemy factory
  */
-public class DefaultEnemyFactory implements EnemyFactory {
+public class CloneEnemyFactory implements EnemyFactory {
 
-    private String name = "default";
-
+    private String name = "clone";
     /**
      * Creates aggressive enemy
      * @param position position of enemy
