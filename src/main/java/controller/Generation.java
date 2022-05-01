@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import model.Cell;
+import model.enemy.CloneEnemyFactory;
 import model.enemy.Enemy;
 import model.Field;
 import model.GenerationResult;
@@ -102,6 +103,11 @@ public class Generation {
             int enemyYPos = rand.nextInt(Field.FIELD_HEIGHT);
             if (!isFilled[enemyXPos][enemyYPos]) {
                 Enemy enemy;
+                if (rand.nextInt(2) == 0) {
+                    setEnemyFactory(new DefaultEnemyFactory());
+                } else {
+                    setEnemyFactory(new CloneEnemyFactory());
+                }
                 switch (strategyType) {
                     case AGGRESSIVE:
                         enemy = enemyFactory.createAggressiveEnemy(new Position(enemyXPos, enemyYPos));

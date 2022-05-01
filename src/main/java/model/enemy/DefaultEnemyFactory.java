@@ -10,7 +10,7 @@ import model.strategies.SimpleStrategy;
  */
 public class DefaultEnemyFactory implements EnemyFactory {
 
-    private String name = "default";
+    private final String name = "default";
 
     /**
      * Creates aggressive enemy

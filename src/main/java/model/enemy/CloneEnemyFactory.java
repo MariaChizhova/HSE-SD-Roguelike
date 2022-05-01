@@ -10,7 +10,7 @@ import model.strategies.SimpleStrategy;
  */
 public class CloneEnemyFactory implements EnemyFactory {
 
-    private String name = "clone";
+    private final String name = "clone";
     /**
      * Creates aggressive enemy
      * @param position position of enemy
