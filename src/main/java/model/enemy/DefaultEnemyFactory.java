@@ -11,6 +11,7 @@ import model.strategies.SimpleStrategy;
 public class DefaultEnemyFactory implements EnemyFactory {
 
     private String color = "white";
+    private final String name = "default";
 
     /**
      * Creates aggressive enemy

@@ -11,6 +11,7 @@ import model.strategies.SimpleStrategy;
 public class RedEnemyFactory implements EnemyFactory {
 
     private String color = "red";
+    private final String name = "clone";
     /**
      * Creates aggressive enemy
      * @param position position of enemy
