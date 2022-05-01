@@ -65,7 +65,7 @@ public class InputHandlerTest {
 
     @Test
     public void testProcessGameCommand() {
-        MapGenerator mapGenerator = new MapGenerator();
+        MapGenerator mapGenerator = new MapGenerator(19, 13);
         var field = new Field(mapGenerator);
         Round round = new Round(mapGenerator.getPlayer(), mapGenerator.getEnemies(), field);
         Position curPos = round.getPlayer().getPosition();

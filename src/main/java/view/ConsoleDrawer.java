@@ -343,14 +343,13 @@ public class ConsoleDrawer {
             int bordersSize = 2;
 
             drawBorder(fieldStartColumn - borderSize, fieldStartRow - borderSize,
-                    cellSize * Field.FIELD_WIDTH + bordersSize, Field.FIELD_HEIGHT + bordersSize);
+                    cellSize * field.getWidth()  + bordersSize, field.getHeight() + bordersSize);
             drawBorder(heroStartColumn - borderSize, heroStartRow - borderSize,
                     heroWidth + bordersSize, heroHeight + bordersSize);
-
             Player player = null;
 
-            for (int i = 0; i < Field.FIELD_HEIGHT; i++) {
-                for (int j = 0; j < Field.FIELD_WIDTH; j++) {
+            for (int i = 0; i < field.getHeight(); i++) {
+                for (int j = 0; j < field.getWidth(); j++) {
                     var cell = field.getCell(new Position(j, i));
                     if (cell instanceof Player) {
                         CellDrawer.playerDrawer(fieldStartColumn + cellSize * j, fieldStartRow + i, screen);

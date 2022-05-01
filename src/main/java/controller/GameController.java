@@ -74,7 +74,7 @@ public class GameController {
      * Starting the new game
      */
     public void gamePreparing() {
-        mapGenerator = new MapGenerator();
+        mapGenerator = new MapGenerator(19, 13);
         field = new Field(mapGenerator);
         round = new Round(mapGenerator.getPlayer(), mapGenerator.getEnemies(), field);
     }
