@@ -21,13 +21,14 @@ public class Enemy implements Character, Cell, Serializable {
     private int visibility;
     private Position position;
     private StrategyEnemy strategy;
+    private String name;
 
     /**
      * Enemy Constructor
      * @param position the enemy is in
      * @param strategy that the enemy will follow
      */
-    public Enemy(Position position, StrategyEnemy strategy) {
+    public Enemy(Position position, StrategyEnemy strategy, String name) {
         this.health = maxHealth;
         this.damage = DEFAULT;
         this.armor = DEFAULT;
@@ -35,6 +36,7 @@ public class Enemy implements Character, Cell, Serializable {
         this.visibility = 5;
         this.position = position;
         this.strategy = strategy;
+        this.name = name;
     }
 
     /**
@@ -113,15 +115,33 @@ public class Enemy implements Character, Cell, Serializable {
         return position;
     }
 
+    /**
+     *
+     * @return enemy strategy
+     */
     public StrategyEnemy getStrategy() {
         return strategy;
     }
 
+    /**
+     * @return visibility
+     */
     public int getVisibility() {
         return visibility;
     }
 
-    public Enemy clone(Position position) {
-        return new Enemy(position, strategy);
+    /**
+     * @param position for clone of enemy
+     * @return clone of enemy
+     */
+    public Enemy clone(Position position, String name) {
+        return new Enemy(position, strategy, name);
+    }
+
+    /**
+     * @return enemy name
+     */
+    public String getName() {
+        return name;
     }
 }

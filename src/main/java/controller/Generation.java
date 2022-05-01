@@ -101,11 +101,17 @@ public class Generation {
             int enemyXPos = rand.nextInt(Field.FIELD_WIDTH);
             int enemyYPos = rand.nextInt(Field.FIELD_HEIGHT);
             if (!isFilled[enemyXPos][enemyYPos]) {
-                Enemy enemy = null;
+                Enemy enemy;
                 switch (strategyType) {
-                    case AGGRESSIVE ->  enemy = enemyFactory.createAggressiveEnemy(new Position(enemyXPos, enemyYPos));
-                    case COWARD -> enemy = enemyFactory.createCowardEnemy(new Position(enemyXPos, enemyYPos));
-                    default -> enemy = enemyFactory.createPassiveEnemy(new Position(enemyXPos, enemyYPos));
+                    case AGGRESSIVE:
+                        enemy = enemyFactory.createAggressiveEnemy(new Position(enemyXPos, enemyYPos), "ядовитая плесень");
+                        break;
+                    case COWARD:
+                        enemy = enemyFactory.createCowardEnemy(new Position(enemyXPos, enemyYPos), "дракон");
+                        break;
+                    default:
+                        enemy = enemyFactory.createPassiveEnemy(new Position(enemyXPos, enemyYPos), "скелет");
+                        break;
                 }
                 enemies.add(enemy);
                 setCellValue(enemyXPos, enemyYPos, enemy);
