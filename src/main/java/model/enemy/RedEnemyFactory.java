@@ -6,12 +6,11 @@ import model.strategies.CowardStrategy;
 import model.strategies.SimpleStrategy;
 
 /**
- * Default enemy factory
+ * Red enemy factory
  */
-public class DefaultEnemyFactory implements EnemyFactory {
+public class RedEnemyFactory implements EnemyFactory {
 
-    private String color = "white";
-
+    private String color = "red";
     /**
      * Creates aggressive enemy
      * @param position position of enemy

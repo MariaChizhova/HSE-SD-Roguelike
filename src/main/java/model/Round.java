@@ -133,7 +133,7 @@ public class Round implements Serializable {
                         if (rand.nextInt(p) == 0) {
                             Position positionEnemy = getEmptyCell(newPosition);
                             if (positionEnemy != null) {
-                                Enemy newEnemy = enemy.clone(positionEnemy, enemy.getName());
+                                Enemy newEnemy = enemy.clone(positionEnemy);
                                 newEnemies.add(newEnemy);
                                 field.addEnemy(positionEnemy, newEnemy);
                             }
