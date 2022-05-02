@@ -364,8 +364,7 @@ public class ConsoleDrawer {
                     if (cell instanceof Player) {
                         CellDrawer.playerDrawer(fieldStartColumn + cellSize * j, fieldStartRow + i, screen);
                         player = (Player) cell;
-                    } else if (cell instanceof Enemy) {
-                        var enemy = (Enemy) cell;
+                    } else if (cell instanceof Enemy enemy) {
                         switch (enemy.getName()) {
                             case DragonEnemyFactory.DRAGON_ENEMY -> CellDrawer.dragonEnemyDrawer(
                                     fieldStartColumn + cellSize * j, fieldStartRow + i, screen);
