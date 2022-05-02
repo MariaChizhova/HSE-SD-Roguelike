@@ -481,9 +481,11 @@ public class ConsoleDrawer {
             }
 
             String enterLabel = "Enter the field size";
+            String spaceLabel = "Press SPACE to load game from file";
             String widthLabel = "width:";
             String heightLabel = "height:";
             textGraphics.putString(40, 4, enterLabel);
+            textGraphics.putString(33, 27, spaceLabel);
             textGraphics.putString(33, 14, widthLabel);
             drawBorder(40, 13, 5, 3);
             if (width.length() > 0) {
