@@ -1,12 +1,14 @@
 package controller;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 import model.Cell;
 import model.enemy.Enemy;
-import model.Field;
 import model.GenerationResult;
 import model.Player;
 import model.Position;
@@ -41,10 +43,18 @@ public class Generation {
     private final List<GenerationResult> generation = new ArrayList<>();
     private final Boolean[][] isFilled;
 
-    public Generation() {
-        isFilled = new Boolean[Field.FIELD_WIDTH][Field.FIELD_HEIGHT];
-        for (int y = 0; y < Field.FIELD_HEIGHT; y++) {
-            for (int x = 0; x < Field.FIELD_WIDTH; x++) {
+    private int width;
+    private int height;
+
+    /**
+     * Creating Generation instance
+     */
+    public Generation(int width, int height) {
+        this.width = width;
+        this.height = height;
+        isFilled = new Boolean[width][height];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 isFilled[x][y] = false;
             }
         }
@@ -55,9 +65,67 @@ public class Generation {
         generatePlayer();
     }
 
+    public Generation(String fileName) {
+        List<List<String>> fieldText = new ArrayList<>();
+        try {
+            BufferedReader in = new BufferedReader(new FileReader(fileName));
+            while (in.ready()) {
+                String line = in.readLine();
+                List<String> characters = Arrays.asList(line.split(""));
+                fieldText.add(characters);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        this.width = fieldText.get(0).size();
+        this.height = fieldText.size();
+        isFilled = new Boolean[width][height];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                isFilled[x][y] = false;
+            }
+        }
+
+        Random rand = new Random();
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                String ch = fieldText.get(y).get(x);
+                if (ch.equals("F")) {
+                    Food food = new Food(rand.nextInt(16) + 5);
+                    var foodWithPos = new FoodWithPosition(new Position(x, y), food);
+                    setCellValue(x, y, foodWithPos);
+                } else if (ch.equals("E")) {
+                    var enemy = enemyFactory.createAggressiveEnemy(new Position(x, y));
+                    enemies.add(enemy);
+                    setCellValue(x, y, enemy);
+                } else if (ch.equals("S")) {
+                    var enemy = enemyFactory.createPassiveEnemy(new Position(x, y));
+                    enemies.add(enemy);
+                    setCellValue(x, y, enemy);
+                } else if (ch.equals("C")) {
+                    var enemy = enemyFactory.createCowardEnemy(new Position(x, y));
+                    enemies.add(enemy);
+                    setCellValue(x, y, enemy);
+                } else if (ch.equals("A")) {
+                    var artifactList = getArtifactList();
+                    Artifact randomArtifact = artifactList.get(rand.nextInt(artifactList.size()));
+                    var artifact = new ArtifactWithPosition(new Position(x, y), randomArtifact);
+                    setCellValue(x, y, artifact);
+                } else if (ch.equals("#")) {
+                    setCellValue(x, y, new Wall());
+                } else if (ch.equals("P")) {
+                    player = new Player(new Position(x, y));
+                    setCellValue(x, y, player);
+                }
+            }
+        }
+    }
+
     private void generateWalls() {
-        for (int y = 1; y < Field.FIELD_HEIGHT; y += 2) {
-            for (int x = 1; x < Field.FIELD_WIDTH; x += 2) {
+        for (int y = 1; y < height; y += 2) {
+            for (int x = 1; x < width; x += 2) {
                 setCellValue(x, y, new Wall());
 
                 switch (getRandomDirection()) {
@@ -98,8 +166,8 @@ public class Generation {
 
         int numOfEnemies = rand.nextInt(maxNum) + 1;
         while (cnt != numOfEnemies) {
-            int enemyXPos = rand.nextInt(Field.FIELD_WIDTH);
-            int enemyYPos = rand.nextInt(Field.FIELD_HEIGHT);
+            int enemyXPos = rand.nextInt(width);
+            int enemyYPos = rand.nextInt(height);
             if (!isFilled[enemyXPos][enemyYPos]) {
                 Enemy enemy;
                 switch (strategyType) {
@@ -127,8 +195,8 @@ public class Generation {
 
         int numOfArtifacts = rand.nextInt(MAX_NUM_OF_ARTIFACTS) + 1;
         while (cnt != numOfArtifacts) {
-            int xPos = rand.nextInt(Field.FIELD_WIDTH);
-            int yPos = rand.nextInt(Field.FIELD_HEIGHT);
+            int xPos = rand.nextInt(width);
+            int yPos = rand.nextInt(height);
             Artifact randomArtifact = artifactList.get(rand.nextInt(artifactList.size()));
             if (!isFilled[xPos][yPos]) {
                 var artifact = new ArtifactWithPosition(new Position(xPos, yPos), randomArtifact);
@@ -144,8 +212,8 @@ public class Generation {
 
         int numOfFood = rand.nextInt(MAX_NUM_OF_FOOD) + 1;
         while (cnt != numOfFood) {
-            int xPos = rand.nextInt(Field.FIELD_WIDTH);
-            int yPos = rand.nextInt(Field.FIELD_HEIGHT);
+            int xPos = rand.nextInt(width);
+            int yPos = rand.nextInt(height);
             Food food = new Food(rand.nextInt(16) + 5);
             if (!isFilled[xPos][yPos]) {
                 var foodWithPos = new FoodWithPosition(new Position(xPos, yPos), food);
@@ -158,8 +226,8 @@ public class Generation {
     private void generatePlayer() {
         Random rand = new Random();
         while (true) {
-            int playerXPos = rand.nextInt(Field.FIELD_WIDTH);
-            int playerYPos = rand.nextInt(Field.FIELD_HEIGHT);
+            int playerXPos = rand.nextInt(width);
+            int playerYPos = rand.nextInt(height);
             if (!isFilled[playerXPos][playerYPos]) {
                 player = new Player(new Position(playerXPos, playerYPos));
                 setCellValue(playerXPos, playerYPos, player);
@@ -170,7 +238,7 @@ public class Generation {
     }
 
     private boolean checkCell(int x, int y) {
-        return x >= 0 && y >= 0 && x < Field.FIELD_WIDTH && y < Field.FIELD_HEIGHT;
+        return x >= 0 && y >= 0 && x < width && y < height;
     }
 
     private void setCellValue(int x, int y, Cell cell) {
@@ -178,15 +246,49 @@ public class Generation {
         isFilled[x][y] = true;
     }
 
+
+    /**
+     * Getting player
+     *
+     * @return player
+     */
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     * Getting all enemies on map
+     *
+     * @return enemies
+     */
     public ArrayList<Enemy> getEnemies() {
         return enemies;
     }
 
+    /**
+     * Getting generation of map
+     *
+     * @return generation
+     */
     public List<GenerationResult> getGeneration() {
         return generation;
+    }
+
+    /**
+     * Getting width of map
+     *
+     * @return width
+     */
+    public int getWidth() {
+        return width;
+    }
+
+    /**
+     * Getting width of map
+     *
+     * @return width
+     */
+    public int getHeight() {
+        return height;
     }
 }
