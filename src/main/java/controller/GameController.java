@@ -56,64 +56,7 @@ public class GameController {
                     mainMenuProcessing(keyType);
                     break;
                 case ASK_SIZE:
-                    if (keyType == KeyType.Enter) {
-                        if (curFillIsWidth) {
-                            curFillIsWidth = false;
-                        } else {
-                            if (fieldHeight > 20 || fieldHeight < 10
-                                    || fieldWidth > 23 || fieldWidth < 10) {
-                                fieldHeight = null;
-                                fieldWidth = null;
-                                curFillIsWidth = true;
-                                view.drawAskSize(null, null, false);
-                            } else {
-                                gamePreparing();
-                                screenType = ScreenType.GAME;
-                                inputHandler.processGameCommand(keyType, round);
-                                view.drawMap(field);
-                                screenType = ScreenType.GAME;
-                                view.drawMap(field);
-                            }
-                        }
-                    } else if (keyType == KeyType.Character) {
-                        var c = inputHandler.getNumber(keyStroke);
-                        if (c != null) {
-                            if (curFillIsWidth) {
-                                if (fieldWidth == null) {
-                                    fieldWidth = Character.getNumericValue(c);
-                                    view.drawAskSize(c, null, true);
-                                } else {
-                                    fieldWidth = fieldWidth * 10 + Character.getNumericValue(c);
-                                    view.drawAskSize(c, null, true);
-                                    curFillIsWidth = false;
-                                    continue;
-                                }
-                            } else {
-                                if (fieldHeight == null) {
-                                    fieldHeight = Character.getNumericValue(c);
-                                    view.drawAskSize(null, c, true);
-                                } else {
-                                    fieldHeight = fieldHeight * 10 + Character.getNumericValue(c);
-                                    if (fieldHeight > 20 || fieldHeight < 10
-                                            || fieldWidth > 23 || fieldWidth < 10) {
-                                        fieldHeight = null;
-                                        fieldWidth = null;
-                                        curFillIsWidth = true;
-                                        view.drawAskSize(null, null, false);
-                                    } else {
-                                        gamePreparing();
-                                        screenType = ScreenType.GAME;
-                                        inputHandler.processGameCommand(keyType, round);
-                                        view.drawMap(field);
-                                        screenType = ScreenType.GAME;
-                                        view.drawMap(field);
-                                    }
-                                }
-                            }
-                        }
-                    } else if (keyType == KeyType.Backspace) {
-
-                    }
+                    inputSizeProcessing(keyStroke, keyType);
                     break;
                 case GAME:
                     boolean finished = inputHandler.processGameCommand(keyType, round);
@@ -138,8 +81,8 @@ public class GameController {
     /**
      * Starting the new game
      */
-    public void gamePreparing() {
-        mapGenerator = new MapGenerator(19, 13);
+    public void gamePreparing(int fieldWidth, int fieldHeight) {
+        mapGenerator = new MapGenerator(fieldWidth, fieldHeight);
         field = new Field(mapGenerator);
         round = new Round(mapGenerator.getPlayer(), mapGenerator.getEnemies(), field);
     }
@@ -155,10 +98,8 @@ public class GameController {
         if (keyType == KeyType.Enter) {
             switch (mainMenuState) {
                 case START:
-                    gamePreparing();
-                    screenType = ScreenType.GAME;
-                    inputHandler.processGameCommand(keyType, round);
-                    view.drawMap(field);
+                    screenType = ScreenType.ASK_SIZE;
+                    view.drawAskSize(null, null, true);
                     break;
                 case LOAD_GAME:
                     round = GameSaverLoader.loadGame();
@@ -172,6 +113,64 @@ public class GameController {
                     notExit = false;
                     break;
             }
+        }
+    }
+
+    private void checkFieldCorrectness(KeyType keyType) {
+        if (fieldHeight > 20 || fieldHeight < 10
+                || fieldWidth > 23 || fieldWidth < 10) {
+            fieldHeight = null;
+            fieldWidth = null;
+            curFillIsWidth = true;
+            view.drawAskSize(null, null, false);
+        } else {
+            startGame(keyType);
+        }
+    }
+
+    private void startGame(KeyType keyType) {
+        gamePreparing(fieldWidth, fieldHeight);
+        screenType = ScreenType.GAME;
+        inputHandler.processGameCommand(keyType, round);
+        view.drawMap(field);
+    }
+
+    private void inputSizeProcessing(KeyStroke keyStroke, KeyType keyType) throws IOException {
+        switch (keyType) {
+            case Enter:
+                if (curFillIsWidth) {
+                    curFillIsWidth = false;
+                } else {
+                    checkFieldCorrectness(keyType);
+                }
+                break;
+            case Character:
+                var c = inputHandler.getNumber(keyStroke);
+                if (c != null) {
+                    if (curFillIsWidth) {
+                        if (fieldWidth == null) {
+                            fieldWidth = Character.getNumericValue(c);
+                            view.drawAskSize(c, null, true);
+                        } else {
+                            fieldWidth = fieldWidth * 10 + Character.getNumericValue(c);
+                            view.drawAskSize(c, null, true);
+                            curFillIsWidth = false;
+                            break;
+                        }
+                    } else {
+                        if (fieldHeight == null) {
+                            fieldHeight = Character.getNumericValue(c);
+                            view.drawAskSize(null, c, true);
+                        } else {
+                            fieldHeight = fieldHeight * 10 + Character.getNumericValue(c);
+                            checkFieldCorrectness(keyType);
+                        }
+                    }
+                }
+                break;
+            case Backspace:
+                startGame(keyType);
+                break;
         }
     }
 
