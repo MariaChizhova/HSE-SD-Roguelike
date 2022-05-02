@@ -6,5 +6,6 @@ package view;
 public enum ScreenType {
     MAIN_MENU,
     GAME,
-    MENU
+    MENU,
+    ASK_SIZE
 }

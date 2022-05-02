@@ -29,11 +29,11 @@ public class Enemy implements Character, Cell, Serializable {
      * @param strategy that the enemy will follow
      * @param name enemy color
      */
-    public Enemy(Position position, StrategyEnemy strategy, String name) {
+    public Enemy(Position position, StrategyEnemy strategy, String name, int damage, int armor, int experience) {
         this.health = maxHealth;
-        this.damage = DEFAULT;
-        this.armor = DEFAULT;
-        this.experience = 5;
+        this.damage = damage;
+        this.armor = armor;
+        this.experience = experience;
         this.visibility = 5;
         this.position = position;
         this.strategy = strategy;
@@ -133,10 +133,11 @@ public class Enemy implements Character, Cell, Serializable {
 
     /**
      * @param position for clone of enemy
+     * @param enemy - its enemy
      * @return clone of enemy
      */
-    public Enemy clone(Position position, String name) {
-        return new Enemy(position, strategy, name);
+    public Enemy clone(Position position, Enemy enemy) {
+        return new Enemy(position, strategy, enemy.getName(), enemy.getDamage(), enemy.getArmor(), enemy.getExperience());
     }
 
     /**

@@ -8,12 +8,10 @@ import java.util.List;
 import java.util.Random;
 
 import model.Cell;
-import model.enemy.Enemy;
+import model.enemy.*;
 import model.GenerationResult;
 import model.Player;
 import model.Position;
-import model.enemy.EnemyFactory;
-import model.enemy.DefaultEnemyFactory;
 import model.strategies.*;
 import model.Wall;
 import model.inventory.Artifact;
@@ -170,6 +168,16 @@ public class Generation {
             int enemyYPos = rand.nextInt(height);
             if (!isFilled[enemyXPos][enemyYPos]) {
                 Enemy enemy;
+                int factory = rand.nextInt(4);
+                if (factory == 0) {
+                    setEnemyFactory(new DefaultEnemyFactory());
+                } else if(factory == 1)  {
+                    setEnemyFactory(new CloneEnemyFactory());
+                } else if(factory == 2) {
+                    setEnemyFactory(new SkeletonEnemyFactory());
+                } else {
+                    setEnemyFactory(new DragonEnemyFactory());
+                }
                 switch (strategyType) {
                     case AGGRESSIVE:
                         enemy = enemyFactory.createAggressiveEnemy(new Position(enemyXPos, enemyYPos));

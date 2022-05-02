@@ -10,7 +10,8 @@ import model.strategies.SimpleStrategy;
  */
 public class DefaultEnemyFactory implements EnemyFactory {
 
-    private String name = "default";
+    public final static String DEFAULT_ENEMY = "default";
+    private final static int DEFAULT = 5;
 
     /**
      * Creates aggressive enemy
@@ -19,7 +20,7 @@ public class DefaultEnemyFactory implements EnemyFactory {
      */
     @Override
     public Enemy createAggressiveEnemy(Position position) {
-        return new Enemy(position, new AggressiveStrategy(), name);
+        return new Enemy(position, new AggressiveStrategy(), DEFAULT_ENEMY, DEFAULT, DEFAULT, DEFAULT);
     }
 
     /**
@@ -29,7 +30,7 @@ public class DefaultEnemyFactory implements EnemyFactory {
      */
     @Override
     public Enemy createCowardEnemy(Position position) {
-        return new Enemy(position, new CowardStrategy(), name);
+        return new Enemy(position, new CowardStrategy(), DEFAULT_ENEMY, DEFAULT, DEFAULT, DEFAULT);
     }
 
     /**
@@ -39,6 +40,6 @@ public class DefaultEnemyFactory implements EnemyFactory {
      */
     @Override
     public Enemy createPassiveEnemy(Position position) {
-        return new Enemy(position, new SimpleStrategy(), name);
+        return new Enemy(position, new SimpleStrategy(), DEFAULT_ENEMY, DEFAULT, DEFAULT, DEFAULT);
     }
 }

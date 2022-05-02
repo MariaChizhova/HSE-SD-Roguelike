@@ -99,6 +99,7 @@ public class Field implements Serializable {
     }
 
     /**
+<<<<<<< HEAD
      * Getting width of map
      *
      * @return width
@@ -115,5 +116,4 @@ public class Field implements Serializable {
     public int getHeight() {
         return height;
     }
-
 }

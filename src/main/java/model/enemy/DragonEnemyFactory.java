@@ -5,13 +5,13 @@ import model.strategies.AggressiveStrategy;
 import model.strategies.CowardStrategy;
 import model.strategies.SimpleStrategy;
 
-/**
- * Red enemy factory
- */
-public class CloneEnemyFactory implements EnemyFactory {
+public class DragonEnemyFactory implements EnemyFactory {
 
-    public final static String CLONE_ENEMY = "clone";
+    public final static String DRAGON_ENEMY = "dragon";
     private final static int DEFAULT = 5;
+    private final static int DRAGONARMOR = 6;
+    private final static int DRAGONEXP = 6;
+
     /**
      * Creates aggressive enemy
      * @param position position of enemy
@@ -19,7 +19,7 @@ public class CloneEnemyFactory implements EnemyFactory {
      */
     @Override
     public Enemy createAggressiveEnemy(Position position) {
-        return new Enemy(position, new AggressiveStrategy(), CLONE_ENEMY, DEFAULT, DEFAULT, DEFAULT);
+        return new Enemy(position, new AggressiveStrategy(), DRAGON_ENEMY, DEFAULT, DRAGONARMOR, DRAGONEXP);
     }
 
     /**
@@ -29,7 +29,7 @@ public class CloneEnemyFactory implements EnemyFactory {
      */
     @Override
     public Enemy createCowardEnemy(Position position) {
-        return new Enemy(position, new CowardStrategy(), CLONE_ENEMY, DEFAULT, DEFAULT, DEFAULT);
+        return new Enemy(position, new CowardStrategy(), DRAGON_ENEMY, DEFAULT, DRAGONARMOR, DRAGONEXP);
     }
 
     /**
@@ -39,6 +39,6 @@ public class CloneEnemyFactory implements EnemyFactory {
      */
     @Override
     public Enemy createPassiveEnemy(Position position) {
-        return new Enemy(position, new SimpleStrategy(), CLONE_ENEMY, DEFAULT, DEFAULT, DEFAULT);
+        return new Enemy(position, new SimpleStrategy(), DRAGON_ENEMY, DEFAULT, DRAGONARMOR, DRAGONEXP);
     }
 }
