@@ -90,7 +90,8 @@ public class GameController {
                                 curFillIsWidth = true;
                                 view.drawAskSize(null, null, false);
                             } else {
-                                startGame();
+                                generation = new Generation(fieldWidth, fieldHeight);
+                                startGame(generation);
                                 screenType = ScreenType.GAME;
                                 view.drawMap(field);
                             }
@@ -121,7 +122,8 @@ public class GameController {
                                         curFillIsWidth = true;
                                         view.drawAskSize(null, null, false);
                                     } else {
-                                        startGame();
+                                        generation = new Generation(fieldWidth, fieldHeight);
+                                        startGame(generation);
                                         screenType = ScreenType.GAME;
                                         view.drawMap(field);
                                     }
@@ -129,7 +131,10 @@ public class GameController {
                             }
                         }
                     } else if (keyType == KeyType.Backspace) {
-
+                        generation = new Generation("maps/map.txt");
+                        startGame(generation);
+                        screenType = ScreenType.GAME;
+                        view.drawMap(field);
                     }
                     break;
                 case GAME:
@@ -175,9 +180,7 @@ public class GameController {
     /**
      * Starting the new game
      */
-    public void startGame() {
-        generation = new Generation(19, 13);
-//        generation = new Generation("file.txt");
+    public void startGame(Generation generation) {
         field = new Field(generation);
         round = new Round(generation.getPlayer(), generation.getEnemies(), field);
     }
