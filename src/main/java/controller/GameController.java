@@ -128,6 +128,8 @@ public class GameController {
                                 }
                             }
                         }
+                    } else if (keyType == KeyType.Backspace) {
+
                     }
                     break;
                 case GAME:
