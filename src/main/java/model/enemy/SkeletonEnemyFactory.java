@@ -7,7 +7,7 @@ import model.strategies.SimpleStrategy;
 
 public class SkeletonEnemyFactory implements EnemyFactory {
 
-    private final String name = "skeleton";
+    public final static String SKELETON_ENEMY = "skeleton";
     private final static int DEFAULT = 5;
     private final static int SKELETONDAMAGE = 6;
     private final static int SKELETONEXP = 6;
@@ -19,7 +19,7 @@ public class SkeletonEnemyFactory implements EnemyFactory {
      */
     @Override
     public Enemy createAggressiveEnemy(Position position) {
-        return new Enemy(position, new AggressiveStrategy(), name, SKELETONDAMAGE, DEFAULT, SKELETONEXP);
+        return new Enemy(position, new AggressiveStrategy(), SKELETON_ENEMY, SKELETONDAMAGE, DEFAULT, SKELETONEXP);
     }
 
     /**
@@ -29,7 +29,7 @@ public class SkeletonEnemyFactory implements EnemyFactory {
      */
     @Override
     public Enemy createCowardEnemy(Position position) {
-        return new Enemy(position, new CowardStrategy(), name, SKELETONDAMAGE, DEFAULT, SKELETONEXP);
+        return new Enemy(position, new CowardStrategy(), SKELETON_ENEMY, SKELETONDAMAGE, DEFAULT, SKELETONEXP);
     }
 
     /**
@@ -39,6 +39,6 @@ public class SkeletonEnemyFactory implements EnemyFactory {
      */
     @Override
     public Enemy createPassiveEnemy(Position position) {
-        return new Enemy(position, new SimpleStrategy(), name, SKELETONDAMAGE, DEFAULT, SKELETONEXP);
+        return new Enemy(position, new SimpleStrategy(), SKELETON_ENEMY, SKELETONDAMAGE, DEFAULT, SKELETONEXP);
     }
 }

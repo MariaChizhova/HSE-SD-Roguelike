@@ -4,16 +4,21 @@ import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
+import com.googlecode.lanterna.terminal.SimpleTerminalResizeListener;
 import model.*;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
+import model.enemy.CloneEnemyFactory;
+import model.enemy.DragonEnemyFactory;
 import model.enemy.Enemy;
+import model.enemy.SkeletonEnemyFactory;
 import model.inventory.ArtifactName;
 import model.inventory.ArtifactWithPosition;
 import model.inventory.FoodWithPosition;
 import model.inventory.Inventory;
 
 import java.io.IOException;
+import java.lang.Character;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,11 +31,15 @@ public class ConsoleDrawer {
     Terminal terminal = null;
     Screen screen = null;
 
+    private String height = "";
+    private String width = "";
+
     /**
      * Creates ConsoleDrawer instance
      */
     public ConsoleDrawer() {
         try {
+            defaultTerminalFactory.setInitialTerminalSize(new TerminalSize(100, 32));
             terminal = defaultTerminalFactory.createTerminal();
             screen = new TerminalScreen(terminal);
 
@@ -356,7 +365,17 @@ public class ConsoleDrawer {
                         CellDrawer.playerDrawer(fieldStartColumn + cellSize * j, fieldStartRow + i, screen);
                         player = (Player) cell;
                     } else if (cell instanceof Enemy) {
-                        CellDrawer.enemyDrawer(fieldStartColumn + cellSize * j, fieldStartRow + i, screen);
+                        var enemy = (Enemy) cell;
+                        switch (enemy.getName()) {
+                            case DragonEnemyFactory.DRAGON_ENEMY -> CellDrawer.dragonEnemyDrawer(
+                                    fieldStartColumn + cellSize * j, fieldStartRow + i, screen);
+                            case CloneEnemyFactory.CLONE_ENEMY -> CellDrawer.cloneEnemyDrawer(
+                                    fieldStartColumn + cellSize * j, fieldStartRow + i, screen);
+                            case SkeletonEnemyFactory.SKELETON_ENEMY -> CellDrawer.skeletonEnemyDrawer(
+                                    fieldStartColumn + cellSize * j, fieldStartRow + i, screen);
+                            default -> CellDrawer.defaultEnemyDrawer(
+                                    fieldStartColumn + cellSize * j, fieldStartRow + i, screen);
+                        }
                     } else if (cell instanceof Wall) {
                         CellDrawer.wallDrawer(fieldStartColumn + cellSize * j, fieldStartRow + i, screen);
                     } else if (cell instanceof ArtifactWithPosition) {
@@ -421,6 +440,61 @@ public class ConsoleDrawer {
 
             drawImg(cat1StartColumn, catsStartRow, catHeight, catWidth, cat);
             drawImg(cat2StartColumn, catsStartRow, catHeight, catWidth, cat);
+
+            screen.refresh();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Function that draws menu with field size
+     */
+    public void drawAskSize(Character newWidthChar, Character newHeightChar, boolean isOk) {
+        try {
+            screen.setCursorPosition(null);
+            screen.clear();
+
+            drawMenuBorder();
+
+            TextGraphics textGraphics = screen.newTextGraphics();
+
+            if (!isOk) {
+                height = "";
+                width = "";
+                textGraphics.putString(40, 25, "Wrong field size!");
+            }
+
+            if (newHeightChar == null && newWidthChar == null) {
+                screen.setCharacter(41, 14, new TextCharacter(' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
+            } else if (newWidthChar != null) {
+                width += newWidthChar;
+                if (width.length() == 1) {
+                    screen.setCharacter(42, 14, new TextCharacter(' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
+                } else {
+                    screen.setCharacter(59, 14, new TextCharacter(' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
+                }
+            } else {
+                height += newHeightChar;
+                if (height.length() == 1) {
+                    screen.setCharacter(60, 14, new TextCharacter(' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
+                }
+            }
+
+            String enterLabel = "Enter the field size";
+            String widthLabel = "width:";
+            String heightLabel = "height:";
+            textGraphics.putString(40, 4, enterLabel);
+            textGraphics.putString(33, 14, widthLabel);
+            drawBorder(40, 13, 5, 3);
+            if (width.length() > 0) {
+                textGraphics.putString(41, 14, width);
+            }
+            textGraphics.putString(50, 14, heightLabel);
+            drawBorder(58, 13, 5, 3);
+            if (height.length() > 0) {
+                textGraphics.putString(59, 14, height);
+            }
 
             screen.refresh();
         } catch (Exception e) {

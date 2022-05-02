@@ -1,5 +1,6 @@
 package controller;
 
+import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
 import model.Field;
@@ -24,6 +25,9 @@ public class GameController {
     private Field field;
     private MapGenerator mapGenerator;
     private boolean notExit = true;
+    private Integer fieldWidth = null;
+    private Integer fieldHeight = null;
+    private boolean curFillIsWidth = true;
 
     /**
      * Creates GameController instance
@@ -45,10 +49,69 @@ public class GameController {
      */
     public void selectMode() throws IOException {
         while (notExit) {
-            KeyType keyType = screen.readInput().getKeyType();
+            KeyStroke keyStroke = screen.readInput();
+            KeyType keyType = keyStroke.getKeyType();
             switch (screenType) {
                 case MAIN_MENU:
                     mainMenuProcessing(keyType);
+                    break;
+                case ASK_SIZE:
+                    if (keyType == KeyType.Enter) {
+                        if (curFillIsWidth) {
+                            curFillIsWidth = false;
+                        } else {
+                            if (fieldHeight > 20 || fieldHeight < 10
+                                    || fieldWidth > 60 || fieldWidth < 30) {
+                                fieldHeight = null;
+                                fieldWidth = null;
+                                curFillIsWidth = true;
+                                view.drawAskSize(null, null, false);
+                            } else {
+                                gamePreparing();
+                                screenType = ScreenType.GAME;
+                                inputHandler.processGameCommand(keyType, round);
+                                view.drawMap(field);
+                                screenType = ScreenType.GAME;
+                                view.drawMap(field);
+                            }
+                        }
+                    } else if (keyType == KeyType.Character) {
+                        var c = inputHandler.getNumber(keyStroke);
+                        if (c != null) {
+                            if (curFillIsWidth) {
+                                if (fieldWidth == null) {
+                                    fieldWidth = Character.getNumericValue(c);
+                                    view.drawAskSize(c, null, true);
+                                } else {
+                                    fieldWidth = fieldWidth * 10 + Character.getNumericValue(c);
+                                    view.drawAskSize(c, null, true);
+                                    curFillIsWidth = false;
+                                    continue;
+                                }
+                            } else {
+                                if (fieldHeight == null) {
+                                    fieldHeight = Character.getNumericValue(c);
+                                    view.drawAskSize(null, c, true);
+                                } else {
+                                    fieldHeight = fieldHeight * 10 + Character.getNumericValue(c);
+                                    if (fieldHeight > 20 || fieldHeight < 10
+                                            || fieldWidth > 60 || fieldWidth < 30) {
+                                        fieldHeight = null;
+                                        fieldWidth = null;
+                                        curFillIsWidth = true;
+                                        view.drawAskSize(null, null, false);
+                                    } else {
+                                        gamePreparing();
+                                        screenType = ScreenType.GAME;
+                                        inputHandler.processGameCommand(keyType, round);
+                                        view.drawMap(field);
+                                        screenType = ScreenType.GAME;
+                                        view.drawMap(field);
+                                    }
+                                }
+                            }
+                        }
+                    }
                     break;
                 case GAME:
                     boolean finished = inputHandler.processGameCommand(keyType, round);

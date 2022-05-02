@@ -31,9 +31,30 @@ public class CellDrawer {
         drawer(col_pos, row_pos, screen, chars);
     }
 
-    public static void enemyDrawer(int col_pos, int row_pos, Screen screen) {
+    public static void defaultEnemyDrawer(int col_pos, int row_pos, Screen screen) {
+        List<CellChar> chars = Arrays.asList(new CellChar(Symbols.OUTLINED_SQUARE_SMALL, TextColor.ANSI.DEFAULT),
+                new CellChar(Symbols.FACE_WHITE, TextColor.ANSI.DEFAULT),
+                new CellChar(Symbols.OUTLINED_SQUARE_SMALL, TextColor.ANSI.DEFAULT));
+        drawer(col_pos, row_pos, screen, chars);
+    }
+
+    public static void dragonEnemyDrawer(int col_pos, int row_pos, Screen screen) {
+        List<CellChar> chars = Arrays.asList(new CellChar('<', TextColor.ANSI.GREEN),
+                new CellChar(Symbols.FACE_BLACK, TextColor.ANSI.RED),
+                new CellChar('>', TextColor.ANSI.GREEN));
+        drawer(col_pos, row_pos, screen, chars);
+    }
+
+    public static void cloneEnemyDrawer(int col_pos, int row_pos, Screen screen) {
+        List<CellChar> chars = Arrays.asList(new CellChar(Symbols.SINGLE_LINE_BOTTOM_LEFT_CORNER, TextColor.ANSI.CYAN),
+                new CellChar(Symbols.FEMALE, TextColor.ANSI.CYAN),
+                new CellChar(Symbols.SINGLE_LINE_BOTTOM_RIGHT_CORNER, TextColor.ANSI.CYAN));
+        drawer(col_pos, row_pos, screen, chars);
+    }
+
+    public static void skeletonEnemyDrawer(int col_pos, int row_pos, Screen screen) {
         List<CellChar> chars = Arrays.asList(new CellChar(Symbols.ARROW_LEFT, TextColor.ANSI.DEFAULT),
-                new CellChar(Symbols.FACE_BLACK, TextColor.ANSI.DEFAULT),
+                new CellChar(Symbols.FACE_WHITE, TextColor.ANSI.DEFAULT),
                 new CellChar(Symbols.ARROW_RIGHT, TextColor.ANSI.DEFAULT));
         drawer(col_pos, row_pos, screen, chars);
     }

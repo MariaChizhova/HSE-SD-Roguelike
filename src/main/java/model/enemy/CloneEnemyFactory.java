@@ -8,10 +8,10 @@ import model.strategies.SimpleStrategy;
 /**
  * Red enemy factory
  */
-public class RedEnemyFactory implements EnemyFactory {
+public class CloneEnemyFactory implements EnemyFactory {
 
-    private String color = "red";
-    private final String name = "clone";
+
+    public final static String CLONE_ENEMY = "clone";
     private final static int DEFAULT = 5;
     /**
      * Creates aggressive enemy
@@ -20,7 +20,7 @@ public class RedEnemyFactory implements EnemyFactory {
      */
     @Override
     public Enemy createAggressiveEnemy(Position position) {
-        return new Enemy(position, new AggressiveStrategy(), name, DEFAULT, DEFAULT, DEFAULT);
+        return new Enemy(position, new AggressiveStrategy(), CLONE_ENEMY, DEFAULT, DEFAULT, DEFAULT);
     }
 
     /**
@@ -30,7 +30,7 @@ public class RedEnemyFactory implements EnemyFactory {
      */
     @Override
     public Enemy createCowardEnemy(Position position) {
-        return new Enemy(position, new CowardStrategy(), name, DEFAULT, DEFAULT, DEFAULT);
+        return new Enemy(position, new CowardStrategy(), CLONE_ENEMY, DEFAULT, DEFAULT, DEFAULT);
     }
 
     /**
@@ -40,6 +40,6 @@ public class RedEnemyFactory implements EnemyFactory {
      */
     @Override
     public Enemy createPassiveEnemy(Position position) {
-        return new Enemy(position, new SimpleStrategy(), name, DEFAULT, DEFAULT, DEFAULT);
+        return new Enemy(position, new SimpleStrategy(), CLONE_ENEMY, DEFAULT, DEFAULT, DEFAULT);
     }
 }
