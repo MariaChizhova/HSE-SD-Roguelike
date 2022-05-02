@@ -104,4 +104,17 @@ public class Field implements Serializable {
         field[position.getX()][position.getY()] = enemy;
     }
 
+    /**
+     * Return height of field
+     */
+    public int getFieldHeight() {
+        return FIELD_HEIGHT;
+    }
+
+    /**
+     * Return width of field
+     */
+    public int getFieldWidth() {
+        return FIELD_WIDTH;
+    }
 }

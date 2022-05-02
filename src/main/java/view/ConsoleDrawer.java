@@ -426,8 +426,8 @@ public class ConsoleDrawer {
 
     private Player drawField(Field field, int start_column, int start_row) {
         Player player = null;
-        for (int i = 0; i < Field.FIELD_HEIGHT; i++) {
-            for (int j = 0; j < Field.FIELD_WIDTH; j++) {
+        for (int i = 0; i < field.getFieldHeight(); i++) {
+            for (int j = 0; j < field.getFieldWidth(); j++) {
                 var cell = field.getCell(new Position(j, i));
                 if (cell instanceof Player) {
                     screen.setCharacter(start_column + 3 * j, start_row + i, new TextCharacter(
@@ -544,7 +544,7 @@ public class ConsoleDrawer {
             int player_column = 83;
             int player_row = 8;
 
-            drawGameBorder(field_column - 1, field_row - 1, 3 * Field.FIELD_WIDTH + 2, Field.FIELD_HEIGHT + 2);
+            drawGameBorder(field_column - 1, field_row - 1, 3 * field.getFieldWidth() + 2, field.getFieldHeight() + 2);
             drawGameBorder(player_column - 1, player_row - 1, 15, 16);
             Player player = drawField(field, field_column, field_row);
             drawLives(player == null ? 100 : player.getHealth(),

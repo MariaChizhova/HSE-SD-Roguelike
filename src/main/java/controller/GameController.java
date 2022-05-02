@@ -84,7 +84,7 @@ public class GameController {
                             curFillIsWidth = false;
                         } else {
                             if (fieldHeight > 20 || fieldHeight < 10
-                                    || fieldWidth > 60 || fieldWidth < 30) {
+                                    || fieldWidth > 23 || fieldWidth < 10) {
                                 fieldHeight = null;
                                 fieldWidth = null;
                                 curFillIsWidth = true;
@@ -115,7 +115,7 @@ public class GameController {
                                 } else {
                                     fieldHeight = fieldHeight * 10 + Character.getNumericValue(c);
                                     if (fieldHeight > 20 || fieldHeight < 10
-                                            || fieldWidth > 60 || fieldWidth < 30) {
+                                            || fieldWidth > 23 || fieldWidth < 10) {
                                         fieldHeight = null;
                                         fieldWidth = null;
                                         curFillIsWidth = true;
