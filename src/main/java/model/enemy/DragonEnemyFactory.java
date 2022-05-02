@@ -7,7 +7,7 @@ import model.strategies.SimpleStrategy;
 
 public class DragonEnemyFactory implements EnemyFactory {
 
-    private final String name = "dragon";
+    public final static String DRAGON_ENEMY = "dragon";
     private final static int DEFAULT = 5;
     private final static int DRAGONARMOR = 6;
     private final static int DRAGONEXP = 6;
@@ -19,7 +19,7 @@ public class DragonEnemyFactory implements EnemyFactory {
      */
     @Override
     public Enemy createAggressiveEnemy(Position position) {
-        return new Enemy(position, new AggressiveStrategy(), name, DEFAULT, DRAGONARMOR, DRAGONEXP);
+        return new Enemy(position, new AggressiveStrategy(), DRAGON_ENEMY, DEFAULT, DRAGONARMOR, DRAGONEXP);
     }
 
     /**
@@ -29,7 +29,7 @@ public class DragonEnemyFactory implements EnemyFactory {
      */
     @Override
     public Enemy createCowardEnemy(Position position) {
-        return new Enemy(position, new CowardStrategy(), name, DEFAULT, DRAGONARMOR, DRAGONEXP);
+        return new Enemy(position, new CowardStrategy(), DRAGON_ENEMY, DEFAULT, DRAGONARMOR, DRAGONEXP);
     }
 
     /**
@@ -39,6 +39,6 @@ public class DragonEnemyFactory implements EnemyFactory {
      */
     @Override
     public Enemy createPassiveEnemy(Position position) {
-        return new Enemy(position, new SimpleStrategy(), name, DEFAULT, DRAGONARMOR, DRAGONEXP);
+        return new Enemy(position, new SimpleStrategy(), DRAGON_ENEMY, DEFAULT, DRAGONARMOR, DRAGONEXP);
     }
 }

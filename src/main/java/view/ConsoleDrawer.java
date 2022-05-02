@@ -4,16 +4,21 @@ import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
+import com.googlecode.lanterna.terminal.SimpleTerminalResizeListener;
 import model.*;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
+import model.enemy.CloneEnemyFactory;
+import model.enemy.DragonEnemyFactory;
 import model.enemy.Enemy;
+import model.enemy.SkeletonEnemyFactory;
 import model.inventory.ArtifactName;
 import model.inventory.ArtifactWithPosition;
 import model.inventory.FoodWithPosition;
 import model.inventory.Inventory;
 
 import java.io.IOException;
+import java.lang.Character;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,11 +31,15 @@ public class ConsoleDrawer {
     Terminal terminal = null;
     Screen screen = null;
 
+    private String height = "";
+    private String width = "";
+
     /**
      * Creates ConsoleDrawer instance
      */
     public ConsoleDrawer() {
         try {
+            defaultTerminalFactory.setInitialTerminalSize(new TerminalSize(100, 32));
             terminal = defaultTerminalFactory.createTerminal();
             screen = new TerminalScreen(terminal);
 
@@ -415,6 +424,110 @@ public class ConsoleDrawer {
 
     }
 
+    private Player drawField(Field field, int start_column, int start_row) {
+        Player player = null;
+        for (int i = 0; i < Field.FIELD_HEIGHT; i++) {
+            for (int j = 0; j < Field.FIELD_WIDTH; j++) {
+                var cell = field.getCell(new Position(j, i));
+                if (cell instanceof Player) {
+                    screen.setCharacter(start_column + 3 * j, start_row + i, new TextCharacter(
+                            '<', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+                    screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                            Symbols.FACE_WHITE, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+                    screen.setCharacter(start_column + 3 * j + 2, start_row + i, new TextCharacter(
+                            '>', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+
+                    player = (Player) cell;
+                } else if (cell instanceof Enemy) {
+                    Enemy enemy = (Enemy) cell;
+                    switch (enemy.getName()) {
+                        case (DragonEnemyFactory.DRAGON_ENEMY):
+                            screen.setCharacter(start_column + 3 * j, start_row + i, new TextCharacter(
+                                    '<', TextColor.ANSI.GREEN, TextColor.ANSI.DEFAULT));
+                            screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                                    Symbols.FACE_BLACK, TextColor.ANSI.RED, TextColor.ANSI.DEFAULT));
+                            screen.setCharacter(start_column + 3 * j + 2, start_row + i, new TextCharacter(
+                                    '>', TextColor.ANSI.GREEN, TextColor.ANSI.DEFAULT));
+                            break;
+                        case (CloneEnemyFactory.CLONE_ENEMY):
+                            screen.setCharacter(start_column + 3 * j, start_row + i, new TextCharacter(
+                                    Symbols.SINGLE_LINE_BOTTOM_LEFT_CORNER, TextColor.ANSI.CYAN, TextColor.ANSI.DEFAULT));
+                            screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                                    Symbols.FEMALE, TextColor.ANSI.CYAN, TextColor.ANSI.DEFAULT));
+                            screen.setCharacter(start_column + 3 * j + 2, start_row + i, new TextCharacter(
+                                    Symbols.SINGLE_LINE_BOTTOM_RIGHT_CORNER, TextColor.ANSI.CYAN, TextColor.ANSI.DEFAULT));
+                            break;
+                        case (SkeletonEnemyFactory.SKELETON_ENEMY):
+                            screen.setCharacter(start_column + 3 * j, start_row + i, new TextCharacter(
+                                    Symbols.ARROW_LEFT, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+                            screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                                    Symbols.FACE_WHITE, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+                            screen.setCharacter(start_column + 3 * j + 2, start_row + i, new TextCharacter(
+                                    Symbols.ARROW_RIGHT, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+                            break;
+                        default:
+                            screen.setCharacter(start_column + 3 * j, start_row + i, new TextCharacter(
+                                    Symbols.OUTLINED_SQUARE_SMALL, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+                            screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                                    Symbols.FACE_WHITE, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+                            screen.setCharacter(start_column + 3 * j + 2, start_row + i, new TextCharacter(
+                                    Symbols.OUTLINED_SQUARE_SMALL, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+                            break;
+                    }
+                } else if (cell instanceof Wall) {
+                    for (int k = 0; k < 3; k++) {
+                        screen.setCharacter(start_column + 3 * j + k, start_row + i, new TextCharacter(
+                                Symbols.BLOCK_DENSE, TextColor.ANSI.GREEN, TextColor.ANSI.DEFAULT));
+                    }
+                } else if (cell instanceof ArtifactWithPosition) {
+                    var artifact = ((ArtifactWithPosition) cell).getArtifact();
+                    switch (artifact.getName()) {
+                        case BOOTS:
+                            screen.setCharacter(start_column + 3 * j, start_row + i, new TextCharacter(
+                                    Symbols.DOUBLE_LINE_BOTTOM_RIGHT_CORNER, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+                            screen.setCharacter(start_column + 3 * j + 2, start_row + i, new TextCharacter(
+                                    Symbols.DOUBLE_LINE_BOTTOM_LEFT_CORNER, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+                            break;
+                        case GLOVES:
+                            screen.setCharacter(start_column + 3 * j, start_row + i, new TextCharacter(
+                                    Symbols.CLUB, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+                            screen.setCharacter(start_column + 3 * j + 2, start_row + i, new TextCharacter(
+                                    Symbols.CLUB, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+                            break;
+                        case HELMET:
+                            screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                                    Symbols.SINGLE_LINE_T_DOUBLE_UP, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+                            break;
+                        case RAPIER:
+                            screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                                    Symbols.BOLD_SINGLE_LINE_VERTICAL, TextColor.ANSI.CYAN, TextColor.ANSI.DEFAULT));
+                            break;
+                        case CUIRASS:
+                            screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                                    Symbols.DOUBLE_LINE_CROSS, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
+                            break;
+                        case STEEL_SWORD:
+                            screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                                    Symbols.ARROW_UP, TextColor.ANSI.CYAN, TextColor.ANSI.DEFAULT));
+                            break;
+                        case COPPER_SWORD:
+                            screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                                    Symbols.ARROW_UP, TextColor.ANSI.RED, TextColor.ANSI.DEFAULT));
+                            break;
+                        case WOODEN_SWORD:
+                            screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                                    Symbols.ARROW_UP, TextColor.ANSI.YELLOW, TextColor.ANSI.DEFAULT));
+                            break;
+                    }
+                } else if (cell instanceof FoodWithPosition) {
+                    screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
+                            Symbols.DIAMOND, TextColor.ANSI.GREEN, TextColor.ANSI.DEFAULT));
+                }
+            }
+        }
+        return player;
+    }
+
     /**
      * Function that draws field in the terminal
      *
@@ -425,89 +538,22 @@ public class ConsoleDrawer {
             screen.setCursorPosition(null);
             screen.clear();
 
-            int start_column = 2;
-            int start_row = 4;
-            drawGameBorder(start_column - 1, start_row - 1, 3 * Field.FIELD_WIDTH + 2, Field.FIELD_HEIGHT + 2);
-            drawGameBorder(62, start_row - 1, 15, 16);
-            Player player = null;
+            int field_column = 2;
+            int field_row = 4;
 
-            for (int i = 0; i < Field.FIELD_HEIGHT; i++) {
-                for (int j = 0; j < Field.FIELD_WIDTH; j++) {
-                    var cell = field.getCell(new Position(j, i));
-                    if (cell instanceof Player) {
-                        screen.setCharacter(start_column + 3 * j, start_row + i, new TextCharacter(
-                                '<', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-                        screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
-                                Symbols.FACE_WHITE, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-                        screen.setCharacter(start_column + 3 * j + 2, start_row + i, new TextCharacter(
-                                '>', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+            int player_column = 83;
+            int player_row = 8;
 
-                        player = (Player) cell;
-                    } else if (cell instanceof Enemy) {
-                        screen.setCharacter(start_column + 3 * j, start_row + i, new TextCharacter(
-                                Symbols.ARROW_LEFT, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-                        screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
-                                Symbols.FACE_BLACK, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-                        screen.setCharacter(start_column + 3 * j + 2, start_row + i, new TextCharacter(
-                                Symbols.ARROW_RIGHT, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-                    } else if (cell instanceof Wall) {
-                        for (int k = 0; k < 3; k++) {
-                            screen.setCharacter(start_column + 3 * j + k, start_row + i, new TextCharacter(
-                                    Symbols.BLOCK_DENSE, TextColor.ANSI.GREEN, TextColor.ANSI.DEFAULT));
-                        }
-                    } else if (cell instanceof ArtifactWithPosition) {
-                        var artifact = ((ArtifactWithPosition) cell).getArtifact();
-                        switch (artifact.getName()) {
-                            case BOOTS:
-                                screen.setCharacter(start_column + 3 * j, start_row + i, new TextCharacter(
-                                        Symbols.DOUBLE_LINE_BOTTOM_RIGHT_CORNER, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
-                                screen.setCharacter(start_column + 3 * j + 2, start_row + i, new TextCharacter(
-                                        Symbols.DOUBLE_LINE_BOTTOM_LEFT_CORNER, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
-                                break;
-                            case GLOVES:
-                                screen.setCharacter(start_column + 3 * j, start_row + i, new TextCharacter(
-                                        Symbols.CLUB, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
-                                screen.setCharacter(start_column + 3 * j + 2, start_row + i, new TextCharacter(
-                                        Symbols.CLUB, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
-                                break;
-                            case HELMET:
-                                screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
-                                        Symbols.SINGLE_LINE_T_DOUBLE_UP, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
-                                break;
-                            case RAPIER:
-                                screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
-                                        Symbols.BOLD_SINGLE_LINE_VERTICAL, TextColor.ANSI.CYAN, TextColor.ANSI.DEFAULT));
-                                break;
-                            case CUIRASS:
-                                screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
-                                        Symbols.DOUBLE_LINE_CROSS, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
-                                break;
-                            case STEEL_SWORD:
-                                screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
-                                        Symbols.ARROW_UP, TextColor.ANSI.CYAN, TextColor.ANSI.DEFAULT));
-                                break;
-                            case COPPER_SWORD:
-                                screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
-                                        Symbols.ARROW_UP, TextColor.ANSI.RED, TextColor.ANSI.DEFAULT));
-                                break;
-                            case WOODEN_SWORD:
-                                screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
-                                        Symbols.ARROW_UP, TextColor.ANSI.YELLOW, TextColor.ANSI.DEFAULT));
-                                break;
-                        }
-                    } else if (cell instanceof FoodWithPosition) {
-                        screen.setCharacter(start_column + 3 * j + 1, start_row + i, new TextCharacter(
-                                Symbols.DIAMOND, TextColor.ANSI.GREEN, TextColor.ANSI.DEFAULT));
-                    }
-                }
-            }
+            drawGameBorder(field_column - 1, field_row - 1, 3 * Field.FIELD_WIDTH + 2, Field.FIELD_HEIGHT + 2);
+            drawGameBorder(player_column - 1, player_row - 1, 15, 16);
+            Player player = drawField(field, field_column, field_row);
             drawLives(player == null ? 100 : player.getHealth(),
                     player == null ? 0 : player.getExperience(),
                     player == null ? 0 : player.getLevel(),
-                    start_column, start_row);
-            drawHero(63, start_row);
-            drawPlayerInventory(63, start_row, player);
-            drawFullInventory(start_column, 19, player);
+                    20, field_row);
+            drawHero(player_column, player_row);
+            drawPlayerInventory(player_column, player_row, player);
+            drawFullInventory(20, 28, player);
 
             screen.refresh();
         } catch (Exception e) {
@@ -528,15 +574,70 @@ public class ConsoleDrawer {
             drawBorder();
 
             TextGraphics textGraphics = screen.newTextGraphics();
-            String startLabel = "  Start game  ";
-            String loadLabel = "  Load game   ";
-            String exitLabel = "  Exit game   ";
-            addTextButton(textGraphics, startLabel, 7, 4, mainMenuState.equals(MainMenuState.START));
-            addTextButton(textGraphics, loadLabel, 7, 10, mainMenuState.equals(MainMenuState.LOAD_GAME));
-            addTextButton(textGraphics, exitLabel, 7, 16, mainMenuState.equals(MainMenuState.EXIT));
+            String startLabel = "    Start game    ";
+            String loadLabel = "    Load game     ";
+            String exitLabel = "    Exit game     ";
+            addTextButton(textGraphics, startLabel, 10, 4, mainMenuState.equals(MainMenuState.START));
+            addTextButton(textGraphics, loadLabel, 10, 13, mainMenuState.equals(MainMenuState.LOAD_GAME));
+            addTextButton(textGraphics, exitLabel, 10, 22, mainMenuState.equals(MainMenuState.EXIT));
 
-            drawCat(33, 4);
-            drawCat(53, 4);
+            drawCat(43, 6);
+            drawCat(73, 6);
+
+            screen.refresh();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Function that draws menu with field size
+     */
+    public void drawAskSize(Character newWidthChar, Character newHeightChar, boolean isOk) {
+        try {
+            screen.setCursorPosition(null);
+            screen.clear();
+
+            drawBorder();
+
+            TextGraphics textGraphics = screen.newTextGraphics();
+
+            if (!isOk) {
+                height = "";
+                width = "";
+                textGraphics.putString(40, 25, "Wrong field size!");
+            }
+
+            if (newHeightChar == null && newWidthChar == null) {
+                screen.setCharacter(41, 14, new TextCharacter(' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
+            } else if (newWidthChar != null) {
+                width += newWidthChar;
+                if (width.length() == 1) {
+                    screen.setCharacter(42, 14, new TextCharacter(' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
+                } else {
+                    screen.setCharacter(59, 14, new TextCharacter(' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
+                }
+            } else {
+                height += newHeightChar;
+                if (height.length() == 1) {
+                    screen.setCharacter(60, 14, new TextCharacter(' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
+                }
+            }
+
+            String enterLabel = "Enter the field size";
+            String widthLabel = "width:";
+            String heightLabel = "height:";
+            textGraphics.putString(40, 4, enterLabel);
+            textGraphics.putString(33, 14, widthLabel);
+            drawGameBorder(40, 13, 5, 3);
+            if (width.length() > 0) {
+                textGraphics.putString(41, 14, width);
+            }
+            textGraphics.putString(50, 14, heightLabel);
+            drawGameBorder(58, 13, 5, 3);
+            if (height.length() > 0) {
+                textGraphics.putString(59, 14, height);
+            }
 
             screen.refresh();
         } catch (Exception e) {
@@ -560,12 +661,12 @@ public class ConsoleDrawer {
             String continueLabel = "     Continue     ";
             String exitLabel = "    Exit game     ";
             String saveAndExitLabel = "Save and exit game";
-            addTextButton(textGraphics, continueLabel, 7, 4, menuState.equals(MenuState.CONTINUE));
-            addTextButton(textGraphics, exitLabel, 7, 10, menuState.equals(MenuState.EXIT));
-            addTextButton(textGraphics, saveAndExitLabel, 7, 16, menuState.equals(MenuState.SAVE_AND_EXIT));
+            addTextButton(textGraphics, continueLabel, 10, 4, menuState.equals(MenuState.CONTINUE));
+            addTextButton(textGraphics, exitLabel, 10, 13, menuState.equals(MenuState.EXIT));
+            addTextButton(textGraphics, saveAndExitLabel, 10, 22, menuState.equals(MenuState.SAVE_AND_EXIT));
 
-            drawCat(35, 4);
-            drawCat(55, 4);
+            drawCat(45, 6);
+            drawCat(65, 6);
 
             screen.refresh();
         } catch (Exception e) {
