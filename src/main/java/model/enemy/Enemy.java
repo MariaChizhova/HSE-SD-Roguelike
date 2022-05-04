@@ -27,7 +27,7 @@ public class Enemy implements Character, Cell, Serializable {
      * Enemy Constructor
      * @param position the enemy is in
      * @param strategy that the enemy will follow
-     * @param name enemy color
+     * @param name enemy name
      */
     public Enemy(Position position, StrategyEnemy strategy, String name, int damage, int armor, int experience) {
         this.health = maxHealth;
