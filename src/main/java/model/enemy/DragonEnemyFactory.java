@@ -5,6 +5,9 @@ import model.strategies.AggressiveStrategy;
 import model.strategies.CowardStrategy;
 import model.strategies.SimpleStrategy;
 
+/**
+ * Dragon enemy factory
+ */
 public class DragonEnemyFactory implements EnemyFactory {
 
     public final static String DRAGON_ENEMY = "dragon";

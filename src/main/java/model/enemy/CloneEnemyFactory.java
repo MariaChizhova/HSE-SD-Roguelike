@@ -6,7 +6,7 @@ import model.strategies.CowardStrategy;
 import model.strategies.SimpleStrategy;
 
 /**
- * Red enemy factory
+ * Clone enemy factory
  */
 public class CloneEnemyFactory implements EnemyFactory {
 

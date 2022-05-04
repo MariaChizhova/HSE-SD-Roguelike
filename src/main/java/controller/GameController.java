@@ -119,13 +119,13 @@ public class GameController {
     private void checkFieldCorrectness(KeyType keyType) {
         if (fieldHeight > 20 || fieldHeight < 10
                 || fieldWidth > 23 || fieldWidth < 10) {
-            fieldHeight = null;
-            fieldWidth = null;
-            curFillIsWidth = true;
             view.drawAskSize(null, null, false);
         } else {
             startGame(keyType);
         }
+        fieldHeight = null;
+        fieldWidth = null;
+        curFillIsWidth = true;
     }
 
     private void startGame(KeyType keyType) {
