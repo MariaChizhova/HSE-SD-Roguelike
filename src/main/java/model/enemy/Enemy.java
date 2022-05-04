@@ -3,6 +3,7 @@ package model.enemy;
 import model.Cell;
 import model.Character;
 import model.Position;
+import model.strategies.CowardStrategy;
 import model.strategies.StrategyEnemy;
 
 import java.io.Serializable;
@@ -12,7 +13,7 @@ import java.io.Serializable;
  */
 public class Enemy implements Character, Cell, Serializable {
 
-    private final static int DEFAULT = 5;
+    private final static int healthLevel = 3;
     private final static int maxHealth = 100;
     private int health;
     private int damage;
@@ -103,6 +104,9 @@ public class Enemy implements Character, Cell, Serializable {
     @Override
     public void beAttacked(Character character) {
         health -= character.getDamage() * (1 - (0.06 * armor)/(1 + 0.06 * armor));
+        if (health <= healthLevel) { // есть ли восстановлениее здоровья????
+            strategy = new CowardStrategy();
+        }
     }
 
     /**
