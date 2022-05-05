@@ -4,6 +4,7 @@ import model.Position;
 import model.strategies.StrategyEnemy;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Represents a simple strategy to move enemies
@@ -18,7 +19,7 @@ public class SimpleStrategy implements StrategyEnemy, Serializable {
      * @return new position
      */
     @Override
-    public Position nextMove(Position playerPosition, Position enemyPosition, int visibility) {
+    public Position nextMove(Position playerPosition, Position enemyPosition, int visibility, ArrayList<Position> emptyPositions) {
         return enemyPosition;
     }
 

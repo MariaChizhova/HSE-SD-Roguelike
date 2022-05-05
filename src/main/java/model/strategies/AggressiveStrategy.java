@@ -1,6 +1,7 @@
 package model.strategies;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import model.Position;
 
@@ -14,7 +15,7 @@ public class AggressiveStrategy implements StrategyEnemy, Serializable {
      * @return new position
      */
     @Override
-    public Position nextMove(Position playerPosition, Position enemyPosition, int visibility) {
+    public Position nextMove(Position playerPosition, Position enemyPosition, int visibility, ArrayList<Position> emptyPositions) {
         if (isPlayerVisible(playerPosition, enemyPosition, visibility)) {
             return enemyPosition;
         }

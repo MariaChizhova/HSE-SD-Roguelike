@@ -1,5 +1,6 @@
 package model.strategies;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import model.Position;
@@ -16,7 +17,7 @@ public interface StrategyEnemy {
      * @param visibility - visibility radius
      * @return new position
      */
-    public Position nextMove(Position playerPosition, Position enemyPosition, int visibility);
+    public Position nextMove(Position playerPosition, Position enemyPosition, int visibility, ArrayList<Position> emptyPositions);
 
     /**
      * Checks if player in enemy's visibility radius

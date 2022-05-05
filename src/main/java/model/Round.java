@@ -117,7 +117,7 @@ public class Round implements Serializable {
         ArrayList<Enemy> newEnemies = new ArrayList<>(enemies);
         for (Enemy enemy: enemies) {
             Position oldPosition = enemy.getPosition();
-            Position newPosition = enemy.getStrategy().nextMove(player.getPosition(), oldPosition, enemy.getVisibility());
+            Position newPosition = enemy.getStrategy().nextMove(player.getPosition(), oldPosition, enemy.getVisibility(), getEmptyPositions(oldPosition));
             if (field.isValidPosition(newPosition)) {
                 Cell cell = field.getCell(newPosition);
                 if (cell == null || cell instanceof EmptyCell) {
@@ -131,8 +131,9 @@ public class Round implements Serializable {
                     if (Objects.equals(enemy.getName(), "clone")) {
                         Random rand = new Random();
                         if (rand.nextInt(p) == 0) {
-                            Position positionEnemy = getEmptyCell(newPosition);
-                            if (positionEnemy != null) {
+                            ArrayList<Position> positions = getEmptyPositions(newPosition);
+                            if (positions.size() != 0) {
+                                Position positionEnemy = positions.get(0);
                                 Enemy newEnemy = enemy.clone(positionEnemy, enemy);
                                 newEnemies.add(newEnemy);
                                 field.addEnemy(positionEnemy, newEnemy);
@@ -154,24 +155,25 @@ public class Round implements Serializable {
         player.putOnTakeOffArtifact(k - 1);
     }
 
-    private Position getEmptyCell(Position position) {
+    private ArrayList<Position> getEmptyPositions(Position position) {
+        ArrayList<Position> emptyPositions = new ArrayList<>();
         Position positionUp = new Position(position.getX(), position.getY() - 1);
         if (isEmptyPosition(positionUp)) {
-            return positionUp;
+            emptyPositions.add(positionUp);
         }
         Position positionDown = new Position(position.getX(), position.getY() + 1);
         if (isEmptyPosition(positionDown)) {
-            return positionDown;
+            emptyPositions.add(positionDown);
         }
         Position positionRight = new Position(position.getX() + 1, position.getY());
         if (isEmptyPosition(positionRight)) {
-            return positionRight;
+            emptyPositions.add(positionRight);
         }
         Position positionLeft = new Position(position.getX() - 1, position.getY());
         if (isEmptyPosition(positionLeft)) {
-            return positionLeft;
+            emptyPositions.add(positionLeft);
         }
-        return null;
+        return emptyPositions;
     }
 
     private boolean isEmptyPosition(Position position) {
