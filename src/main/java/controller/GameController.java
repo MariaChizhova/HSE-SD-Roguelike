@@ -3,6 +3,10 @@ package controller;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
+import controller.commands.DrawAskSizeCommand;
+import controller.commands.DrawMainMenuCommand;
+import controller.commands.DrawMapCommand;
+import controller.commands.DrawMenuCommand;
 import model.Field;
 import model.Round;
 import view.ConsoleDrawer;
@@ -26,6 +30,10 @@ public class GameController {
     private Integer fieldWidth = null;
     private Integer fieldHeight = null;
     private boolean curFillIsWidth = true;
+    private DrawMapCommand drawMapCommand;
+    private DrawAskSizeCommand drawAskSizeCommand;
+    private DrawMenuCommand drawMenuCommand;
+    private DrawMainMenuCommand drawMainMenuCommand;
 
     /**
      * Creates GameController instance
@@ -53,13 +61,15 @@ public class GameController {
             switch (screenType) {
                 case MAIN_MENU:
                     mainMenuState = inputHandler.processMainMenuCommand(keyType, mainMenuState);
-                    view.drawMainMenu(mainMenuState);
+                    drawMainMenuCommand = new DrawMainMenuCommand(view, mainMenuState);
+                    drawMainMenuCommand.execute();
                     // TODO: Move the processing of KeyType.Enter to the InputHandler
                     if (keyType == KeyType.Enter) {
                         switch (mainMenuState) {
                             case START:
                                 screenType = ScreenType.ASK_SIZE;
-                                view.drawAskSize(null, null, true);
+                                drawAskSizeCommand = new DrawAskSizeCommand(view, null, null, true);
+                                drawAskSizeCommand.execute();
                                 break;
                             case LOAD_GAME:
                                 round = GameSaverLoader.loadGame();
@@ -69,7 +79,8 @@ public class GameController {
                                 field = round.getField();
                                 screenType = ScreenType.GAME;
                                 inputHandler.processGameCommand(keyType, round);
-                                view.drawMap(field);
+                                drawMapCommand = new DrawMapCommand(view, field);
+                                drawMapCommand.execute();
                                 break;
                             case EXIT:
                                 view.closeAll();
@@ -88,31 +99,37 @@ public class GameController {
                                 fieldHeight = null;
                                 fieldWidth = null;
                                 curFillIsWidth = true;
-                                view.drawAskSize(null, null, false);
+                                drawAskSizeCommand = new DrawAskSizeCommand(view, null, null, false);
+                                drawAskSizeCommand.execute();
                             } else {
                                 generation = new Generation(fieldWidth, fieldHeight);
                                 startGame(generation);
                                 screenType = ScreenType.GAME;
-                                view.drawMap(field);
+                                drawMapCommand = new DrawMapCommand(view, field);
+                                drawMapCommand.execute();
                             }
                         }
                     } else if (keyType == KeyType.Character) {
                         var c = inputHandler.getNumber(keyStroke);
+                        DrawAskSizeCommand drawAskSizeCommand;
                         if (c != null) {
                             if (curFillIsWidth) {
                                 if (fieldWidth == null) {
                                     fieldWidth = Character.getNumericValue(c);
-                                    view.drawAskSize(c, null, true);
+                                    drawAskSizeCommand = new DrawAskSizeCommand(view, null, null, false);
+                                    drawAskSizeCommand.execute();
                                 } else {
                                     fieldWidth = fieldWidth * 10 + Character.getNumericValue(c);
-                                    view.drawAskSize(c, null, true);
+                                    drawAskSizeCommand = new DrawAskSizeCommand(view, null, null, true);
+                                    drawAskSizeCommand.execute();
                                     curFillIsWidth = false;
                                     continue;
                                 }
                             } else {
                                 if (fieldHeight == null) {
                                     fieldHeight = Character.getNumericValue(c);
-                                    view.drawAskSize(null, c, true);
+                                    drawAskSizeCommand = new DrawAskSizeCommand(view, null, c, true);
+                                    drawAskSizeCommand.execute();
                                 } else {
                                     fieldHeight = fieldHeight * 10 + Character.getNumericValue(c);
                                     if (fieldHeight > 20 || fieldHeight < 10
@@ -120,12 +137,14 @@ public class GameController {
                                         fieldHeight = null;
                                         fieldWidth = null;
                                         curFillIsWidth = true;
-                                        view.drawAskSize(null, null, false);
+                                        drawAskSizeCommand = new DrawAskSizeCommand(view, null, null, false);
+                                        drawAskSizeCommand.execute();
                                     } else {
                                         generation = new Generation(fieldWidth, fieldHeight);
                                         startGame(generation);
                                         screenType = ScreenType.GAME;
-                                        view.drawMap(field);
+                                        drawMapCommand = new DrawMapCommand(view, field);
+                                        drawMapCommand.execute();
                                     }
                                 }
                             }
@@ -134,41 +153,48 @@ public class GameController {
                         generation = new Generation("maps/map.txt");
                         startGame(generation);
                         screenType = ScreenType.GAME;
-                        view.drawMap(field);
+                        drawMapCommand = new DrawMapCommand(view, field);
+                        drawMapCommand.execute();
                     }
                     break;
                 case GAME:
                     boolean finished = inputHandler.processGameCommand(keyType, round);
                     if (finished) {
                         screenType = ScreenType.MAIN_MENU;
-                        view.drawMainMenu(mainMenuState);
+                        drawMainMenuCommand = new DrawMainMenuCommand(view, mainMenuState);
+                        drawMainMenuCommand.execute();
                     } else {
                         view.drawMap(field);
                         if (keyType == KeyType.Escape) {
                             screenType = ScreenType.MENU;
-                            view.drawMenu(menuState);
+                            drawMenuCommand = new DrawMenuCommand(view, menuState);
+                            drawMenuCommand.execute();
                         }
                     }
                     break;
                 case MENU:
                     menuState = inputHandler.processMenuCommand(keyType, menuState);
-                    view.drawMenu(menuState);
+                    drawMenuCommand = new DrawMenuCommand(view, menuState);
+                    drawMenuCommand.execute();
                     // TODO: Move the processing of KeyType.Enter to the InputHandler
                     if (keyType == KeyType.Enter) {
                         switch (menuState) {
                             case CONTINUE:
                                 // TODO: continue game
-                                view.drawMap(field);
+                                drawMapCommand = new DrawMapCommand(view, field);
+                                drawMapCommand.execute();
                                 screenType = ScreenType.GAME;
                                 break;
                             case SAVE_AND_EXIT:
                                 GameSaverLoader.saveGame(round);
                                 screenType = ScreenType.MAIN_MENU;
-                                view.drawMainMenu(mainMenuState);
+                                drawMainMenuCommand = new DrawMainMenuCommand(view, mainMenuState);
+                                drawMainMenuCommand.execute();
                                 break;
                             case EXIT:
                                 screenType = ScreenType.MAIN_MENU;
-                                view.drawMainMenu(mainMenuState);
+                                drawMainMenuCommand = new DrawMainMenuCommand(view, mainMenuState);
+                                drawMainMenuCommand.execute();
                                 break;
                         }
                     }
