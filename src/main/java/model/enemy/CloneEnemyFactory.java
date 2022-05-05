@@ -3,6 +3,7 @@ package model.enemy;
 import model.Position;
 import model.strategies.AggressiveStrategy;
 import model.strategies.CowardStrategy;
+import model.strategies.PatrolStrategy;
 import model.strategies.SimpleStrategy;
 
 /**
@@ -40,5 +41,15 @@ public class CloneEnemyFactory implements EnemyFactory {
     @Override
     public Enemy createPassiveEnemy(Position position) {
         return new Enemy(position, new SimpleStrategy(), CLONE_ENEMY, DEFAULT, DEFAULT, DEFAULT);
+    }
+
+    /**
+     * Creates patrol enemy
+     * @param position position of enemy
+     * @return patrol enemy
+     */
+    @Override
+    public Enemy createPatrolEnemy(Position position) {
+        return new Enemy(position, new PatrolStrategy(), CLONE_ENEMY, DEFAULT, DEFAULT, DEFAULT);
     }
 }

@@ -26,4 +26,11 @@ public interface EnemyFactory {
      * @return coward enemy
      */
     Enemy createPassiveEnemy(Position position);
+
+    /**
+     * Creates patrol enemy
+     * @param position position of enemy
+     * @return patrol enemy
+     */
+    Enemy createPatrolEnemy(Position position);
 }

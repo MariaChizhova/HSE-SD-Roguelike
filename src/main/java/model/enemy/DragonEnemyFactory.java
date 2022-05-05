@@ -3,6 +3,7 @@ package model.enemy;
 import model.Position;
 import model.strategies.AggressiveStrategy;
 import model.strategies.CowardStrategy;
+import model.strategies.PatrolStrategy;
 import model.strategies.SimpleStrategy;
 
 /**
@@ -43,5 +44,15 @@ public class DragonEnemyFactory implements EnemyFactory {
     @Override
     public Enemy createPassiveEnemy(Position position) {
         return new Enemy(position, new SimpleStrategy(), DRAGON_ENEMY, DEFAULT, DRAGONARMOR, DRAGONEXP);
+    }
+
+    /**
+     * Creates patrol enemy
+     * @param position position of enemy
+     * @return patrol enemy
+     */
+    @Override
+    public Enemy createPatrolEnemy(Position position) {
+        return new Enemy(position, new PatrolStrategy(), DRAGON_ENEMY, DEFAULT, DRAGONARMOR, DRAGONEXP);
     }
 }

@@ -15,6 +15,7 @@ public interface StrategyEnemy {
      * @param playerPosition - player's position
      * @param enemyPosition - old position
      * @param visibility - visibility radius
+     * @param emptyPositions - empty positions around the old positions
      * @return new position
      */
     public Position nextMove(Position playerPosition, Position enemyPosition, int visibility, ArrayList<Position> emptyPositions);

@@ -30,8 +30,9 @@ public class Generation {
     }
 
     private final int MAX_NUM_OF_AGGRESSIVE_ENEMIES = 3;
-    private final int MAX_NUM_OF_PASSIVE_ENEMIES = 5;
-    private final int MAX_NUM_OF_COWARD_ENEMIES = 4;
+    private final int MAX_NUM_OF_PASSIVE_ENEMIES = 4;
+    private final int MAX_NUM_OF_COWARD_ENEMIES = 3;
+    private final int MAX_NUM_OF_PATROL_ENEMIES = 2;
     private final int MAX_NUM_OF_ARTIFACTS = 8;
     private final int MAX_NUM_OF_FOOD = 8;
 
@@ -156,6 +157,7 @@ public class Generation {
         generateEnemiesDependsOnStrategy(MAX_NUM_OF_PASSIVE_ENEMIES, StrategyType.SIMPLE);
         generateEnemiesDependsOnStrategy(MAX_NUM_OF_AGGRESSIVE_ENEMIES, StrategyType.AGGRESSIVE);
         generateEnemiesDependsOnStrategy(MAX_NUM_OF_COWARD_ENEMIES, StrategyType.COWARD);
+        generateEnemiesDependsOnStrategy(MAX_NUM_OF_PATROL_ENEMIES, StrategyType.PATROL);
     }
 
     private void generateEnemiesDependsOnStrategy(int maxNum, StrategyType strategyType) {
@@ -184,6 +186,9 @@ public class Generation {
                         break;
                     case COWARD:
                         enemy = enemyFactory.createCowardEnemy(new Position(enemyXPos, enemyYPos));
+                        break;
+                    case PATROL:
+                        enemy = enemyFactory.createPatrolEnemy(new Position(enemyXPos, enemyYPos));
                         break;
                     default:
                         enemy = enemyFactory.createPassiveEnemy(new Position(enemyXPos, enemyYPos));

@@ -12,6 +12,7 @@ public class AggressiveStrategy implements StrategyEnemy, Serializable {
      * @param playerPosition - player's position
      * @param enemyPosition - old position
      * @param visibility - enemy's visibility
+     * @param emptyPositions - empty positions around the old positions
      * @return new position
      */
     @Override
