@@ -159,6 +159,9 @@
 ### CowardStrategy
 Часть Model. Класс, реализующий интерфейс StrategyEnemy. Трусливое поведение врага.
 
+### PatrolStrategy
+Часть Model. Класс, реализующий интерфейс StrategyEnemy. Патрулирующее поведение врага.
+
 ### StrategyDecorator
 Часть Model. Абстрактный класс, который реализует интерфейс StrategyEnemy. Абстрактный декоратор стратегий.
 
