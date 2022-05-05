@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 public class Enemy implements Character, Cell, Serializable {
 
-    private final static int healthLevel = 3;
+    private final static int healthLevel = 20;
     private final static int maxHealth = 100;
     private int health;
     private int damage;
@@ -21,8 +21,9 @@ public class Enemy implements Character, Cell, Serializable {
     private int experience;
     private int visibility;
     private Position position;
-    private StrategyEnemy strategy;
-    private String name;
+    private StrategyEnemy currentStrategy;
+    private final StrategyEnemy strategy;
+    private final String name;
 
     /**
      * Enemy Constructor
@@ -38,6 +39,7 @@ public class Enemy implements Character, Cell, Serializable {
         this.visibility = 5;
         this.position = position;
         this.strategy = strategy;
+        this.currentStrategy = strategy;
         this.name = name;
     }
 
@@ -47,6 +49,16 @@ public class Enemy implements Character, Cell, Serializable {
     @Override
     public int getHealth() {
         return health;
+    }
+
+    /**
+     * increase health
+     */
+    public void increaseHealth() {
+        health = Math.min(health + 2, maxHealth);
+        if (health > healthLevel) {
+            currentStrategy = strategy;
+        }
     }
 
     /**
@@ -104,8 +116,8 @@ public class Enemy implements Character, Cell, Serializable {
     @Override
     public void beAttacked(Character character) {
         health -= character.getDamage() * (1 - (0.06 * armor)/(1 + 0.06 * armor));
-        if (health <= healthLevel) { // есть ли восстановлениее здоровья????
-            strategy = new CowardStrategy();
+        if (health <= healthLevel) {
+            currentStrategy = new CowardStrategy();
         }
     }
 
@@ -125,7 +137,7 @@ public class Enemy implements Character, Cell, Serializable {
      * @return enemy strategy
      */
     public StrategyEnemy getStrategy() {
-        return strategy;
+        return currentStrategy;
     }
 
     /**

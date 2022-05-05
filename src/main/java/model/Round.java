@@ -122,6 +122,7 @@ public class Round implements Serializable {
                 Cell cell = field.getCell(newPosition);
                 if (cell == null || cell instanceof EmptyCell) {
                     enemy.move(newPosition);
+                    enemy.increaseHealth();
                     if (newPosition != oldPosition) {
                         field.clearCage(oldPosition);
                     }
