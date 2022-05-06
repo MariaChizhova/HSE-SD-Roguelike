@@ -119,6 +119,8 @@ public interface StrategyEnemy {
                 return new CowardStrategy();
             case 3:
                 return new PatrolStrategy();
+            case 4:
+                return new SearchingStrategy();
         }
         return new SimpleStrategy();
     }
