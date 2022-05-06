@@ -592,7 +592,7 @@ public class ConsoleDrawer {
     /**
      * Function that draws menu with field size
      */
-    public void drawAskSize(Character newWidthChar, Character newHeightChar, boolean isOk) {
+    public void drawAskSize(Character newWidthChar, Character newHeightChar, boolean isOk, boolean isNew) {
         try {
             screen.setCursorPosition(null);
             screen.clear();
@@ -601,9 +601,12 @@ public class ConsoleDrawer {
 
             TextGraphics textGraphics = screen.newTextGraphics();
 
-            if (!isOk) {
+            if (!isOk || isNew) {
                 height = "";
                 width = "";
+            }
+
+            if (!isOk) {
                 textGraphics.putString(40, 25, "Wrong field size!");
             }
 
@@ -623,11 +626,11 @@ public class ConsoleDrawer {
                 }
             }
 
-            String enterLabel = "Enter the field size";
+            String enterLabel = "Enter the field size (10 <= width <= 20, 10 <= height <= 23)";
             String spaceLabel = "Press BACKSPACE to load game from file";
             String widthLabel = "width:";
             String heightLabel = "height:";
-            textGraphics.putString(40, 4, enterLabel);
+            textGraphics.putString(18, 4, enterLabel);
             textGraphics.putString(33, 27, spaceLabel);
             textGraphics.putString(33, 14, widthLabel);
             drawGameBorder(40, 13, 5, 3);

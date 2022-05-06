@@ -68,7 +68,7 @@ public class GameController {
                         switch (mainMenuState) {
                             case START:
                                 screenType = ScreenType.ASK_SIZE;
-                                drawAskSizeCommand = new DrawAskSizeCommand(view, null, null, true);
+                                drawAskSizeCommand = new DrawAskSizeCommand(view, null, null, true, true);
                                 drawAskSizeCommand.execute();
                                 break;
                             case LOAD_GAME:
@@ -94,33 +94,19 @@ public class GameController {
                         if (curFillIsWidth) {
                             curFillIsWidth = false;
                         } else {
-                            if (fieldHeight > 20 || fieldHeight < 10
-                                    || fieldWidth > 23 || fieldWidth < 10) {
-                                fieldHeight = null;
-                                fieldWidth = null;
-                                curFillIsWidth = true;
-                                drawAskSizeCommand = new DrawAskSizeCommand(view, null, null, false);
-                                drawAskSizeCommand.execute();
-                            } else {
-                                generation = new Generation(fieldWidth, fieldHeight);
-                                startGame(generation);
-                                screenType = ScreenType.GAME;
-                                drawMapCommand = new DrawMapCommand(view, field);
-                                drawMapCommand.execute();
-                            }
+                            enterInput();
                         }
                     } else if (keyType == KeyType.Character) {
                         var c = inputHandler.getNumber(keyStroke);
-                        DrawAskSizeCommand drawAskSizeCommand;
                         if (c != null) {
                             if (curFillIsWidth) {
                                 if (fieldWidth == null) {
                                     fieldWidth = Character.getNumericValue(c);
-                                    drawAskSizeCommand = new DrawAskSizeCommand(view, null, null, false);
+                                    drawAskSizeCommand = new DrawAskSizeCommand(view, c, null, true, false);
                                     drawAskSizeCommand.execute();
                                 } else {
                                     fieldWidth = fieldWidth * 10 + Character.getNumericValue(c);
-                                    drawAskSizeCommand = new DrawAskSizeCommand(view, null, null, true);
+                                    drawAskSizeCommand = new DrawAskSizeCommand(view, c, null, true, false);
                                     drawAskSizeCommand.execute();
                                     curFillIsWidth = false;
                                     continue;
@@ -128,24 +114,11 @@ public class GameController {
                             } else {
                                 if (fieldHeight == null) {
                                     fieldHeight = Character.getNumericValue(c);
-                                    drawAskSizeCommand = new DrawAskSizeCommand(view, null, c, true);
+                                    drawAskSizeCommand = new DrawAskSizeCommand(view, null, c, true, false);
                                     drawAskSizeCommand.execute();
                                 } else {
                                     fieldHeight = fieldHeight * 10 + Character.getNumericValue(c);
-                                    if (fieldHeight > 20 || fieldHeight < 10
-                                            || fieldWidth > 23 || fieldWidth < 10) {
-                                        fieldHeight = null;
-                                        fieldWidth = null;
-                                        curFillIsWidth = true;
-                                        drawAskSizeCommand = new DrawAskSizeCommand(view, null, null, false);
-                                        drawAskSizeCommand.execute();
-                                    } else {
-                                        generation = new Generation(fieldWidth, fieldHeight);
-                                        startGame(generation);
-                                        screenType = ScreenType.GAME;
-                                        drawMapCommand = new DrawMapCommand(view, field);
-                                        drawMapCommand.execute();
-                                    }
+                                    enterInput();
                                 }
                             }
                         }
@@ -201,6 +174,23 @@ public class GameController {
                     break;
             }
         }
+    }
+
+    private void enterInput() {
+        if (fieldHeight >= 20 || fieldHeight <= 10
+                || fieldWidth >= 23 || fieldWidth <= 10) {
+            drawAskSizeCommand = new DrawAskSizeCommand(view, null, null, false, false);
+            drawAskSizeCommand.execute();
+        } else {
+            generation = new Generation(fieldWidth, fieldHeight);
+            startGame(generation);
+            screenType = ScreenType.GAME;
+            drawMapCommand = new DrawMapCommand(view, field);
+            drawMapCommand.execute();
+        }
+        fieldHeight = null;
+        fieldWidth = null;
+        curFillIsWidth = true;
     }
 
     /**

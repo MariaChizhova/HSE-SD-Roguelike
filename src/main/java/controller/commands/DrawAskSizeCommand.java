@@ -11,14 +11,17 @@ public class DrawAskSizeCommand extends Command {
     private Character newHeightChar;
     private boolean isOk;
 
+    private boolean isNew;
+
     /**
      * Creates DrawAskSizeCommand with given arguments
      */
-    public DrawAskSizeCommand(ConsoleDrawer view, Character newWidthChar, Character newHeightChar, boolean isOk) {
+    public DrawAskSizeCommand(ConsoleDrawer view, Character newWidthChar, Character newHeightChar, boolean isOk, boolean isNew) {
         this.view = view;
         this.newWidthChar = newWidthChar;
         this.newHeightChar = newHeightChar;
         this.isOk = isOk;
+        this.isNew = isNew;
     }
 
     /**
@@ -26,6 +29,6 @@ public class DrawAskSizeCommand extends Command {
      */
     @Override
     public void execute() {
-        view.drawAskSize(newWidthChar, newHeightChar, isOk);
+        view.drawAskSize(newWidthChar, newHeightChar, isOk, isNew);
     }
 }
