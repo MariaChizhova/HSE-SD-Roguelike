@@ -2,9 +2,10 @@ package model.decorator;
 
 import model.Position;
 import model.strategies.StrategyEnemy;
+import model.strategies.StrategyType;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Confusing decorator of enemy strategy
@@ -23,6 +24,15 @@ public class ConfuseStrategyDecorator extends StrategyDecorator implements Seria
     }
 
     /**
+     * Gets enemies strategy type
+     * @return strategy type
+     */
+    @Override
+    public StrategyType getStrategyType() {
+        return null;
+    }
+
+    /**
      *  Makes one enemy move
      * @param playerPosition - player's position
      * @param enemyPosition - old position
@@ -30,7 +40,7 @@ public class ConfuseStrategyDecorator extends StrategyDecorator implements Seria
      * @return new position
      */
     @Override
-    public Position nextMove(Position playerPosition, Position enemyPosition, int visibility, ArrayList<Position> emptyPositions) {
+    public Position nextMove(Position playerPosition, Position enemyPosition, int visibility, List<Position> emptyPositions) {
         if (confusedNumber > 0) {
             --confusedNumber;
             return StrategyEnemy.getRandomStrategy().nextMove(playerPosition, enemyPosition, visibility, emptyPositions);

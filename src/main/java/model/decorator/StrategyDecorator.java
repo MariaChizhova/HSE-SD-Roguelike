@@ -4,7 +4,7 @@ import model.Position;
 import model.strategies.StrategyEnemy;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Decorator for enemy strategies
@@ -27,7 +27,7 @@ public abstract class StrategyDecorator implements StrategyEnemy, Serializable {
      * @return new position
      */
     @Override
-    public Position nextMove(Position playerPosition, Position enemyPosition, int visibility, ArrayList<Position> emptyPositions) {
+    public Position nextMove(Position playerPosition, Position enemyPosition, int visibility, List<Position> emptyPositions) {
         return decorate.nextMove(playerPosition, enemyPosition, visibility, emptyPositions);
     }
 }

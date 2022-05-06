@@ -33,4 +33,11 @@ public interface EnemyFactory {
      * @return patrol enemy
      */
     Enemy createPatrolEnemy(Position position);
+
+    /**
+     * Creates tracker enemy
+     * @param position position of enemy
+     * @return tracker enemy
+     */
+    Enemy createTrackerEnemy(Position position);
 }

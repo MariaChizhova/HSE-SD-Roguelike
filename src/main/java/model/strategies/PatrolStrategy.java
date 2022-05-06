@@ -3,13 +3,21 @@ package model.strategies;
 import model.Position;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
  * Represents a patrol strategy to move enemies
  */
 public class PatrolStrategy implements StrategyEnemy, Serializable  {
+
+    /**
+     * Gets enemies strategy type
+     * @return strategy type
+     */
+    public StrategyType getStrategyType() {
+        return StrategyType.PATROL;
+    }
 
     /**
      *
@@ -20,7 +28,7 @@ public class PatrolStrategy implements StrategyEnemy, Serializable  {
      * @return new position
      */
     @Override
-    public Position nextMove(Position playerPosition, Position enemyPosition, int visibility, ArrayList<Position> emptyPositions) {
+    public Position nextMove(Position playerPosition, Position enemyPosition, int visibility, List<Position> emptyPositions) {
         if (isPlayerVisible(playerPosition, enemyPosition, visibility)) {
             return enemyPosition;
         }

@@ -3,6 +3,7 @@ package model;
 import model.enemy.Enemy;
 import model.inventory.ArtifactWithPosition;
 import model.inventory.FoodWithPosition;
+import model.strategies.StrategyType;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -117,7 +118,10 @@ public class Round implements Serializable {
         ArrayList<Enemy> newEnemies = new ArrayList<>(enemies);
         for (Enemy enemy: enemies) {
             Position oldPosition = enemy.getPosition();
-            Position newPosition = enemy.getStrategy().nextMove(player.getPosition(), oldPosition, enemy.getVisibility(), getEmptyPositions(oldPosition));
+            var playerPos = enemy.getStrategy().getStrategyType() == StrategyType.TRACKER ? enemy.getPlayerLastPos()
+                    : player.getPosition();
+            Position newPosition = enemy.getStrategy().nextMove(playerPos, oldPosition, enemy.getVisibility(),
+                    getEmptyPositions(oldPosition));
             if (field.isValidPosition(newPosition)) {
                 Cell cell = field.getCell(newPosition);
                 if (cell == null || cell instanceof EmptyCell) {
@@ -144,6 +148,13 @@ public class Round implements Serializable {
                 } else if (cell instanceof Player) {
                     enemy.attack((Player) cell);
                     return player.isDead();
+                }
+                if (!enemy.getStrategy().isPlayerVisible(player.getPosition(), newPosition, enemy.getVisibility())) {
+                    for (Enemy otherEnemy : enemies) {
+                        if (otherEnemy != enemy && otherEnemy.getStrategy().getStrategyType() == StrategyType.TRACKER) {
+                            otherEnemy.setPlayerLastPos(player.getPosition());
+                        }
+                    }
                 }
             }
         }

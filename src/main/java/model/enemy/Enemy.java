@@ -25,6 +25,8 @@ public class Enemy implements Character, Cell, Serializable {
     private final StrategyEnemy strategy;
     private final String name;
 
+    private Position playerLastPos;
+
     /**
      * Enemy Constructor
      * @param position the enemy is in
@@ -41,6 +43,7 @@ public class Enemy implements Character, Cell, Serializable {
         this.strategy = strategy;
         this.currentStrategy = strategy;
         this.name = name;
+        this.playerLastPos = null;
     }
 
     /**
@@ -162,4 +165,20 @@ public class Enemy implements Character, Cell, Serializable {
     public String getName() {
         return name;
     }
+
+    /**
+     * @return players last known position
+     */
+    public Position getPlayerLastPos() {
+        return playerLastPos;
+    }
+
+    /**
+     * Sets players position if enemy detected a player
+     * @param playerLastPos - players position
+     */
+    public void setPlayerLastPos(Position playerLastPos) {
+        this.playerLastPos = playerLastPos;
+    }
+
 }

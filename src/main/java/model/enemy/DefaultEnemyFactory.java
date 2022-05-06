@@ -5,6 +5,7 @@ import model.strategies.AggressiveStrategy;
 import model.strategies.CowardStrategy;
 import model.strategies.PatrolStrategy;
 import model.strategies.SimpleStrategy;
+import model.strategies.TrackerStrategy;
 
 /**
  * Default enemy factory
@@ -52,5 +53,15 @@ public class DefaultEnemyFactory implements EnemyFactory {
     @Override
     public Enemy createPatrolEnemy(Position position) {
         return new Enemy(position, new PatrolStrategy(), DEFAULT_ENEMY, DEFAULT, DEFAULT, DEFAULT);
+    }
+
+    /**
+     * Creates tracker enemy
+     * @param position position of enemy
+     * @return tracker enemy
+     */
+    @Override
+    public Enemy createTrackerEnemy(Position position) {
+        return new Enemy(position, new TrackerStrategy(), DEFAULT_ENEMY, DEFAULT, DEFAULT, DEFAULT);
     }
 }

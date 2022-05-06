@@ -5,6 +5,7 @@ import model.strategies.AggressiveStrategy;
 import model.strategies.CowardStrategy;
 import model.strategies.PatrolStrategy;
 import model.strategies.SimpleStrategy;
+import model.strategies.TrackerStrategy;
 
 /**
  * Dragon enemy factory
@@ -54,5 +55,15 @@ public class DragonEnemyFactory implements EnemyFactory {
     @Override
     public Enemy createPatrolEnemy(Position position) {
         return new Enemy(position, new PatrolStrategy(), DRAGON_ENEMY, DEFAULT, DRAGONARMOR, DRAGONEXP);
+    }
+
+    /**
+     * Creates tracker enemy
+     * @param position position of enemy
+     * @return tracker enemy
+     */
+    @Override
+    public Enemy createTrackerEnemy(Position position) {
+        return new Enemy(position, new TrackerStrategy(), DRAGON_ENEMY, DEFAULT, DRAGONARMOR, DRAGONEXP);
     }
 }

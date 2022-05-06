@@ -1,11 +1,19 @@
 package model.strategies;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
 
 import model.Position;
 
 public class CowardStrategy implements StrategyEnemy, Serializable {
+
+    /**
+     * Gets enemies strategy type
+     * @return strategy type
+     */
+    public StrategyType getStrategyType() {
+        return StrategyType.COWARD;
+    }
 
     /**
      * The enemy is running away from player in visibility radius
@@ -16,7 +24,7 @@ public class CowardStrategy implements StrategyEnemy, Serializable {
      * @return new position
      */
     @Override
-    public Position nextMove(Position playerPosition, Position enemyPosition, int visibility, ArrayList<Position> emptyPositions) {
+    public Position nextMove(Position playerPosition, Position enemyPosition, int visibility, List<Position> emptyPositions) {
         if (isPlayerVisible(playerPosition, enemyPosition, visibility)) {
             return enemyPosition;
         }
