@@ -4,69 +4,48 @@ import controller.Generation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
+
 public class RoundTest {
+
     @Test
     public void testMovePlayerUp() {
-        var field = new Field();
-        Generation generation = new Generation();
-        field = new Field(generation);
-        Round round = new Round(generation.getPlayer(), generation.getEnemies(), field);
-        Position currentPosition = round.getPlayer().getPosition();
-        Position movePosition = new Position(currentPosition.getX(), currentPosition.getY() - 1);
-        if (checkPosition(field, movePosition)) {
-            System.out.println(currentPosition.getX());
-            System.out.println(currentPosition.getY());
-            round.movePlayerUp();
-            System.out.println(movePosition.getX());
-            System.out.println(movePosition.getY());
-            Assertions.assertEquals(movePosition, round.getPlayer().getPosition());
-        } else {
-            Assertions.assertEquals(new Position(currentPosition.getX(), currentPosition.getY()), round.getPlayer().getPosition());
-        }
+        UnaryOperator<Position> positionStep = (position) -> new Position(position.getX(), position.getY() - 1);
+        Consumer<Round> moveAction = Round::movePlayerUp;
+        testMovePlayer(positionStep, moveAction);
     }
 
     @Test
     public void testMovePlayerDown() {
-        var field = new Field();
-        Generation generation = new Generation();
-        field = new Field(generation);
-        Round round = new Round(generation.getPlayer(), generation.getEnemies(), field);
-        Position currentPosition = round.getPlayer().getPosition();
-        Position movePosition = new Position(currentPosition.getX(), currentPosition.getY() + 1);
-        if (checkPosition(field, movePosition)) {
-            round.movePlayerDown();
-            Assertions.assertEquals(movePosition, round.getPlayer().getPosition());
-        } else {
-            Assertions.assertEquals(new Position(currentPosition.getX(), currentPosition.getY()), round.getPlayer().getPosition());
-        }
+        UnaryOperator<Position> positionStep = (position) -> new Position(position.getX(), position.getY() + 1);
+        Consumer<Round> moveAction = Round::movePlayerDown;
+        testMovePlayer(positionStep, moveAction);
     }
 
     @Test
     public void testMovePlayerLeft() {
-        var field = new Field();
-        Generation generation = new Generation();
-        field = new Field(generation);
-        Round round = new Round(generation.getPlayer(), generation.getEnemies(), field);
-        Position currentPosition = round.getPlayer().getPosition();
-        Position movePosition = new Position(currentPosition.getX() - 1, currentPosition.getY());
-        if (checkPosition(field, movePosition)) {
-            round.movePlayerLeft();
-            Assertions.assertEquals(movePosition, round.getPlayer().getPosition());
-        } else {
-            Assertions.assertEquals(new Position(currentPosition.getX(), currentPosition.getY()), round.getPlayer().getPosition());
-        }
+        UnaryOperator<Position> positionStep = (position) -> new Position(position.getX() - 1, position.getY());
+        Consumer<Round> moveAction = Round::movePlayerLeft;
+        testMovePlayer(positionStep, moveAction);
     }
 
     @Test
     public void testMovePlayerRight() {
+        UnaryOperator<Position> positionStep = (position) -> new Position(position.getX() + 1, position.getY());
+        Consumer<Round> moveAction = Round::movePlayerRight;
+        testMovePlayer(positionStep, moveAction);
+    }
+
+    void testMovePlayer(UnaryOperator<Position> positionStep, Consumer<Round> moveAction) {
         var field = new Field();
         Generation generation = new Generation();
         field = new Field(generation);
         Round round = new Round(generation.getPlayer(), generation.getEnemies(), field);
         Position currentPosition = round.getPlayer().getPosition();
-        Position movePosition = new Position(currentPosition.getX() + 1, currentPosition.getY());
+        Position movePosition = positionStep.apply(currentPosition);
         if (checkPosition(field, movePosition)) {
-            round.movePlayerRight();
+            moveAction.accept(round);
             Assertions.assertEquals(movePosition, round.getPlayer().getPosition());
         } else {
             Assertions.assertEquals(new Position(currentPosition.getX(), currentPosition.getY()), round.getPlayer().getPosition());
@@ -74,7 +53,7 @@ public class RoundTest {
     }
 
     private boolean checkPosition(Field field, Position position) {
-        if (field.isValidPosition(position)) {
+        if (field.isInsideBounds(position)) {
             Cell cell = field.getCell(position);
             return cell == null || cell instanceof EmptyCell;
         } else {

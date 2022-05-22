@@ -5,7 +5,6 @@ import model.inventory.FoodWithPosition;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class is responsible for the environment in the round.
@@ -78,24 +77,24 @@ public class Round implements Serializable {
     }
 
     private void movePlayer(Position position) {
-        if (field.isValidPosition(position)) {
-            Cell cell = field.getCell(position);
-            if (cell == null || cell instanceof EmptyCell) {
+        if (!field.isInsideBounds(position)) {
+            return;
+        }
+        Cell cell = field.getCell(position);
+        if (cell == null || cell instanceof EmptyCell) {
+            field.movePlayer(position, player);
+        } else if (cell instanceof Enemy) {
+            Enemy enemy = (Enemy) cell;
+            player.attack(enemy);
+            if ((enemy).isDead()) {
                 field.movePlayer(position, player);
-                player.move(position);
-            } else if (cell instanceof Enemy) {
-                player.attack((Enemy) cell);
-                if (((Enemy) cell).isDead()) {
-                    field.movePlayer(position, player);
-                    player.move(position);
-                }
-            } else if (cell instanceof ArtifactWithPosition) {
-                player.addArtifact(((ArtifactWithPosition) cell).getArtifact());
-                field.clearCage(position);
-            } else if (cell instanceof FoodWithPosition) {
-                player.increaseHealth(((FoodWithPosition) cell).getFood().getHealth());
-                field.clearCage(position);
             }
+        } else if (cell instanceof ArtifactWithPosition) {
+            player.addArtifact(((ArtifactWithPosition) cell).getArtifact());
+            field.clearCage(position);
+        } else if (cell instanceof FoodWithPosition) {
+            player.increaseHealth(((FoodWithPosition) cell).getFood().getHealth());
+            field.clearCage(position);
         }
     }
 

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents a player who is a character and who stands on some square of the field
+ * Represents a player who is a character and who stands on some cell of the field
  */
 public class Player implements Character, Cell, Serializable {
 

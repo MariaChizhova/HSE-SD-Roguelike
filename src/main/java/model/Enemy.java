@@ -3,7 +3,7 @@ package model;
 import java.io.Serializable;
 
 /**
- * Represents enemy who is a character and who stands on some square of the field
+ * Represents enemy who is a character and who stands on some cell of the field
  */
 public class Enemy implements Character, Cell, Serializable {
 
