@@ -9,6 +9,7 @@ import view.MainMenuState;
 import view.MenuState;
 import view.ScreenType;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class GameController {
@@ -22,6 +23,7 @@ public class GameController {
     private MenuState menuState;
     private Field field;
     private Generation generation;
+    private boolean notExit = true;
 
     /**
      * Creates GameController instance
@@ -42,66 +44,17 @@ public class GameController {
      * @throws IOException
      */
     public void selectMode() throws IOException {
-        boolean notExit = true;
         while (notExit) {
             KeyType keyType = screen.readInput().getKeyType();
             switch (screenType) {
                 case MAIN_MENU:
-                    mainMenuState = inputHandler.processMainMenuCommand(keyType, mainMenuState);
-                    view.drawMainMenu(mainMenuState);
-                    // TODO: Move the processing of KeyType.Enter to the InputHandler
-                    if (keyType == KeyType.Enter) {
-                        switch (mainMenuState) {
-                            case START:
-                                startGame();
-                                screenType = ScreenType.GAME;
-                                inputHandler.processGameCommand(keyType, round);
-                                view.drawMap(field);
-                                break;
-                            case LOAD_GAME:
-                                round = GameSaverLoader.loadGame();
-                                field = round.getField();
-                                screenType = ScreenType.GAME;
-                                inputHandler.processGameCommand(keyType, round);
-                                view.drawMap(field);
-                                break;
-                            case EXIT:
-                                view.closeAll();
-                                notExit = false;
-                                break;
-                        }
-                    }
+                    mainMenuProcessing(keyType);
                     break;
                 case GAME:
-                    inputHandler.processGameCommand(keyType, round);
-                    view.drawMap(field);
-                    if (keyType == KeyType.Escape) {
-                        screenType = ScreenType.MENU;
-                        view.drawMenu(menuState);
-                    }
+                    gameProcessing(keyType);
                     break;
                 case MENU:
-                    menuState = inputHandler.processMenuCommand(keyType, menuState);
-                    view.drawMenu(menuState);
-                    // TODO: Move the processing of KeyType.Enter to the InputHandler
-                    if (keyType == KeyType.Enter) {
-                        switch (menuState) {
-                            case CONTINUE:
-                                // TODO: continue game
-                                view.drawMap(field);
-                                screenType = ScreenType.GAME;
-                                break;
-                            case SAVE_AND_EXIT:
-                                GameSaverLoader.saveGame(round);
-                                screenType = ScreenType.MAIN_MENU;
-                                view.drawMainMenu(mainMenuState);
-                                break;
-                            case EXIT:
-                                screenType = ScreenType.MAIN_MENU;
-                                view.drawMainMenu(mainMenuState);
-                                break;
-                        }
-                    }
+                    menuProcessing(keyType);
                     break;
             }
         }
@@ -110,10 +63,84 @@ public class GameController {
     /**
      * Starting the new game
      */
-    public void startGame() {
+    public void gamePreparing() {
         generation = new Generation();
         field = new Field(generation);
         round = new Round(generation.getPlayer(), generation.getEnemies(), field);
+    }
+
+    /**
+     * Process different behaviors of main menu
+     * @param keyType current screen key type
+     */
+    public void mainMenuProcessing(KeyType keyType) throws IOException {
+        mainMenuState = inputHandler.processMainMenuCommand(keyType, mainMenuState);
+        view.drawMainMenu(mainMenuState);
+        // TODO: Move the processing of KeyType.Enter to the InputHandler
+        if (keyType == KeyType.Enter) {
+            switch (mainMenuState) {
+                case START:
+                    gamePreparing();
+                    screenType = ScreenType.GAME;
+                    inputHandler.processGameCommand(keyType, round);
+                    view.drawMap(field);
+                    break;
+                case LOAD_GAME:
+                    round = GameSaverLoader.loadGame();
+                    field = round.getField();
+                    screenType = ScreenType.GAME;
+                    inputHandler.processGameCommand(keyType, round);
+                    view.drawMap(field);
+                    break;
+                case EXIT:
+                    view.closeAll();
+                    notExit = false;
+                    break;
+            }
+        }
+    }
+
+
+    /**
+     * Process different behaviors of game
+     * @param keyType current screen key type
+     */
+    private void gameProcessing(KeyType keyType) {
+        inputHandler.processGameCommand(keyType, round);
+        view.drawMap(field);
+        if (keyType == KeyType.Escape) {
+            screenType = ScreenType.MENU;
+            view.drawMenu(menuState);
+        }
+    }
+
+
+    /**
+     * Process different behaviors of menu
+     * @param keyType current screen key type
+     */
+    private void menuProcessing(KeyType keyType) throws FileNotFoundException {
+        menuState = inputHandler.processMenuCommand(keyType, menuState);
+        view.drawMenu(menuState);
+        // TODO: Move the processing of KeyType.Enter to the InputHandler
+        if (keyType == KeyType.Enter) {
+            switch (menuState) {
+                case CONTINUE:
+                    // TODO: continue game
+                    view.drawMap(field);
+                    screenType = ScreenType.GAME;
+                    break;
+                case SAVE_AND_EXIT:
+                    GameSaverLoader.saveGame(round);
+                    screenType = ScreenType.MAIN_MENU;
+                    view.drawMainMenu(mainMenuState);
+                    break;
+                case EXIT:
+                    screenType = ScreenType.MAIN_MENU;
+                    view.drawMainMenu(mainMenuState);
+                    break;
+            }
+        }
     }
 
 }
