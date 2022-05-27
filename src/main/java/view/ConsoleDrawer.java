@@ -55,8 +55,6 @@ public class ConsoleDrawer {
 
     private void drawBorder() {
         TerminalSize terminalSize = screen.getTerminalSize();
-        System.out.println(terminalSize.getColumns());
-        System.out.println(terminalSize.getRows());
         for (int column = 0; column < terminalSize.getColumns(); column++) {
             screen.setCharacter(column, 0, new TextCharacter(
                     '#', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));

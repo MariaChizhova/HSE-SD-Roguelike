@@ -15,10 +15,10 @@ public class InputHandler {
         MainMenuState nextMainMenuState;
         switch (command) {
             case ArrowUp:
-                nextMainMenuState = MainMenuState.values()[(mainMenuState.ordinal() + 1 + 3) % 3];
+                nextMainMenuState = MainMenuState.values()[(mainMenuState.ordinal() - 1 + 3) % 3];
                 break;
             case ArrowDown:
-                nextMainMenuState = MainMenuState.values()[(mainMenuState.ordinal() - 1 + 3) % 3];
+                nextMainMenuState = MainMenuState.values()[(mainMenuState.ordinal() + 1 + 3) % 3];
                 break;
             // case Enter:
             default:
