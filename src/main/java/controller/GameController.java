@@ -22,7 +22,7 @@ public class GameController {
     private MainMenuState mainMenuState;
     private MenuState menuState;
     private Field field;
-    private Generation generation;
+    private MapGenerator mapGenerator;
     private boolean notExit = true;
 
     /**
@@ -64,9 +64,9 @@ public class GameController {
      * Starting the new game
      */
     public void gamePreparing() {
-        generation = new Generation();
-        field = new Field(generation);
-        round = new Round(generation.getPlayer(), generation.getEnemies(), field);
+        mapGenerator = new MapGenerator();
+        field = new Field(mapGenerator);
+        round = new Round(mapGenerator.getPlayer(), mapGenerator.getEnemies(), field);
     }
 
     /**

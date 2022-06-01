@@ -3,7 +3,7 @@ package model;
 import java.io.Serializable;
 import java.util.List;
 
-import controller.Generation;
+import controller.MapGenerator;
 
 
 /**
@@ -28,25 +28,25 @@ public class Field implements Serializable {
 
     /**
      * Creating Field instance
-     * @param generation - field generation
+     * @param mapGenerator - field generation
      */
-    public Field(Generation generation) {
+    public Field(MapGenerator mapGenerator) {
         createField();
-        fillField(generation.getGeneration());
+        fillField(mapGenerator.getGeneration());
     }
 
     /**
      * Updating generation of field
-     * @param generation - field generation
+     * @param mapGenerator - field generation
      */
-    public void updateGeneration(Generation generation) {
+    public void updateGeneration(MapGenerator mapGenerator) {
         createField();
-        fillField(generation.getGeneration());
+        fillField(mapGenerator.getGeneration());
     }
 
-    private void fillField(List<GenerationResult> fieldGeneration) {
-        for (GenerationResult r : fieldGeneration) {
-            field[r.getX()][r.getY()] = r.getCell();
+    private void fillField(List<GeneratedMap> fieldGeneration) {
+        for (GeneratedMap r : fieldGeneration) {
+            field[r.x][r.y] = r.cell;
         }
     }
 

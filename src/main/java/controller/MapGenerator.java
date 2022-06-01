@@ -7,7 +7,7 @@ import java.util.Random;
 import model.Cell;
 import model.Enemy;
 import model.Field;
-import model.GenerationResult;
+import model.GeneratedMap;
 import model.Player;
 import model.Position;
 import model.SimpleStrategy;
@@ -20,7 +20,10 @@ import model.inventory.FoodWithPosition;
 import static model.WallDirection.getRandomDirection;
 import static model.inventory.Artifact.getArtifactList;
 
-public class Generation {
+/**
+ * Random generation of the map
+ */
+public class MapGenerator {
     private final int MAX_NUM_OF_ENEMIES = 15;
     private final int MAX_NUM_OF_ARTIFACTS = 8;
     private final int MAX_NUM_OF_FOOD = 8;
@@ -28,10 +31,10 @@ public class Generation {
     private Player player;
     private final ArrayList<Enemy> enemies = new ArrayList<>();
 
-    private final List<GenerationResult> generation = new ArrayList<>();
+    private final List<GeneratedMap> generation = new ArrayList<>();
     private final Boolean[][] isFilled;
 
-    public Generation() {
+    public MapGenerator() {
         isFilled = new Boolean[Field.FIELD_WIDTH][Field.FIELD_HEIGHT];
         for (int y = 0; y < Field.FIELD_HEIGHT; y++) {
             for (int x = 0; x < Field.FIELD_WIDTH; x++) {
@@ -77,53 +80,53 @@ public class Generation {
     }
 
     private void generateEnemies() {
-        int cnt = 0;
+        int cntOfEnemies = 0;
         Random rand = new Random();
 
         int numOfEnemies = rand.nextInt(MAX_NUM_OF_ENEMIES) + 1;
-        while (cnt != numOfEnemies) {
+        while (cntOfEnemies != numOfEnemies) {
             int enemyXPos = rand.nextInt(Field.FIELD_WIDTH);
             int enemyYPos = rand.nextInt(Field.FIELD_HEIGHT);
             if (!isFilled[enemyXPos][enemyYPos]) {
                 var enemy = new Enemy(new Position(enemyXPos, enemyYPos), new SimpleStrategy());
                 enemies.add(enemy);
                 setCellValue(enemyXPos, enemyYPos, enemy);
-                cnt++;
+                cntOfEnemies++;
             }
         }
     }
 
     private void generateArtifacts() {
-        int cnt = 0;
+        int cntOfArtifacts = 0;
         Random rand = new Random();
         var artifactList = getArtifactList();
 
         int numOfArtifacts = rand.nextInt(MAX_NUM_OF_ARTIFACTS) + 1;
-        while (cnt != numOfArtifacts) {
+        while (cntOfArtifacts != numOfArtifacts) {
             int xPos = rand.nextInt(Field.FIELD_WIDTH);
             int yPos = rand.nextInt(Field.FIELD_HEIGHT);
             Artifact randomArtifact = artifactList.get(rand.nextInt(artifactList.size()));
             if (!isFilled[xPos][yPos]) {
                 var artifact = new ArtifactWithPosition(new Position(xPos, yPos), randomArtifact);
                 setCellValue(xPos, yPos, artifact);
-                cnt++;
+                cntOfArtifacts++;
             }
         }
     }
 
     private void generateFood() {
-        int cnt = 0;
+        int cntOfFood = 0;
         Random rand = new Random();
 
         int numOfFood = rand.nextInt(MAX_NUM_OF_FOOD) + 1;
-        while (cnt != numOfFood) {
+        while (cntOfFood != numOfFood) {
             int xPos = rand.nextInt(Field.FIELD_WIDTH);
             int yPos = rand.nextInt(Field.FIELD_HEIGHT);
             Food food = new Food(rand.nextInt(16) + 5);
             if (!isFilled[xPos][yPos]) {
                 var foodWithPos = new FoodWithPosition(new Position(xPos, yPos), food);
                 setCellValue(xPos, yPos, foodWithPos);
-                cnt++;
+                cntOfFood++;
             }
         }
     }
@@ -147,7 +150,7 @@ public class Generation {
     }
 
     private void setCellValue(int x, int y, Cell cell) {
-        generation.add(new GenerationResult(x, y, cell));
+        generation.add(new GeneratedMap(x, y, cell));
         isFilled[x][y] = true;
     }
 
@@ -159,7 +162,7 @@ public class Generation {
         return enemies;
     }
 
-    public List<GenerationResult> getGeneration() {
+    public List<GeneratedMap> getGeneration() {
         return generation;
     }
 }

@@ -1,6 +1,6 @@
 package model;
 
-import controller.Generation;
+import controller.MapGenerator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -39,9 +39,9 @@ public class RoundTest {
 
     void testMovePlayer(UnaryOperator<Position> positionStep, Consumer<Round> moveAction) {
         var field = new Field();
-        Generation generation = new Generation();
-        field = new Field(generation);
-        Round round = new Round(generation.getPlayer(), generation.getEnemies(), field);
+        MapGenerator mapGenerator = new MapGenerator();
+        field = new Field(mapGenerator);
+        Round round = new Round(mapGenerator.getPlayer(), mapGenerator.getEnemies(), field);
         Position currentPosition = round.getPlayer().getPosition();
         Position movePosition = positionStep.apply(currentPosition);
         if (checkPosition(field, movePosition)) {
