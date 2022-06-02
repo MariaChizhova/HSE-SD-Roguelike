@@ -28,6 +28,9 @@ public class MapGenerator {
     private final int MAX_NUM_OF_ARTIFACTS = 8;
     private final int MAX_NUM_OF_FOOD = 8;
 
+    private final int MAX_FOOD_HEAL = 16;
+    private final int MIN_FOOD_HEAL = 5;
+
     private Player player;
     private final ArrayList<Enemy> enemies = new ArrayList<>();
 
@@ -122,7 +125,7 @@ public class MapGenerator {
         while (cntOfFood != numOfFood) {
             int xPos = rand.nextInt(Field.FIELD_WIDTH);
             int yPos = rand.nextInt(Field.FIELD_HEIGHT);
-            Food food = new Food(rand.nextInt(16) + 5);
+            Food food = new Food(rand.nextInt(MAX_FOOD_HEAL) + MIN_FOOD_HEAL);
             if (!isFilled[xPos][yPos]) {
                 var foodWithPos = new FoodWithPosition(new Position(xPos, yPos), food);
                 setCellValue(xPos, yPos, foodWithPos);

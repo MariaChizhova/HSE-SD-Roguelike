@@ -6,7 +6,7 @@ import java.io.*;
 
 public class GameSaverLoader {
 
-    private final static String filename = "saved_game.txt";
+    private final static String filename = "saved_game.bin";
     /**
      * Saving game to the file
      * @param round The round to save
