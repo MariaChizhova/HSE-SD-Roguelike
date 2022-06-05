@@ -59,12 +59,31 @@ public class Field implements Serializable {
     }
 
     /**
+     * @param x - x on the field
+     * @param y - y on the field
+     * @return the cell of the field
+     */
+    public Cell getCell(int x, int y) {
+        return field[x][y];
+    }
+
+    /**
      * Checks whether the position does not go beyond the boundaries of the field
      * @param position on the field
      * @return whether the position is valid
      */
     public boolean isInsideBounds(Position position) {
         return position.getX() < FIELD_WIDTH && position.getX() >= 0 && position.getY() < FIELD_HEIGHT && position.getY() >= 0;
+    }
+
+    /**
+     * Checks whether the position does not go beyond the boundaries of the field
+     * @param x - x on the field
+     * @param y - y on the field
+     * @return whether the position is valid
+     */
+    public boolean isInsideBounds(int x, int y) {
+        return x < FIELD_WIDTH && x >= 0 && y < FIELD_HEIGHT && y >= 0;
     }
 
     /**
