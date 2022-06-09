@@ -1,5 +1,7 @@
 package model;
 
+import model.strategies.StrategyEnemy;
+
 import java.io.Serializable;
 
 /**
@@ -7,12 +9,13 @@ import java.io.Serializable;
  */
 public class Enemy implements Character, Cell, Serializable {
 
-    private final static int DEFAULT = 10;
+    private final static int DEFAULT = 5;
     private final static int maxHealth = 100;
     private int health;
     private int damage;
     private int armor;
     private int experience;
+    private int visibility;
     private Position position;
     private StrategyEnemy strategy;
 
@@ -26,8 +29,17 @@ public class Enemy implements Character, Cell, Serializable {
         this.damage = DEFAULT;
         this.armor = DEFAULT;
         this.experience = 5;
+        this.visibility = 5;
         this.position = position;
         this.strategy = strategy;
+    }
+
+    /**
+     * @return enemy health
+     */
+    @Override
+    public int getHealth() {
+        return health;
     }
 
     /**
@@ -44,6 +56,14 @@ public class Enemy implements Character, Cell, Serializable {
     @Override
     public int getDamage() {
         return damage;
+    }
+
+    /**
+     * @return enemy armor
+     */
+    @Override
+    public int getArmor() {
+        return armor;
     }
 
     /**
@@ -86,9 +106,15 @@ public class Enemy implements Character, Cell, Serializable {
      */
     @Override
     public Position move(Position position) {
-        Position newPosition = strategy.nextMove(position, this.position);
-        this.position = newPosition;
-        return newPosition;
+        this.position = position;
+        return position;
     }
 
+    public StrategyEnemy getStrategy() {
+        return strategy;
+    }
+
+    public int getVisibility() {
+        return visibility;
+    }
 }

@@ -1,21 +1,26 @@
 package controller;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 import model.Cell;
 import model.Enemy;
-import model.Field;
 import model.GeneratedMap;
 import model.Player;
 import model.Position;
-import model.SimpleStrategy;
+import model.strategies.AggressiveStrategy;
+import model.strategies.CowardStrategy;
+import model.strategies.SimpleStrategy;
 import model.Wall;
 import model.inventory.Artifact;
 import model.inventory.ArtifactWithPosition;
 import model.inventory.Food;
 import model.inventory.FoodWithPosition;
+import model.strategies.StrategyEnemy;
 
 import static model.WallDirection.getRandomDirection;
 import static model.inventory.Artifact.getArtifactList;
@@ -24,7 +29,9 @@ import static model.inventory.Artifact.getArtifactList;
  * Random generation of the map
  */
 public class MapGenerator {
-    private final int MAX_NUM_OF_ENEMIES = 15;
+    private final int MAX_NUM_OF_AGGRESSIVE_ENEMIES = 3;
+    private final int MAX_NUM_OF_PASSIVE_ENEMIES = 5;
+    private final int MAX_NUM_OF_COWARD_ENEMIES = 4;
     private final int MAX_NUM_OF_ARTIFACTS = 8;
     private final int MAX_NUM_OF_FOOD = 8;
 
@@ -37,10 +44,18 @@ public class MapGenerator {
     private final List<GeneratedMap> generation = new ArrayList<>();
     private final Boolean[][] isFilled;
 
-    public MapGenerator() {
-        isFilled = new Boolean[Field.FIELD_WIDTH][Field.FIELD_HEIGHT];
-        for (int y = 0; y < Field.FIELD_HEIGHT; y++) {
-            for (int x = 0; x < Field.FIELD_WIDTH; x++) {
+    private int width;
+    private int height;
+
+    /**
+     * Creating MapGenerator instance
+     */
+    public MapGenerator(int width, int height) {
+        this.width = width;
+        this.height = height;
+        isFilled = new Boolean[width][height];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 isFilled[x][y] = false;
             }
         }
@@ -51,9 +66,67 @@ public class MapGenerator {
         generatePlayer();
     }
 
+    public MapGenerator(String fileName) {
+        List<List<String>> fieldText = new ArrayList<>();
+        try {
+            BufferedReader in = new BufferedReader(new FileReader(fileName));
+            while (in.ready()) {
+                String line = in.readLine();
+                List<String> characters = Arrays.asList(line.split(""));
+                fieldText.add(characters);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        this.width = fieldText.get(0).size();
+        this.height = fieldText.size();
+        isFilled = new Boolean[width][height];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                isFilled[x][y] = false;
+            }
+        }
+
+        Random rand = new Random();
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                String ch = fieldText.get(y).get(x);
+                if (ch.equals("F")) {
+                    Food food = new Food(rand.nextInt(16) + 5);
+                    var foodWithPos = new FoodWithPosition(new Position(x, y), food);
+                    setCellValue(x, y, foodWithPos);
+                } else if (ch.equals("E")) {
+                    var enemy = new Enemy(new Position(x, y), new AggressiveStrategy());
+                    enemies.add(enemy);
+                    setCellValue(x, y, enemy);
+                } else if (ch.equals("S")) {
+                    var enemy = new Enemy(new Position(x, y), new SimpleStrategy());
+                    enemies.add(enemy);
+                    setCellValue(x, y, enemy);
+                } else if (ch.equals("C")) {
+                    var enemy = new Enemy(new Position(x, y), new CowardStrategy());
+                    enemies.add(enemy);
+                    setCellValue(x, y, enemy);
+                } else if (ch.equals("A")) {
+                    var artifactList = getArtifactList();
+                    Artifact randomArtifact = artifactList.get(rand.nextInt(artifactList.size()));
+                    var artifact = new ArtifactWithPosition(new Position(x, y), randomArtifact);
+                    setCellValue(x, y, artifact);
+                } else if (ch.equals("#")) {
+                    setCellValue(x, y, new Wall());
+                } else if (ch.equals("P")) {
+                    player = new Player(new Position(x, y));
+                    setCellValue(x, y, player);
+                }
+            }
+        }
+    }
+
     private void generateWalls() {
-        for (int y = 1; y < Field.FIELD_HEIGHT; y += 2) {
-            for (int x = 1; x < Field.FIELD_WIDTH; x += 2) {
+        for (int y = 1; y < height; y += 2) {
+            for (int x = 1; x < width; x += 2) {
                 setCellValue(x, y, new Wall());
 
                 switch (getRandomDirection()) {
@@ -83,15 +156,21 @@ public class MapGenerator {
     }
 
     private void generateEnemies() {
+        generateEnemiesDependsOnStrategy(MAX_NUM_OF_PASSIVE_ENEMIES, new SimpleStrategy());
+        generateEnemiesDependsOnStrategy(MAX_NUM_OF_AGGRESSIVE_ENEMIES, new AggressiveStrategy());
+        generateEnemiesDependsOnStrategy(MAX_NUM_OF_COWARD_ENEMIES, new CowardStrategy());
+    }
+
+    private void generateEnemiesDependsOnStrategy(int maxNum, StrategyEnemy strategyEnemy) {
         int cntOfEnemies = 0;
         Random rand = new Random();
 
-        int numOfEnemies = rand.nextInt(MAX_NUM_OF_ENEMIES) + 1;
+        int numOfEnemies = rand.nextInt(maxNum) + 1;
         while (cntOfEnemies != numOfEnemies) {
-            int enemyXPos = rand.nextInt(Field.FIELD_WIDTH);
-            int enemyYPos = rand.nextInt(Field.FIELD_HEIGHT);
+            int enemyXPos = rand.nextInt(width);
+            int enemyYPos = rand.nextInt(height);
             if (!isFilled[enemyXPos][enemyYPos]) {
-                var enemy = new Enemy(new Position(enemyXPos, enemyYPos), new SimpleStrategy());
+                var enemy = new Enemy(new Position(enemyXPos, enemyYPos), strategyEnemy);
                 enemies.add(enemy);
                 setCellValue(enemyXPos, enemyYPos, enemy);
                 cntOfEnemies++;
@@ -106,8 +185,8 @@ public class MapGenerator {
 
         int numOfArtifacts = rand.nextInt(MAX_NUM_OF_ARTIFACTS) + 1;
         while (cntOfArtifacts != numOfArtifacts) {
-            int xPos = rand.nextInt(Field.FIELD_WIDTH);
-            int yPos = rand.nextInt(Field.FIELD_HEIGHT);
+            int xPos = rand.nextInt(width);
+            int yPos = rand.nextInt(height);
             Artifact randomArtifact = artifactList.get(rand.nextInt(artifactList.size()));
             if (!isFilled[xPos][yPos]) {
                 var artifact = new ArtifactWithPosition(new Position(xPos, yPos), randomArtifact);
@@ -123,8 +202,8 @@ public class MapGenerator {
 
         int numOfFood = rand.nextInt(MAX_NUM_OF_FOOD) + 1;
         while (cntOfFood != numOfFood) {
-            int xPos = rand.nextInt(Field.FIELD_WIDTH);
-            int yPos = rand.nextInt(Field.FIELD_HEIGHT);
+            int xPos = rand.nextInt(width);
+            int yPos = rand.nextInt(height);
             Food food = new Food(rand.nextInt(MAX_FOOD_HEAL) + MIN_FOOD_HEAL);
             if (!isFilled[xPos][yPos]) {
                 var foodWithPos = new FoodWithPosition(new Position(xPos, yPos), food);
@@ -137,8 +216,8 @@ public class MapGenerator {
     private void generatePlayer() {
         Random rand = new Random();
         while (true) {
-            int playerXPos = rand.nextInt(Field.FIELD_WIDTH);
-            int playerYPos = rand.nextInt(Field.FIELD_HEIGHT);
+            int playerXPos = rand.nextInt(width);
+            int playerYPos = rand.nextInt(height);
             if (!isFilled[playerXPos][playerYPos]) {
                 player = new Player(new Position(playerXPos, playerYPos));
                 setCellValue(playerXPos, playerYPos, player);
@@ -149,7 +228,7 @@ public class MapGenerator {
     }
 
     private boolean checkCell(int x, int y) {
-        return x >= 0 && y >= 0 && x < Field.FIELD_WIDTH && y < Field.FIELD_HEIGHT;
+        return x >= 0 && y >= 0 && x < width && y < height;
     }
 
     private void setCellValue(int x, int y, Cell cell) {
@@ -157,15 +236,49 @@ public class MapGenerator {
         isFilled[x][y] = true;
     }
 
+
+    /**
+     * Getting player
+     *
+     * @return player
+     */
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     * Getting all enemies on map
+     *
+     * @return enemies
+     */
     public ArrayList<Enemy> getEnemies() {
         return enemies;
     }
 
+    /**
+     * Getting generation of map
+     *
+     * @return generation
+     */
     public List<GeneratedMap> getGeneration() {
         return generation;
+    }
+
+    /**
+     * Getting width of map
+     *
+     * @return width
+     */
+    public int getWidth() {
+        return width;
+    }
+
+    /**
+     * Getting width of map
+     *
+     * @return width
+     */
+    public int getHeight() {
+        return height;
     }
 }

@@ -2,9 +2,9 @@ package model;
 
 import model.inventory.Artifact;
 import model.inventory.ArtifactName;
+import model.inventory.Inventory;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,12 +14,14 @@ public class Player implements Character, Cell, Serializable {
 
     private final static int DEFAULT = 10;
     private final static int maxHealth = 100;
+    private final static int IS_NEXT_LEVEL = 20;
     private int health;
     private int damage;
     private int armor;
     private int experience;
     private Position position;
-    private List<Artifact> artifacts;
+    private final Inventory inventory;
+    private int level;
 
     /**
      * Player Constructor
@@ -31,7 +33,8 @@ public class Player implements Character, Cell, Serializable {
         this.armor = DEFAULT;
         this.experience = 0;
         this.position = position;
-        this.artifacts = new ArrayList<>();
+        this.inventory = new Inventory();
+        this.level = 0;
     }
 
     /**
@@ -55,6 +58,14 @@ public class Player implements Character, Cell, Serializable {
     @Override
     public int getDamage() {
         return damage;
+    }
+
+    /**
+     * @return the player's armor
+     */
+    @Override
+    public int getArmor() {
+        return armor;
     }
 
     /**
@@ -82,6 +93,7 @@ public class Player implements Character, Cell, Serializable {
         character.beAttacked(this);
         if (character.isDead()) {
             experience += character.getExperience();
+            increaseLevel();
         }
     }
 
@@ -117,18 +129,68 @@ public class Player implements Character, Cell, Serializable {
      * @param artifact
      */
     public void addArtifact(Artifact artifact) {
-        artifacts.add(artifact);
+        inventory.addArtifact(artifact);
     }
 
+    /**
+     * Check the availability of the artifact
+     */
     public boolean hasArtifact(ArtifactName artifactName) {
-        boolean has_artifact = false;
-        for (var artifact: artifacts) {
-            if (artifact.getName().equals(artifactName)) {
-                has_artifact = true;
-                break;
-            }
-        }
-        return has_artifact;
+        return inventory.checkArtifact(artifactName);
     }
 
+    /**
+     * Check the if artifact is on
+     */
+    public boolean isArtifactOn(ArtifactName artifactName) {
+        return inventory.checkPutOnArtifact(artifactName);
+    }
+
+    /**
+     * Check the availability of the artifact
+     */
+    public List<ArtifactName> getInventory() {
+        return inventory.getFullInventory();
+    }
+
+    /**
+     * Check the artifacts on from inventory
+     */
+    public List<Boolean> getArtifactsOn() {
+        return inventory.getArtifactsOn();
+    }
+
+    private void increaseLevel() {
+        if (experience >= IS_NEXT_LEVEL) {
+            level += 1;
+            experience = 0;
+            growthOfCharacteristics();
+        }
+    }
+
+    private void growthOfCharacteristics() {
+        damage += 1;
+        armor += 1;
+        health = maxHealth;
+    }
+
+    /**
+     * @return the player's level
+     */
+    public int getLevel() {
+        return level;
+    }
+
+    /**
+     * Put on artifact from inventory if it wasn't and take off otherwise
+     */
+    public void putOnTakeOffArtifact(int i) {
+        var artifact = inventory.putOnTakeOffArtifact(i);
+        if (artifact != null) {
+            boolean isOn = inventory.checkPutOnArtifact(i);
+            var sign = isOn ? 1 : -1;
+            damage += sign * artifact.getDamage();
+            armor += sign * artifact.getArmor();
+        }
+    }
 }

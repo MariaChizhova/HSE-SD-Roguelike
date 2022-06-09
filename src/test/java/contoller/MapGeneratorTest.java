@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MapGeneratorTest {
-    MapGenerator map = new MapGenerator();
+    MapGenerator map = new MapGenerator(19, 13);
 
     @Test
     public void testGetPlayer() {

@@ -38,8 +38,10 @@ public class RoundTest {
     }
 
     void testMovePlayer(UnaryOperator<Position> positionStep, Consumer<Round> moveAction) {
-        var field = new Field();
-        MapGenerator mapGenerator = new MapGenerator();
+        int width = 19;
+        int height = 13;
+        var field = new Field(width,height);
+        MapGenerator mapGenerator = new MapGenerator(width, height);
         field = new Field(mapGenerator);
         Round round = new Round(mapGenerator.getPlayer(), mapGenerator.getEnemies(), field);
         Position currentPosition = round.getPlayer().getPosition();

@@ -10,8 +10,11 @@ import com.googlecode.lanterna.terminal.Terminal;
 import model.inventory.ArtifactName;
 import model.inventory.ArtifactWithPosition;
 import model.inventory.FoodWithPosition;
+import model.inventory.Inventory;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents console drawer
@@ -107,6 +110,7 @@ public class ConsoleDrawer {
     private final int defaultHp = 100;
     private final int hpPerHeart = 10;
     private final int defaultExp = 0;
+    private final int defaultLvl = 0;
 
     private final int buttonsStartColumn = 7;
     private final int button1StartRow = 4;
@@ -186,33 +190,57 @@ public class ConsoleDrawer {
         }
     }
 
-    private void drawInventory(int start_column, int start_row, Player player) {
+    private void drawPlayerInventory(int start_column, int start_row, Player player) {
         if (player == null) {
             return;
         }
-        if (player.hasArtifact(ArtifactName.BOOTS)) {
+        if (player.hasArtifact(ArtifactName.BOOTS) && player.isArtifactOn(ArtifactName.BOOTS)) {
             ArtifactDrawer.bootsDrawer(start_column, start_row, screen);
         }
-        if (player.hasArtifact(ArtifactName.HELMET)) {
+        if (player.hasArtifact(ArtifactName.HELMET) && player.isArtifactOn(ArtifactName.HELMET)) {
             ArtifactDrawer.helmetDrawer(start_column, start_row, screen);
         }
-        if (player.hasArtifact(ArtifactName.GLOVES)) {
+        if (player.hasArtifact(ArtifactName.GLOVES) && player.isArtifactOn(ArtifactName.GLOVES)) {
             ArtifactDrawer.glovesDrawer(start_column, start_row, screen);
         }
-        if (player.hasArtifact(ArtifactName.CUIRASS)) {
+        if (player.hasArtifact(ArtifactName.CUIRASS) && player.isArtifactOn(ArtifactName.CUIRASS)) {
             ArtifactDrawer.cuirassDrawer(start_column, start_row, screen);
         }
-        if (player.hasArtifact(ArtifactName.RAPIER)) {
+        if (player.hasArtifact(ArtifactName.RAPIER) && player.isArtifactOn(ArtifactName.RAPIER)) {
             ArtifactDrawer.rapierDrawer(start_column, start_row, screen);
         }
-        if (player.hasArtifact(ArtifactName.STEEL_SWORD)) {
+        if (player.hasArtifact(ArtifactName.STEEL_SWORD) && player.isArtifactOn(ArtifactName.STEEL_SWORD)) {
             ArtifactDrawer.steelSwordDrawer(start_column, start_row, screen);
         }
-        if (player.hasArtifact(ArtifactName.COPPER_SWORD)) {
+        if (player.hasArtifact(ArtifactName.COPPER_SWORD) && player.isArtifactOn(ArtifactName.COPPER_SWORD)) {
             ArtifactDrawer.cooperSwordDrawer(start_column, start_row, screen);
         }
-        if (player.hasArtifact(ArtifactName.WOODEN_SWORD)) {
+        if (player.hasArtifact(ArtifactName.WOODEN_SWORD) && player.isArtifactOn(ArtifactName.WOODEN_SWORD)) {
             ArtifactDrawer.woodenSwordDrawer(start_column, start_row, screen);
+        }
+    }
+
+    private void drawFullInventory(int start_column, int start_row, Player player) {
+        List<ArtifactName> artifacts;
+        List<Boolean> isOn;
+        if (player == null) {
+            artifacts = new ArrayList<>();
+            isOn = new ArrayList<>();
+            for (int i = 0; i < Inventory.INVENTORY_SIZE; i++) {
+                artifacts.add(null);
+                isOn.add(false);
+            }
+        } else {
+            artifacts = player.getInventory();
+            isOn = player.getArtifactsOn();
+        }
+        TextGraphics inventoryGraphics = screen.newTextGraphics();
+        inventoryGraphics.setForegroundColor(TextColor.ANSI.MAGENTA);
+        for (int i = 0; i < Inventory.INVENTORY_SIZE; i++) {
+            String labelIsOn = isOn.get(i) ? "^" : " ";
+            String label = "0" + (i + 1) + " " +
+                    labelIsOn + (artifacts.get(i) == null ? "--------" : artifacts.get(i).interfaceName) + labelIsOn;
+            inventoryGraphics.putString(start_column + 15 * (i / 2), start_row + 2 * (i % 2), label);
         }
     }
 
@@ -262,7 +290,9 @@ public class ConsoleDrawer {
         expGraphics.putString(start_column, start_row, label);
     }
 
-    private void drawHeroInfo(int health, int experience, int start_column, int start_row) {
+    private void drawHeroInfo(int health, int experience, int level, int start_column, int start_row) {
+        TextGraphics livesGraphics = screen.newTextGraphics();
+        livesGraphics.setForegroundColor(TextColor.ANSI.RED);
         String livesLabel = "LIVES: ";
         String expLabel = "EXP: " + experience;
         TextCharacter heart = new TextCharacter(
@@ -279,6 +309,11 @@ public class ConsoleDrawer {
         int expIndent = 23;
 
         drawInfoLabel(expLabel, start_column + expIndent + livesLabel.length(), start_row, TextColor.ANSI.GREEN);
+
+        String levelLabel = "LVL: " + level;
+        int lvlIndent = 26;
+
+        drawInfoLabel(levelLabel, start_column + lvlIndent + livesLabel.length() + expLabel.length(), start_row, TextColor.ANSI.WHITE);
     }
 
     /**
@@ -294,6 +329,9 @@ public class ConsoleDrawer {
             int fieldStartColumn = 2;
             int fieldStartRow = 4;
 
+            int fullInventoryStartColumn = 2;
+            int fullInventoryStartRow = 19;
+
             int heroStartColumn = 63;
             int heroStartRow = 4;
 
@@ -305,14 +343,13 @@ public class ConsoleDrawer {
             int bordersSize = 2;
 
             drawBorder(fieldStartColumn - borderSize, fieldStartRow - borderSize,
-                    cellSize * Field.FIELD_WIDTH + bordersSize, Field.FIELD_HEIGHT + bordersSize);
+                    cellSize * field.getWidth()  + bordersSize, field.getHeight() + bordersSize);
             drawBorder(heroStartColumn - borderSize, heroStartRow - borderSize,
                     heroWidth + bordersSize, heroHeight + bordersSize);
-
             Player player = null;
 
-            for (int i = 0; i < Field.FIELD_HEIGHT; i++) {
-                for (int j = 0; j < Field.FIELD_WIDTH; j++) {
+            for (int i = 0; i < field.getHeight(); i++) {
+                for (int j = 0; j < field.getWidth(); j++) {
                     var cell = field.getCell(new Position(j, i));
                     if (cell instanceof Player) {
                         CellDrawer.playerDrawer(fieldStartColumn + cellSize * j, fieldStartRow + i, screen);
@@ -349,10 +386,11 @@ public class ConsoleDrawer {
             }
             drawHeroInfo(player == null ? defaultHp : player.getHealth(),
                          player == null ? defaultExp : player.getExperience(),
+                         player == null ? defaultLvl : player.getLevel(),
                          heroInfoStartColumn, heroInfoStartRow);
             drawImg(heroStartColumn, heroStartRow, heroHeight, heroWidth, hero);
-            drawInventory(heroStartColumn, heroStartRow, player);
-
+            drawPlayerInventory(heroStartColumn, heroStartRow, player);
+            drawFullInventory(fullInventoryStartColumn, fullInventoryStartRow, player);
             screen.refresh();
         } catch (Exception e) {
             e.printStackTrace();

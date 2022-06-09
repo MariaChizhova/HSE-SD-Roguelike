@@ -51,7 +51,17 @@ public class GameController {
                     mainMenuProcessing(keyType);
                     break;
                 case GAME:
-                    gameProcessing(keyType);
+                    boolean finished = inputHandler.processGameCommand(keyType, round);
+                    if (finished) {
+                        screenType = ScreenType.MAIN_MENU;
+                        view.drawMainMenu(mainMenuState);
+                    } else {
+                        view.drawMap(field);
+                        if (keyType == KeyType.Escape) {
+                            screenType = ScreenType.MENU;
+                            view.drawMenu(menuState);
+                        }
+                    }
                     break;
                 case MENU:
                     menuProcessing(keyType);
@@ -64,7 +74,7 @@ public class GameController {
      * Starting the new game
      */
     public void gamePreparing() {
-        mapGenerator = new MapGenerator();
+        mapGenerator = new MapGenerator(19, 13);
         field = new Field(mapGenerator);
         round = new Round(mapGenerator.getPlayer(), mapGenerator.getEnemies(), field);
     }
