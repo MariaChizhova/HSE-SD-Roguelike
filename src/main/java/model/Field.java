@@ -122,6 +122,15 @@ public class Field implements Serializable {
     }
 
     /**
+     * Create an enemy on the field
+     * @param position - its position
+     * @param enemy - its enemy
+     */
+    public void addEnemy(Position position, Enemy enemy) {
+        field[position.getX()][position.getY()] = enemy;
+    }
+
+    /**
      * Getting width of map
      *
      * @return width
@@ -137,14 +146,5 @@ public class Field implements Serializable {
      */
     public int getHeight() {
         return height;
-    }
-
-    /**
-     * Create an enemy on the field
-     * @param position - its position
-     * @param enemy - its enemy
-     */
-    public void addEnemy(Position position, Enemy enemy) {
-        field[position.getX()][position.getY()] = enemy;
     }
 }

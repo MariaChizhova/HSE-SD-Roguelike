@@ -10,7 +10,6 @@ import model.strategies.SimpleStrategy;
  */
 public class CloneEnemyFactory implements EnemyFactory {
 
-
     public final static String CLONE_ENEMY = "clone";
     private final static int DEFAULT = 5;
     /**

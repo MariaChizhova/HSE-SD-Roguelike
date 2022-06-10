@@ -12,7 +12,6 @@ import java.io.Serializable;
  */
 public class Enemy implements Character, Cell, Serializable {
 
-    private String color;
     private final static int DEFAULT = 5;
     private final static int maxHealth = 100;
     private int health;
@@ -41,12 +40,6 @@ public class Enemy implements Character, Cell, Serializable {
         this.name = name;
     }
 
-    /**
-     * @return enemy color
-     */
-    public String getColor() {
-        return color;
-    }
     /**
      * @return enemy health
      */

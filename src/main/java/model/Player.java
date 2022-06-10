@@ -192,6 +192,5 @@ public class Player implements Character, Cell, Serializable {
             damage += sign * artifact.getDamage();
             armor += sign * artifact.getArmor();
         }
-        health += maxHealth;
     }
 }
