@@ -449,7 +449,7 @@ public class ConsoleDrawer {
     /**
      * Function that draws menu with field size
      */
-    public void drawAskSize(Character newWidthChar, Character newHeightChar, boolean isOk) {
+    public void drawAskSize(Character newWidthChar, Character newHeightChar, boolean isOk, boolean toClear) {
         try {
             screen.setCursorPosition(null);
             screen.clear();
@@ -458,25 +458,41 @@ public class ConsoleDrawer {
 
             TextGraphics textGraphics = screen.newTextGraphics();
 
-            if (!isOk) {
+            String wrongSizeLabel = "Wrong field size!";
+            int wrongSizeStartColumn = 40;
+            int wrongSizeStartRow = 25;
+
+            int numbersRow = 14;
+            int fstWidthColumn = 41;
+            int fstHeightColumn = 59;
+            int nextChar = 1;
+
+            int boxWidth = 5;
+            int boxHeight = 3;
+
+            var selectedChar = new TextCharacter(' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE);
+
+            if (toClear || !isOk) {
                 height = "";
                 width = "";
-                textGraphics.putString(40, 25, "Wrong field size!");
+            }
+            if (!isOk) {
+                textGraphics.putString(wrongSizeStartColumn, wrongSizeStartRow, wrongSizeLabel);
             }
 
             if (newHeightChar == null && newWidthChar == null) {
-                screen.setCharacter(41, 14, new TextCharacter(' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
+                screen.setCharacter(fstWidthColumn, numbersRow, selectedChar);
             } else if (newWidthChar != null) {
                 width += newWidthChar;
                 if (width.length() == 1) {
-                    screen.setCharacter(42, 14, new TextCharacter(' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
+                    screen.setCharacter(fstWidthColumn + nextChar, numbersRow, selectedChar);
                 } else {
-                    screen.setCharacter(59, 14, new TextCharacter(' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
+                    screen.setCharacter(fstHeightColumn, numbersRow, selectedChar);
                 }
             } else {
                 height += newHeightChar;
                 if (height.length() == 1) {
-                    screen.setCharacter(60, 14, new TextCharacter(' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
+                    screen.setCharacter(fstHeightColumn + nextChar, numbersRow, selectedChar);
                 }
             }
 
@@ -484,17 +500,27 @@ public class ConsoleDrawer {
             String spaceLabel = "Press BACKSPACE to load game from file";
             String widthLabel = "width:";
             String heightLabel = "height:";
-            textGraphics.putString(40, 4, enterLabel);
-            textGraphics.putString(33, 27, spaceLabel);
-            textGraphics.putString(33, 14, widthLabel);
-            drawBorder(40, 13, 5, 3);
+
+            int enterLabelStartColumn = 40;
+            int enterLabelStartRow = 4;
+            int spaceLabelStartColumn = 33;
+            int spaceLabelStartRow = 27;
+            int widthLabelStartColumn = 33;
+            int heightLabelStartColumn = 50;
+
+            textGraphics.putString(enterLabelStartColumn, enterLabelStartRow, enterLabel);
+            textGraphics.putString(spaceLabelStartColumn, spaceLabelStartRow, spaceLabel);
+            textGraphics.putString(widthLabelStartColumn, numbersRow, widthLabel);
+            textGraphics.putString(heightLabelStartColumn, numbersRow, heightLabel);
+
+            drawBorder(fstWidthColumn - nextChar, numbersRow - nextChar, boxWidth, boxHeight);
             if (width.length() > 0) {
-                textGraphics.putString(41, 14, width);
+                textGraphics.putString(fstWidthColumn, numbersRow, width);
             }
-            textGraphics.putString(50, 14, heightLabel);
-            drawBorder(58, 13, 5, 3);
+
+            drawBorder(fstHeightColumn - nextChar, numbersRow - nextChar, boxWidth, boxHeight);
             if (height.length() > 0) {
-                textGraphics.putString(59, 14, height);
+                textGraphics.putString(fstHeightColumn, numbersRow, height);
             }
 
             screen.refresh();

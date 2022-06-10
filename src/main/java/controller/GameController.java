@@ -99,7 +99,7 @@ public class GameController {
             switch (mainMenuState) {
                 case START:
                     screenType = ScreenType.ASK_SIZE;
-                    view.drawAskSize(null, null, true);
+                    view.drawAskSize(null, null, true, true);
                     break;
                 case LOAD_GAME:
                     round = GameSaverLoader.loadGame();
@@ -119,7 +119,7 @@ public class GameController {
     private void checkFieldCorrectness(KeyType keyType) {
         if (fieldHeight > 20 || fieldHeight < 10
                 || fieldWidth > 23 || fieldWidth < 10) {
-            view.drawAskSize(null, null, false);
+            view.drawAskSize(null, null, false, false);
         } else {
             startGame(keyType);
         }
@@ -150,17 +150,17 @@ public class GameController {
                     if (curFillIsWidth) {
                         if (fieldWidth == null) {
                             fieldWidth = Character.getNumericValue(c);
-                            view.drawAskSize(c, null, true);
+                            view.drawAskSize(c, null, true, false);
                         } else {
                             fieldWidth = fieldWidth * 10 + Character.getNumericValue(c);
-                            view.drawAskSize(c, null, true);
+                            view.drawAskSize(c, null, true, false);
                             curFillIsWidth = false;
                             break;
                         }
                     } else {
                         if (fieldHeight == null) {
                             fieldHeight = Character.getNumericValue(c);
-                            view.drawAskSize(null, c, true);
+                            view.drawAskSize(null, c, true, false);
                         } else {
                             fieldHeight = fieldHeight * 10 + Character.getNumericValue(c);
                             checkFieldCorrectness(keyType);
