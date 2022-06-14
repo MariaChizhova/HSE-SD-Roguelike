@@ -118,7 +118,7 @@ public class Enemy implements Character, Cell, Serializable {
      */
     @Override
     public void beAttacked(Character character) {
-        health -= character.getDamage() * (1 - (0.06 * armor)/(1 + 0.06 * armor));
+        health -= character.getDamage() * (1 - (0.06 * armor) / (1 + 0.06 * armor));
         if (health <= healthLevel) {
             currentStrategy = new CowardStrategy();
         }
@@ -136,7 +136,6 @@ public class Enemy implements Character, Cell, Serializable {
     }
 
     /**
-     *
      * @return enemy strategy
      */
     public StrategyEnemy getStrategy() {

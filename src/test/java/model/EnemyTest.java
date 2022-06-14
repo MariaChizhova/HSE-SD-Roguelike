@@ -38,7 +38,7 @@ public class EnemyTest {
     public void testIsDead() {
         var enemy = new Enemy(new Position(2, 2), new SimpleStrategy(), "default", 5, 5, 5);
         var character = new Enemy(new Position(2, 3), new SimpleStrategy(), "default", 5, 5, 5);
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 26; i++) {
             enemy.beAttacked(character);
         }
         Assertions.assertTrue(enemy.isDead());
