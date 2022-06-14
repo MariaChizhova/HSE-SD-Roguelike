@@ -9,7 +9,7 @@ import java.util.Random;
 
 import model.Cell;
 import model.enemy.*;
-import model.GenerationResult;
+import model.GeneratedMap;
 import model.Player;
 import model.Position;
 import model.strategies.*;
@@ -22,7 +22,11 @@ import model.inventory.FoodWithPosition;
 import static model.WallDirection.getRandomDirection;
 import static model.inventory.Artifact.getArtifactList;
 
-public class Generation {
+/**
+ * Random generation of the map
+ */
+public class MapGenerator {
+
     private EnemyFactory enemyFactory = new DefaultEnemyFactory();
 
     public void setEnemyFactory(EnemyFactory enemyFactory) {
@@ -30,26 +34,29 @@ public class Generation {
     }
 
     private final int MAX_NUM_OF_AGGRESSIVE_ENEMIES = 3;
-    private final int MAX_NUM_OF_PASSIVE_ENEMIES = 1;
+    private final int MAX_NUM_OF_PASSIVE_ENEMIES = 2;
     private final int MAX_NUM_OF_COWARD_ENEMIES = 3;
     private final int MAX_NUM_OF_PATROL_ENEMIES = 2;
     private final int MAX_NUM_OF_TRACKER_ENEMIES = 1;
+    private final int MAX_NUM_OF_ENEMIES = 15;
     private final int MAX_NUM_OF_ARTIFACTS = 8;
     private final int MAX_NUM_OF_FOOD = 8;
+
+    private final int MAX_FOOD_HEAL = 16;
+    private final int MIN_FOOD_HEAL = 5;
 
     private Player player;
     private final ArrayList<Enemy> enemies = new ArrayList<>();
 
-    private final List<GenerationResult> generation = new ArrayList<>();
+    private final List<GeneratedMap> generation = new ArrayList<>();
     private final Boolean[][] isFilled;
-
     private int width;
     private int height;
 
     /**
      * Creating Generation instance
      */
-    public Generation(int width, int height) {
+    public MapGenerator(int width, int height) {
         this.width = width;
         this.height = height;
         isFilled = new Boolean[width][height];
@@ -65,7 +72,7 @@ public class Generation {
         generatePlayer();
     }
 
-    public Generation(String fileName) {
+    public MapGenerator(String fileName) {
         List<List<String>> fieldText = new ArrayList<>();
         try {
             BufferedReader in = new BufferedReader(new FileReader(fileName));
@@ -163,11 +170,10 @@ public class Generation {
     }
 
     private void generateEnemiesDependsOnStrategy(int maxNum, StrategyType strategyType) {
-        int cnt = 0;
+        int cntOfEnemies = 0;
         Random rand = new Random();
-
         int numOfEnemies = rand.nextInt(maxNum) + 1;
-        while (cnt != numOfEnemies) {
+        while (cntOfEnemies != numOfEnemies) {
             int enemyXPos = rand.nextInt(width);
             int enemyYPos = rand.nextInt(height);
             if (!isFilled[enemyXPos][enemyYPos]) {
@@ -201,42 +207,42 @@ public class Generation {
                 }
                 enemies.add(enemy);
                 setCellValue(enemyXPos, enemyYPos, enemy);
-                cnt++;
+                cntOfEnemies++;
             }
         }
     }
 
     private void generateArtifacts() {
-        int cnt = 0;
+        int cntOfArtifacts = 0;
         Random rand = new Random();
         var artifactList = getArtifactList();
 
         int numOfArtifacts = rand.nextInt(MAX_NUM_OF_ARTIFACTS) + 1;
-        while (cnt != numOfArtifacts) {
+        while (cntOfArtifacts != numOfArtifacts) {
             int xPos = rand.nextInt(width);
             int yPos = rand.nextInt(height);
             Artifact randomArtifact = artifactList.get(rand.nextInt(artifactList.size()));
             if (!isFilled[xPos][yPos]) {
                 var artifact = new ArtifactWithPosition(new Position(xPos, yPos), randomArtifact);
                 setCellValue(xPos, yPos, artifact);
-                cnt++;
+                cntOfArtifacts++;
             }
         }
     }
 
     private void generateFood() {
-        int cnt = 0;
+        int cntOfFood = 0;
         Random rand = new Random();
 
         int numOfFood = rand.nextInt(MAX_NUM_OF_FOOD) + 1;
-        while (cnt != numOfFood) {
+        while (cntOfFood != numOfFood) {
             int xPos = rand.nextInt(width);
             int yPos = rand.nextInt(height);
-            Food food = new Food(rand.nextInt(16) + 5);
+            Food food = new Food(rand.nextInt(MAX_FOOD_HEAL) + MIN_FOOD_HEAL);
             if (!isFilled[xPos][yPos]) {
                 var foodWithPos = new FoodWithPosition(new Position(xPos, yPos), food);
                 setCellValue(xPos, yPos, foodWithPos);
-                cnt++;
+                cntOfFood++;
             }
         }
     }
@@ -260,7 +266,7 @@ public class Generation {
     }
 
     private void setCellValue(int x, int y, Cell cell) {
-        generation.add(new GenerationResult(x, y, cell));
+        generation.add(new GeneratedMap(x, y, cell));
         isFilled[x][y] = true;
     }
 
@@ -288,7 +294,7 @@ public class Generation {
      *
      * @return generation
      */
-    public List<GenerationResult> getGeneration() {
+    public List<GeneratedMap> getGeneration() {
         return generation;
     }
 

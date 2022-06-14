@@ -65,181 +65,167 @@ public class ConsoleDrawer {
         terminal.close();
     }
 
-    private void drawBorder() {
+    private final TextCharacter borderChar = new TextCharacter('#', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT);
+    private final TextCharacter upChar = new TextCharacter('^', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT);
+    private final TextCharacter leftChar = new TextCharacter('>', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT);
+    private final TextCharacter rightChar = new TextCharacter('<', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT);
+    private final TextCharacter arobaseChar = new TextCharacter('@', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT);
+    private final TextCharacter minusChar = new TextCharacter('-', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT);
+    private final TextCharacter downChar = new TextCharacter('_', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT);
+    private final TextCharacter whiteChar = new TextCharacter(' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE);
+    private final TextCharacter greenChar = new TextCharacter(' ', TextColor.ANSI.GREEN, TextColor.ANSI.GREEN);
+    private final TextCharacter magentaChar = new TextCharacter(' ', TextColor.ANSI.MAGENTA, TextColor.ANSI.MAGENTA);
+    private final TextCharacter eyeChar = new TextCharacter(Symbols.BULLET, TextColor.ANSI.GREEN, TextColor.ANSI.DEFAULT);
+    private final TextCharacter noseChar = new TextCharacter(
+            Symbols.TRIANGLE_DOWN_POINTING_BLACK, TextColor.ANSI.MAGENTA, TextColor.ANSI.DEFAULT);
+
+    private final int heroWidth = 13;
+    private final int heroHeight = 14;
+    private final String hero = "AAAA^___^AAAA" +
+                                "AAA<AAAAA>AAA" +
+                                "AAA<AYAYA>AAA" +
+                                "AAA<AATAA>AAA" +
+                                "AAAA<AAA>AAAA" +
+                                "<@----W----@>" +
+                                "AAAAA<W>AAAAA" +
+                                "AAAAA<W>AAAAA" +
+                                "AAAAA<W>AAAAA" +
+                                "AAAAA<W>AAAAA" +
+                                "AAAAA<A>AAAAA" +
+                                "AAAAA<A>AAAAA" +
+                                "AAAAA<A>AAAAA" +
+                                "AAAAWWAWWAAAA";
+
+    private final int catWidth = 17;
+    private final int catHeight = 16;
+
+    private final String cat = "AAAWAAAAAAAAAWAAA" +
+                               "AAWAWAAAAAAAWAWAA" +
+                               "AAWAAWAAAAAWAAWAA" +
+                               "AWAAAAWWWWWAAAAWA" +
+                               "AWAAAAAAAAAAAAAWA" +
+                               "AWAAAAAAAAAAAAAWA" +
+                               "WAAAAAAAAAAAAAAAW" +
+                               "WAAWWWAAAAAWWWAAW" +
+                               "WAWGAGWAAAWGAGWAW" +
+                               "WAAWWWAAAAAWWWAAW" +
+                               "WAAAAAAAMAAAAAAAW" +
+                               "WAAAAAWAWAWAAAAAW" +
+                               "WAAAAAAWAWAAAAAAW" +
+                               "AWAAAAAAAAAAAAAWA" +
+                               "AAWWAAAAAAAAAWWAA" +
+                               "AAAAWWWWWWWWWAAAA";
+
+    private final int defaultHp = 100;
+    private final int defaultLevel = 10;
+    private final int hpPerHeart = 10;
+    private final int defaultExp = 0;
+
+    private final int buttonsStartColumn = 7;
+    private final int button1StartRow = 4;
+    private final int button2StartRow = 10;
+    private final int button3StartRow = 16;
+
+    private final int cat1StartColumn = 35;
+    private final int cat2StartColumn = 55;
+    private final int catsStartRow = 4;
+
+    private void drawMenuBorder() {
         TerminalSize terminalSize = screen.getTerminalSize();
         for (int column = 0; column < terminalSize.getColumns(); column++) {
-            screen.setCharacter(column, 0, new TextCharacter(
-                    '#', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-            screen.setCharacter(column, terminalSize.getRows() - 1, new TextCharacter(
-                    '#', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+            screen.setCharacter(column, 0, borderChar);
+            screen.setCharacter(column, terminalSize.getRows() - 1, borderChar);
         }
         for (int row = 0; row < terminalSize.getRows(); row++) {
-            screen.setCharacter(0, row, new TextCharacter(
-                    '#', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-            screen.setCharacter(terminalSize.getColumns() - 1, row, new TextCharacter(
-                    '#', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+            screen.setCharacter(0, row, borderChar);
+            screen.setCharacter(terminalSize.getColumns() - 1, row, borderChar);
         }
     }
 
-    private void drawGameBorder(int start_column, int start_row, int width, int height) {
+    private void drawBorder(int start_column, int start_row, int width, int height) {
+        TextCharacter double_hor = new TextCharacter(
+                Symbols.DOUBLE_LINE_HORIZONTAL, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT);
+        TextCharacter double_ver = new TextCharacter(
+                Symbols.DOUBLE_LINE_VERTICAL, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT);
+        TextCharacter double_bot_left = new TextCharacter(
+                Symbols.DOUBLE_LINE_BOTTOM_LEFT_CORNER, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT);
+        TextCharacter double_top_left = new TextCharacter(
+                Symbols.DOUBLE_LINE_TOP_LEFT_CORNER, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT);
+        TextCharacter double_top_right = new TextCharacter(
+                Symbols.DOUBLE_LINE_TOP_RIGHT_CORNER, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT);
+        TextCharacter double_bot_right = new TextCharacter(
+                Symbols.DOUBLE_LINE_BOTTOM_RIGHT_CORNER, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT);
+
         for (int column = start_column + 1; column < start_column + width - 1; column++) {
-            screen.setCharacter(column, start_row, new TextCharacter(
-                    Symbols.DOUBLE_LINE_HORIZONTAL, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-            screen.setCharacter(column, start_row + height - 1, new TextCharacter(
-                    Symbols.DOUBLE_LINE_HORIZONTAL, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+            screen.setCharacter(column, start_row, double_hor);
+            screen.setCharacter(column, start_row + height - 1, double_hor);
         }
+
         for (int row = start_row + 1; row < start_row + height - 1; row++) {
-            screen.setCharacter(start_column, row, new TextCharacter(
-                    Symbols.DOUBLE_LINE_VERTICAL, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-            screen.setCharacter(start_column + width - 1, row, new TextCharacter(
-                    Symbols.DOUBLE_LINE_VERTICAL, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+            screen.setCharacter(start_column, row, double_ver);
+            screen.setCharacter(start_column + width - 1, row, double_ver);
         }
-        screen.setCharacter(start_column, start_row + height - 1, new TextCharacter(
-                Symbols.DOUBLE_LINE_BOTTOM_LEFT_CORNER, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-        screen.setCharacter(start_column, start_row, new TextCharacter(
-                Symbols.DOUBLE_LINE_TOP_LEFT_CORNER, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-        screen.setCharacter(start_column + width - 1, start_row, new TextCharacter(
-                Symbols.DOUBLE_LINE_TOP_RIGHT_CORNER, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-        screen.setCharacter(start_column + width - 1, start_row + height - 1, new TextCharacter(
-                Symbols.DOUBLE_LINE_BOTTOM_RIGHT_CORNER, TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
+        screen.setCharacter(start_column, start_row + height - 1, double_bot_left);
+        screen.setCharacter(start_column, start_row, double_top_left);
+        screen.setCharacter(start_column + width - 1, start_row, double_top_right);
+        screen.setCharacter(start_column + width - 1, start_row + height - 1, double_bot_right);
     }
 
-    private void drawHero(int start_column, int start_row) {
-        screen.setCharacter(start_column + 4, start_row, new TextCharacter(
-                '^', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-        screen.setCharacter(start_column + 8, start_row, new TextCharacter(
-                '^', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-        for (int i = 0; i < 3; i++) {
-            screen.setCharacter(start_column + 5 + i, start_row, new TextCharacter(
-                    '_', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-            screen.setCharacter(start_column + 3, start_row + 1 + i, new TextCharacter(
-                    '<', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-            screen.setCharacter(start_column + 9, start_row + 1 + i, new TextCharacter(
-                    '>', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-        }
-        screen.setCharacter(start_column, start_row + 5, new TextCharacter(
-                '<', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-        screen.setCharacter(start_column + 12, start_row + 5, new TextCharacter(
-                '>', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-        screen.setCharacter(start_column + 4, start_row + 4, new TextCharacter(
-                '<', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-        screen.setCharacter(start_column + 8, start_row + 4, new TextCharacter(
-                '>', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-        screen.setCharacter(start_column + 1, start_row + 5, new TextCharacter(
-                '@', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-        screen.setCharacter(start_column + 11, start_row + 5, new TextCharacter(
-                '@', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-        for (int i = 0; i < 9; i++) {
-            if (i != 4) {
-                screen.setCharacter(start_column + 2 + i, start_row + 5, new TextCharacter(
-                        '-', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-            }
-        }
-        for (int i = 0; i < 7; i++) {
-            screen.setCharacter(start_column + 5, start_row + 6 + i, new TextCharacter(
-                    '<', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-            screen.setCharacter(start_column + 7, start_row + 6 + i, new TextCharacter(
-                    '>', TextColor.ANSI.DEFAULT, TextColor.ANSI.DEFAULT));
-        }
-        for (int i = 0; i < 5; i++) {
-            screen.setCharacter(start_column + 6, start_row + 5 + i, new TextCharacter(
-                    ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-            if (i != 2) {
-                screen.setCharacter(start_column + 4 + i, start_row + 13, new TextCharacter(
-                        ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-            }
-        }
-        screen.setCharacter(start_column + 5, start_row + 2, new TextCharacter(
-                Symbols.BULLET, TextColor.ANSI.GREEN, TextColor.ANSI.DEFAULT));
-        screen.setCharacter(start_column + 7, start_row + 2, new TextCharacter(
-                Symbols.BULLET, TextColor.ANSI.GREEN, TextColor.ANSI.DEFAULT));
-        screen.setCharacter(start_column + 6, start_row + 3, new TextCharacter(
-                Symbols.TRIANGLE_DOWN_POINTING_BLACK, TextColor.ANSI.MAGENTA, TextColor.ANSI.DEFAULT));
+    private TextCharacter getChar(char c) {
+        return switch (c) {
+            case '^' -> upChar;
+            case '>' -> leftChar;
+            case '<' -> rightChar;
+            case '_' -> downChar;
+            case '-' -> minusChar;
+            case '@' -> arobaseChar;
+            case 'W' -> whiteChar;
+            case 'G' -> greenChar;
+            case 'M' -> magentaChar;
+            case 'Y' -> eyeChar;
+            case 'T' -> noseChar;
+            default -> null;
+        };
     }
 
-    private void drawPlayerInventory(int start_column, int start_row, Player player) {
+    private void drawImg(int start_column, int start_row, int height, int width, String img) {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                TextCharacter curChar = getChar(img.charAt(i * width + j));
+                if (curChar != null) {
+                    screen.setCharacter(start_column + j, start_row + i, curChar);
+                }
+            }
+        }
+    }
+
+    private void drawInventory(int start_column, int start_row, Player player) {
         if (player == null) {
             return;
         }
-        if (player.hasArtifact(ArtifactName.BOOTS) && player.isArtifactOn(ArtifactName.BOOTS)) {
-            screen.setCharacter(start_column + 4, start_row + 13, new TextCharacter(
-                    Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
-            screen.setCharacter(start_column + 8, start_row + 13, new TextCharacter(
-                    Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
-            for (int i = 0; i < 3; i++) {
-                screen.setCharacter(start_column + 5, start_row + 11 + i, new TextCharacter(
-                        Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
-                screen.setCharacter(start_column + 7, start_row + 11 + i, new TextCharacter(
-                        Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
-            }
+        if (player.hasArtifact(ArtifactName.BOOTS)) {
+            ArtifactDrawer.bootsDrawer(start_column, start_row, screen);
         }
-        if (player.hasArtifact(ArtifactName.HELMET) && player.isArtifactOn(ArtifactName.HELMET)) {
-            screen.setCharacter(start_column + 3, start_row + 1, new TextCharacter(
-                    Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
-            screen.setCharacter(start_column + 9, start_row + 1, new TextCharacter(
-                    Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
-            for (int i = 0; i < 7; i++) {
-                screen.setCharacter(start_column + 3 + i, start_row, new TextCharacter(
-                        Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
-            }
+        if (player.hasArtifact(ArtifactName.HELMET)) {
+            ArtifactDrawer.helmetDrawer(start_column, start_row, screen);
         }
-        if (player.hasArtifact(ArtifactName.GLOVES) && player.isArtifactOn(ArtifactName.GLOVES)) {
-            for (int i = 0; i < 2; i++) {
-                screen.setCharacter(start_column + i, start_row + 5, new TextCharacter(
-                        Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
-                screen.setCharacter(start_column + 11 + i, start_row + 5, new TextCharacter(
-                        Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
-            }
+        if (player.hasArtifact(ArtifactName.GLOVES)) {
+            ArtifactDrawer.glovesDrawer(start_column, start_row, screen);
         }
-        if (player.hasArtifact(ArtifactName.CUIRASS) && player.isArtifactOn(ArtifactName.CUIRASS)) {
-            for (int i = 0; i < 5; i++) {
-                screen.setCharacter(start_column + 4 + i, start_row + 5, new TextCharacter(
-                        Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
-            }
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 3; j++) {
-                    screen.setCharacter(start_column + 5 + j, start_row + 6 + i, new TextCharacter(
-                            Symbols.BLOCK_MIDDLE, TextColor.ANSI.BLUE, TextColor.ANSI.DEFAULT));
-                }
-            }
+        if (player.hasArtifact(ArtifactName.CUIRASS)) {
+            ArtifactDrawer.cuirassDrawer(start_column, start_row, screen);
         }
-        if (player.hasArtifact(ArtifactName.RAPIER) && player.isArtifactOn(ArtifactName.RAPIER)) {
-            for (int i = 0; i < 6; i++) {
-                if (i != 4) {
-                    screen.setCharacter(start_column + 11, start_row + 1 + i, new TextCharacter(
-                            Symbols.BOLD_SINGLE_LINE_VERTICAL, TextColor.ANSI.CYAN, TextColor.ANSI.DEFAULT));
-                }
-            }
+        if (player.hasArtifact(ArtifactName.RAPIER)) {
+            ArtifactDrawer.rapierDrawer(start_column, start_row, screen);
         }
-        if (player.hasArtifact(ArtifactName.WOODEN_SWORD) && player.isArtifactOn(ArtifactName.WOODEN_SWORD)) {
-            for (int i = 0; i < 6; i++) {
-                if (i != 4) {
-                    screen.setCharacter(start_column + 11, start_row + 1 + i, new TextCharacter(
-                            Symbols.DOUBLE_LINE_VERTICAL, TextColor.ANSI.YELLOW, TextColor.ANSI.DEFAULT));
-                }
-            }
-            screen.setCharacter(start_column + 11, start_row + 3, new TextCharacter(
-                    Symbols.DOUBLE_LINE_VERTICAL_SINGLE_LINE_CROSS, TextColor.ANSI.YELLOW, TextColor.ANSI.DEFAULT));
+        if (player.hasArtifact(ArtifactName.STEEL_SWORD)) {
+            ArtifactDrawer.steelSwordDrawer(start_column, start_row, screen);
         }
-        if (player.hasArtifact(ArtifactName.COPPER_SWORD) && player.isArtifactOn(ArtifactName.COPPER_SWORD)) {
-            for (int i = 0; i < 6; i++) {
-                if (i != 4) {
-                    screen.setCharacter(start_column + 11, start_row + 1 + i, new TextCharacter(
-                            Symbols.DOUBLE_LINE_VERTICAL, TextColor.ANSI.RED, TextColor.ANSI.DEFAULT));
-                }
-            }
-            screen.setCharacter(start_column + 11, start_row + 3, new TextCharacter(
-                    Symbols.DOUBLE_LINE_VERTICAL_SINGLE_LINE_CROSS, TextColor.ANSI.RED, TextColor.ANSI.DEFAULT));
+        if (player.hasArtifact(ArtifactName.COPPER_SWORD)) {
+            ArtifactDrawer.cooperSwordDrawer(start_column, start_row, screen);
         }
-        if (player.hasArtifact(ArtifactName.STEEL_SWORD) && player.isArtifactOn(ArtifactName.STEEL_SWORD)) {
-            for (int i = 0; i < 6; i++) {
-                if (i != 4) {
-                    screen.setCharacter(start_column + 11, start_row + 1 + i, new TextCharacter(
-                            Symbols.DOUBLE_LINE_VERTICAL, TextColor.ANSI.CYAN, TextColor.ANSI.DEFAULT));
-                }
-            }
-            screen.setCharacter(start_column + 11, start_row + 3, new TextCharacter(
-                    Symbols.DOUBLE_LINE_VERTICAL_SINGLE_LINE_CROSS, TextColor.ANSI.CYAN, TextColor.ANSI.DEFAULT));
+        if (player.hasArtifact(ArtifactName.WOODEN_SWORD)) {
+            ArtifactDrawer.woodenSwordDrawer(start_column, start_row, screen);
         }
     }
 
@@ -268,159 +254,69 @@ public class ConsoleDrawer {
     }
 
     private void addTextButton(TextGraphics textGraphics, String textLabel, int column, int row, boolean selected) {
+        int bordersSize = 2;
+        int rows = 3;
+        char emptyChar = ' ';
+
         TerminalPosition labelBoxTopLeft = new TerminalPosition(column, row);
-        TerminalSize labelBoxSize = new TerminalSize(textLabel.length() + 2, 3);
+        TerminalSize labelBoxSize = new TerminalSize(textLabel.length() + bordersSize, rows);
         TerminalPosition labelBoxTopRightCorner = labelBoxTopLeft.withRelativeColumn(labelBoxSize.getColumns() - 1);
 
-        textGraphics.fillRectangle(labelBoxTopLeft, labelBoxSize, ' ');
+        textGraphics.fillRectangle(labelBoxTopLeft, labelBoxSize, emptyChar);
 
-        /*
-        Draw horizontal lines, first upper then lower
-         */
+        int startLineIdx = 1;
+        int endLineIdx = labelBoxSize.getColumns() - 2;
+
+        int textRowIdx = 1;
+        int sndLineIdx = 2;
+
         textGraphics.drawLine(
-                labelBoxTopLeft.withRelativeColumn(1),
-                labelBoxTopLeft.withRelativeColumn(labelBoxSize.getColumns() - 2),
+                labelBoxTopLeft.withRelativeColumn(startLineIdx),
+                labelBoxTopLeft.withRelativeColumn(endLineIdx),
                 Symbols.DOUBLE_LINE_HORIZONTAL);
         textGraphics.drawLine(
-                labelBoxTopLeft.withRelativeRow(2).withRelativeColumn(1),
-                labelBoxTopLeft.withRelativeRow(2).withRelativeColumn(labelBoxSize.getColumns() - 2),
+                labelBoxTopLeft.withRelativeRow(2).withRelativeColumn(startLineIdx),
+                labelBoxTopLeft.withRelativeRow(2).withRelativeColumn(endLineIdx),
                 Symbols.DOUBLE_LINE_HORIZONTAL);
-        /*
-        Manually do the edges and (since it's only one) the vertical lines, first on the left then on the right
-         */
+
         textGraphics.setCharacter(labelBoxTopLeft, Symbols.DOUBLE_LINE_TOP_LEFT_CORNER);
-        textGraphics.setCharacter(labelBoxTopLeft.withRelativeRow(1), Symbols.DOUBLE_LINE_VERTICAL);
-        textGraphics.setCharacter(labelBoxTopLeft.withRelativeRow(2), Symbols.DOUBLE_LINE_BOTTOM_LEFT_CORNER);
+        textGraphics.setCharacter(labelBoxTopLeft.withRelativeRow(textRowIdx), Symbols.DOUBLE_LINE_VERTICAL);
+        textGraphics.setCharacter(labelBoxTopLeft.withRelativeRow(sndLineIdx), Symbols.DOUBLE_LINE_BOTTOM_LEFT_CORNER);
         textGraphics.setCharacter(labelBoxTopRightCorner, Symbols.DOUBLE_LINE_TOP_RIGHT_CORNER);
-        textGraphics.setCharacter(labelBoxTopRightCorner.withRelativeRow(1), Symbols.DOUBLE_LINE_VERTICAL);
-        textGraphics.setCharacter(labelBoxTopRightCorner.withRelativeRow(2), Symbols.DOUBLE_LINE_BOTTOM_RIGHT_CORNER);
+        textGraphics.setCharacter(labelBoxTopRightCorner.withRelativeRow(textRowIdx), Symbols.DOUBLE_LINE_VERTICAL);
+        textGraphics.setCharacter(labelBoxTopRightCorner.withRelativeRow(sndLineIdx), Symbols.DOUBLE_LINE_BOTTOM_RIGHT_CORNER);
 
-        /*
-        Finally put the text inside the box
-         */
         if (selected) {
-            textGraphics.putString(labelBoxTopLeft.withRelative(1, 1), textLabel, SGR.REVERSE);
+            textGraphics.putString(labelBoxTopLeft.withRelative(startLineIdx, textRowIdx), textLabel, SGR.REVERSE);
         } else {
-            textGraphics.putString(labelBoxTopLeft.withRelative(1, 1), textLabel);
+            textGraphics.putString(labelBoxTopLeft.withRelative(startLineIdx, textRowIdx), textLabel);
         }
     }
 
-    private void drawCat(int column, int row) {
-        screen.setCharacter(column + 3, row, new TextCharacter(
-                ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-        screen.setCharacter(column + 13, row, new TextCharacter(
-                ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-        screen.setCharacter(column + 2, row + 1, new TextCharacter(
-                ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-        screen.setCharacter(column + 2, row + 2, new TextCharacter(
-                ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-        screen.setCharacter(column + 4, row + 1, new TextCharacter(
-                ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-        screen.setCharacter(column + 5, row + 2, new TextCharacter(
-                ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-        screen.setCharacter(column + 11, row + 2, new TextCharacter(
-                ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-        screen.setCharacter(column + 12, row + 1, new TextCharacter(
-                ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-        screen.setCharacter(column + 14, row + 1, new TextCharacter(
-                ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-        screen.setCharacter(column + 14, row + 2, new TextCharacter(
-                ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-        for (int i = 0; i < 5; i++) {
-            screen.setCharacter(column + 6 + i, row + 3, new TextCharacter(
-                    ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-        }
-        for (int i = 0; i < 3; i++) {
-            screen.setCharacter(column + 1, row + 3 + i, new TextCharacter(
-                    ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-            screen.setCharacter(column + 15, row + 3 + i, new TextCharacter(
-                    ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-        }
-        for (int i = 0; i < 7; i++) {
-            screen.setCharacter(column, row + 6 + i, new TextCharacter(
-                    ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-            screen.setCharacter(column + 16, row + 6 + i, new TextCharacter(
-                    ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-        }
-        screen.setCharacter(column + 1, row + 13, new TextCharacter(
-                ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-        screen.setCharacter(column + 15, row + 13, new TextCharacter(
-                ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-        for (int i = 0; i < 2; i++) {
-            screen.setCharacter(column + 2 + i, row + 14, new TextCharacter(
-                    ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-            screen.setCharacter(column + 13 + i, row + 14, new TextCharacter(
-                    ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-        }
-        for (int i = 0; i < 9; i++) {
-            screen.setCharacter(column + 4 + i, row + 15, new TextCharacter(
-                    ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-        }
-        screen.setCharacter(column + 3, row + 8, new TextCharacter(
-                ' ', TextColor.ANSI.GREEN, TextColor.ANSI.GREEN));
-        screen.setCharacter(column + 5, row + 8, new TextCharacter(
-                ' ', TextColor.ANSI.GREEN, TextColor.ANSI.GREEN));
-        screen.setCharacter(column + 11, row + 8, new TextCharacter(
-                ' ', TextColor.ANSI.GREEN, TextColor.ANSI.GREEN));
-        screen.setCharacter(column + 13, row + 8, new TextCharacter(
-                ' ', TextColor.ANSI.GREEN, TextColor.ANSI.GREEN));
-        screen.setCharacter(column + 8, row + 10, new TextCharacter(
-                ' ', TextColor.ANSI.MAGENTA, TextColor.ANSI.MAGENTA));
-
-        screen.setCharacter(column + 2, row + 8, new TextCharacter(
-                ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-        screen.setCharacter(column + 6, row + 8, new TextCharacter(
-                ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-        screen.setCharacter(column + 10, row + 8, new TextCharacter(
-                ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-        screen.setCharacter(column + 14, row + 8, new TextCharacter(
-                ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-
-        for (int i = 0; i < 3; i++) {
-            screen.setCharacter(column + 3 + i, row + 7, new TextCharacter(
-                    ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-            screen.setCharacter(column + 3 + i, row + 9, new TextCharacter(
-                    ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-            screen.setCharacter(column + 11 + i, row + 7, new TextCharacter(
-                    ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-            screen.setCharacter(column + 11 + i, row + 9, new TextCharacter(
-                    ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-        }
-
-        screen.setCharacter(column + 6, row + 11, new TextCharacter(
-                ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-        screen.setCharacter(column + 7, row + 12, new TextCharacter(
-                ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-        screen.setCharacter(column + 8, row + 11, new TextCharacter(
-                ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-        screen.setCharacter(column + 9, row + 12, new TextCharacter(
-                ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
-        screen.setCharacter(column + 10, row + 11, new TextCharacter(
-                ' ', TextColor.ANSI.WHITE, TextColor.ANSI.WHITE));
+    private void drawInfoLabel(String label, int start_column, int start_row, TextColor color) {
+        TextGraphics expGraphics = screen.newTextGraphics();
+        expGraphics.setForegroundColor(color);
+        expGraphics.putString(start_column, start_row, label);
     }
 
-    private void drawLives(int health, int experience, int level, int start_column, int start_row) {
-        TextGraphics livesGraphics = screen.newTextGraphics();
-        livesGraphics.setForegroundColor(TextColor.ANSI.RED);
+    private void drawHeroInfo(int health, int experience, int level, int start_column, int start_row) {
         String livesLabel = "LIVES: ";
-        livesGraphics.putString(start_column + 1, start_row - 3, livesLabel);
-        for (int i = 0; i < 10; i++) {
-            if ((i + 1) * 10 <= health) {
-                screen.setCharacter(start_column + livesLabel.length() + 2 * i + 1, start_row - 3, new TextCharacter(
-                        Symbols.HEART, TextColor.ANSI.RED, TextColor.ANSI.DEFAULT));
+        String expLabel = "EXP: " + experience;
+        String levelLabel = "LVL: " + level;
+        TextCharacter heart = new TextCharacter(Symbols.HEART, TextColor.ANSI.RED, TextColor.ANSI.DEFAULT);
+        drawInfoLabel(livesLabel, start_column, start_row, TextColor.ANSI.RED);
+
+        for (int i = 0; i < (defaultHp / hpPerHeart); i++) {
+            if ((i + 1) * hpPerHeart <= health) {
+                screen.setCharacter(start_column + livesLabel.length() + 2 * i, start_row, heart);
             }
         }
 
-        TextGraphics expGraphics = screen.newTextGraphics();
-        expGraphics.setForegroundColor(TextColor.ANSI.GREEN);
-        String expLabel = "EXP: " + experience;
-        expGraphics.putString(start_column + 23 + livesLabel.length(), start_row - 3, expLabel);
+        int expIndent = 23;
+        int levelIndent = 26;
 
-        TextGraphics levelGraphics = screen.newTextGraphics();
-        levelGraphics.setForegroundColor(TextColor.ANSI.WHITE);
-        String levelLabel = "LVL: " + level;
-        levelGraphics.putString(start_column + 26 + livesLabel.length() + expLabel.length(), start_row - 3, levelLabel);
-
+        drawInfoLabel(expLabel, start_column + expIndent + livesLabel.length(), start_row, TextColor.ANSI.GREEN);
+        drawInfoLabel(levelLabel, start_column + levelIndent + livesLabel.length() + expLabel.length(), start_row, TextColor.ANSI.WHITE);
     }
 
     private Player drawField(Field field, int start_column, int start_row) {
@@ -537,22 +433,68 @@ public class ConsoleDrawer {
             screen.setCursorPosition(null);
             screen.clear();
 
-            int field_column = 2;
-            int field_row = 4;
+            int fieldStartColumn = 2;
+            int fieldStartRow = 4;
 
-            int player_column = 83;
-            int player_row = 8;
+            int heroStartColumn = 63;
+            int heroStartRow = 4;
 
-            drawGameBorder(field_column - 1, field_row - 1, 3 * field.getWidth() + 2, field.getHeight() + 2);
-            drawGameBorder(player_column - 1, player_row - 1, 15, 16);
-            Player player = drawField(field, field_column, field_row);
-            drawLives(player == null ? 100 : player.getHealth(),
-                    player == null ? 0 : player.getExperience(),
-                    player == null ? 0 : player.getLevel(),
-                    20, field_row);
-            drawHero(player_column, player_row);
-            drawPlayerInventory(player_column, player_row, player);
-            drawFullInventory(20, 28, player);
+            int heroInfoStartColumn = 3;
+            int heroInfoStartRow = 1;
+
+            int cellSize = 3;
+            int borderSize = 1;
+            int bordersSize = 2;
+
+            drawBorder(fieldStartColumn - borderSize, fieldStartRow - borderSize,
+                    cellSize * field.getWidth() + bordersSize, field.getHeight() + bordersSize);
+            drawBorder(heroStartColumn - borderSize, heroStartRow - borderSize,
+                    heroWidth + bordersSize, heroHeight + bordersSize);
+
+            Player player = null;
+
+            for (int i = 0; i < field.getHeight(); i++) {
+                for (int j = 0; j < field.getWidth(); j++) {
+                    var cell = field.getCell(new Position(j, i));
+                    if (cell instanceof Player) {
+                        CellDrawer.playerDrawer(fieldStartColumn + cellSize * j, fieldStartRow + i, screen);
+                        player = (Player) cell;
+                    } else if (cell instanceof Enemy) {
+                        CellDrawer.enemyDrawer(fieldStartColumn + cellSize * j, fieldStartRow + i, screen);
+                    } else if (cell instanceof Wall) {
+                        CellDrawer.wallDrawer(fieldStartColumn + cellSize * j, fieldStartRow + i, screen);
+                    } else if (cell instanceof ArtifactWithPosition) {
+                        var artifact = ((ArtifactWithPosition) cell).getArtifact();
+                        switch (artifact.getName()) {
+                            case BOOTS -> CellDrawer.bootsDrawer(fieldStartColumn + cellSize * j,
+                                    fieldStartRow + i, screen);
+                            case GLOVES -> CellDrawer.glovesDrawer(fieldStartColumn + cellSize * j,
+                                    fieldStartRow + i, screen);
+                            case HELMET -> CellDrawer.helmetDrawer(fieldStartColumn + cellSize * j,
+                                    fieldStartRow + i, screen);
+                            case RAPIER -> CellDrawer.rapierDrawer(fieldStartColumn + cellSize * j,
+                                    fieldStartRow + i, screen);
+                            case CUIRASS -> CellDrawer.cuirassDrawer(fieldStartColumn + cellSize * j,
+                                    fieldStartRow + i, screen);
+                            case STEEL_SWORD -> CellDrawer.steelSwordDrawer(fieldStartColumn + cellSize * j,
+                                    fieldStartRow + i, screen);
+                            case COPPER_SWORD -> CellDrawer.copperSwordDrawer(fieldStartColumn + cellSize * j,
+                                    fieldStartRow + i, screen);
+                            case WOODEN_SWORD -> CellDrawer.woodenSwordDrawer(fieldStartColumn + cellSize * j,
+                                    fieldStartRow + i, screen);
+                        }
+                    } else if (cell instanceof FoodWithPosition) {
+                        CellDrawer.foodDrawer(fieldStartColumn + cellSize * j,
+                                fieldStartRow + i, screen);
+                    }
+                }
+            }
+            drawHeroInfo(player == null ? defaultHp : player.getHealth(),
+                         player == null ? defaultExp : player.getExperience(),
+                         player == null ? defaultLevel : player.getLevel(),
+                         heroInfoStartColumn, heroInfoStartRow);
+            drawImg(heroStartColumn, heroStartRow, heroHeight, heroWidth, hero);
+            drawInventory(heroStartColumn, heroStartRow, player);
 
             screen.refresh();
         } catch (Exception e) {
@@ -570,19 +512,19 @@ public class ConsoleDrawer {
             screen.setCursorPosition(null);
             screen.clear();
 
-            drawBorder();
+            drawMenuBorder();
+
+            String startLabel = "  Start game  ";
+            String loadLabel  = "  Load game   ";
+            String exitLabel  = "  Exit game   ";
 
             TextGraphics textGraphics = screen.newTextGraphics();
-            String startLabel = "    Start game    ";
-            String loadLabel = "    Load game     ";
-            String exitLabel = "    Exit game     ";
-            addTextButton(textGraphics, startLabel, 10, 4, mainMenuState.equals(MainMenuState.START));
-            addTextButton(textGraphics, loadLabel, 10, 13, mainMenuState.equals(MainMenuState.LOAD_GAME));
-            addTextButton(textGraphics, exitLabel, 10, 22, mainMenuState.equals(MainMenuState.EXIT));
+            addTextButton(textGraphics, startLabel, buttonsStartColumn, button1StartRow, mainMenuState.equals(MainMenuState.START));
+            addTextButton(textGraphics, loadLabel, buttonsStartColumn, button2StartRow, mainMenuState.equals(MainMenuState.LOAD_GAME));
+            addTextButton(textGraphics, exitLabel, buttonsStartColumn, button3StartRow, mainMenuState.equals(MainMenuState.EXIT));
 
-            drawCat(43, 6);
-            drawCat(73, 6);
-
+            drawImg(cat1StartColumn, catsStartRow, catHeight, catWidth, cat);
+            drawImg(cat2StartColumn, catsStartRow, catHeight, catWidth, cat);
             screen.refresh();
         } catch (Exception e) {
             e.printStackTrace();
@@ -597,7 +539,7 @@ public class ConsoleDrawer {
             screen.setCursorPosition(null);
             screen.clear();
 
-            drawBorder();
+            drawMenuBorder();
 
             TextGraphics textGraphics = screen.newTextGraphics();
 
@@ -633,12 +575,12 @@ public class ConsoleDrawer {
             textGraphics.putString(18, 4, enterLabel);
             textGraphics.putString(33, 27, spaceLabel);
             textGraphics.putString(33, 14, widthLabel);
-            drawGameBorder(40, 13, 5, 3);
+            drawBorder(40, 13, 5, 3);
             if (width.length() > 0) {
                 textGraphics.putString(41, 14, width);
             }
             textGraphics.putString(50, 14, heightLabel);
-            drawGameBorder(58, 13, 5, 3);
+            drawBorder(58, 13, 5, 3);
             if (height.length() > 0) {
                 textGraphics.putString(59, 14, height);
             }
@@ -659,18 +601,20 @@ public class ConsoleDrawer {
             screen.setCursorPosition(null);
             screen.clear();
 
-            drawBorder();
+            drawMenuBorder();
+
+            String continueLabel    = "     Continue     ";
+            String exitLabel        = "    Exit game     ";
+            String saveAndExitLabel = "Save and exit game";
 
             TextGraphics textGraphics = screen.newTextGraphics();
-            String continueLabel = "     Continue     ";
-            String exitLabel = "    Exit game     ";
-            String saveAndExitLabel = "Save and exit game";
-            addTextButton(textGraphics, continueLabel, 10, 4, menuState.equals(MenuState.CONTINUE));
-            addTextButton(textGraphics, exitLabel, 10, 13, menuState.equals(MenuState.EXIT));
-            addTextButton(textGraphics, saveAndExitLabel, 10, 22, menuState.equals(MenuState.SAVE_AND_EXIT));
 
-            drawCat(45, 6);
-            drawCat(65, 6);
+            addTextButton(textGraphics, continueLabel, buttonsStartColumn, button1StartRow, menuState.equals(MenuState.CONTINUE));
+            addTextButton(textGraphics, exitLabel, buttonsStartColumn, button2StartRow, menuState.equals(MenuState.EXIT));
+            addTextButton(textGraphics, saveAndExitLabel, buttonsStartColumn, button3StartRow, menuState.equals(MenuState.SAVE_AND_EXIT));
+
+            drawImg(cat1StartColumn, catsStartRow, catHeight, catWidth, cat);
+            drawImg(cat2StartColumn, catsStartRow, catHeight, catWidth, cat);
 
             screen.refresh();
         } catch (Exception e) {

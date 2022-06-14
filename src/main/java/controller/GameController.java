@@ -14,6 +14,7 @@ import view.MainMenuState;
 import view.MenuState;
 import view.ScreenType;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class GameController {
@@ -26,7 +27,8 @@ public class GameController {
     private MainMenuState mainMenuState;
     private MenuState menuState;
     private Field field;
-    private Generation generation;
+
+    private MapGenerator generation;
     private Integer fieldWidth = null;
     private Integer fieldHeight = null;
     private boolean curFillIsWidth = true;
@@ -34,6 +36,8 @@ public class GameController {
     private DrawAskSizeCommand drawAskSizeCommand;
     private DrawMenuCommand drawMenuCommand;
     private DrawMainMenuCommand drawMainMenuCommand;
+    private boolean notExit = true;
+
 
     /**
      * Creates GameController instance
@@ -54,123 +58,21 @@ public class GameController {
      * @throws IOException
      */
     public void selectMode() throws IOException {
-        boolean notExit = true;
         while (notExit) {
             KeyStroke keyStroke = screen.readInput();
             KeyType keyType = keyStroke.getKeyType();
             switch (screenType) {
                 case MAIN_MENU:
-                    mainMenuState = inputHandler.processMainMenuCommand(keyType, mainMenuState);
-                    drawMainMenuCommand = new DrawMainMenuCommand(view, mainMenuState);
-                    drawMainMenuCommand.execute();
-                    // TODO: Move the processing of KeyType.Enter to the InputHandler
-                    if (keyType == KeyType.Enter) {
-                        switch (mainMenuState) {
-                            case START:
-                                screenType = ScreenType.ASK_SIZE;
-                                drawAskSizeCommand = new DrawAskSizeCommand(view, null, null, true, true);
-                                drawAskSizeCommand.execute();
-                                break;
-                            case LOAD_GAME:
-                                round = GameSaverLoader.loadGame();
-                                if (round == null) {
-                                    continue;
-                                }
-                                field = round.getField();
-                                screenType = ScreenType.GAME;
-                                inputHandler.processGameCommand(keyType, round);
-                                drawMapCommand = new DrawMapCommand(view, field);
-                                drawMapCommand.execute();
-                                break;
-                            case EXIT:
-                                view.closeAll();
-                                notExit = false;
-                                break;
-                        }
-                    }
+                    mainMenuProcessing(keyType);
                     break;
                 case ASK_SIZE:
-                    if (keyType == KeyType.Enter) {
-                        if (curFillIsWidth) {
-                            curFillIsWidth = false;
-                        } else {
-                            enterInput();
-                        }
-                    } else if (keyType == KeyType.Character) {
-                        var c = inputHandler.getNumber(keyStroke);
-                        if (c != null) {
-                            if (curFillIsWidth) {
-                                if (fieldWidth == null) {
-                                    fieldWidth = Character.getNumericValue(c);
-                                    drawAskSizeCommand = new DrawAskSizeCommand(view, c, null, true, false);
-                                    drawAskSizeCommand.execute();
-                                } else {
-                                    fieldWidth = fieldWidth * 10 + Character.getNumericValue(c);
-                                    drawAskSizeCommand = new DrawAskSizeCommand(view, c, null, true, false);
-                                    drawAskSizeCommand.execute();
-                                    curFillIsWidth = false;
-                                    continue;
-                                }
-                            } else {
-                                if (fieldHeight == null) {
-                                    fieldHeight = Character.getNumericValue(c);
-                                    drawAskSizeCommand = new DrawAskSizeCommand(view, null, c, true, false);
-                                    drawAskSizeCommand.execute();
-                                } else {
-                                    fieldHeight = fieldHeight * 10 + Character.getNumericValue(c);
-                                    enterInput();
-                                }
-                            }
-                        }
-                    } else if (keyType == KeyType.Backspace) {
-                        generation = new Generation("maps/map.txt");
-                        startGame(generation);
-                        screenType = ScreenType.GAME;
-                        drawMapCommand = new DrawMapCommand(view, field);
-                        drawMapCommand.execute();
-                    }
+                    ask_size(keyType, keyStroke);
                     break;
                 case GAME:
-                    boolean finished = inputHandler.processGameCommand(keyType, round);
-                    if (finished) {
-                        screenType = ScreenType.MAIN_MENU;
-                        drawMainMenuCommand = new DrawMainMenuCommand(view, mainMenuState);
-                        drawMainMenuCommand.execute();
-                    } else {
-                        view.drawMap(field);
-                        if (keyType == KeyType.Escape) {
-                            screenType = ScreenType.MENU;
-                            drawMenuCommand = new DrawMenuCommand(view, menuState);
-                            drawMenuCommand.execute();
-                        }
-                    }
+                    gameProcessing(keyType);
                     break;
                 case MENU:
-                    menuState = inputHandler.processMenuCommand(keyType, menuState);
-                    drawMenuCommand = new DrawMenuCommand(view, menuState);
-                    drawMenuCommand.execute();
-                    // TODO: Move the processing of KeyType.Enter to the InputHandler
-                    if (keyType == KeyType.Enter) {
-                        switch (menuState) {
-                            case CONTINUE:
-                                // TODO: continue game
-                                drawMapCommand = new DrawMapCommand(view, field);
-                                drawMapCommand.execute();
-                                screenType = ScreenType.GAME;
-                                break;
-                            case SAVE_AND_EXIT:
-                                GameSaverLoader.saveGame(round);
-                                screenType = ScreenType.MAIN_MENU;
-                                drawMainMenuCommand = new DrawMainMenuCommand(view, mainMenuState);
-                                drawMainMenuCommand.execute();
-                                break;
-                            case EXIT:
-                                screenType = ScreenType.MAIN_MENU;
-                                drawMainMenuCommand = new DrawMainMenuCommand(view, mainMenuState);
-                                drawMainMenuCommand.execute();
-                                break;
-                        }
-                    }
+                    menuProcessing(keyType);
                     break;
             }
         }
@@ -182,7 +84,7 @@ public class GameController {
             drawAskSizeCommand = new DrawAskSizeCommand(view, null, null, false, false);
             drawAskSizeCommand.execute();
         } else {
-            generation = new Generation(fieldWidth, fieldHeight);
+            generation = new MapGenerator(fieldWidth, fieldHeight);
             startGame(generation);
             screenType = ScreenType.GAME;
             drawMapCommand = new DrawMapCommand(view, field);
@@ -196,9 +98,140 @@ public class GameController {
     /**
      * Starting the new game
      */
-    public void startGame(Generation generation) {
-        field = new Field(generation);
-        round = new Round(generation.getPlayer(), generation.getEnemies(), field);
+
+    public void startGame(MapGenerator mapGenerator) {
+        field = new Field(mapGenerator);
+        round = new Round(mapGenerator.getPlayer(), mapGenerator.getEnemies(), field);
+    }
+
+    /**
+     * Process different behaviors of main menu
+     * @param keyType current screen key type
+     */
+    public void mainMenuProcessing(KeyType keyType) throws IOException {
+        mainMenuState = inputHandler.processMainMenuCommand(keyType, mainMenuState);
+        drawMainMenuCommand = new DrawMainMenuCommand(view, mainMenuState);
+        drawMainMenuCommand.execute();
+        // TODO: Move the processing of KeyType.Enter to the InputHandler
+        if (keyType == KeyType.Enter) {
+            switch (mainMenuState) {
+                case START:
+                    screenType = ScreenType.ASK_SIZE;
+                    drawAskSizeCommand = new DrawAskSizeCommand(view, null, null, true, true);
+                    drawAskSizeCommand.execute();
+                    break;
+                case LOAD_GAME:
+                    round = GameSaverLoader.loadGame();
+                    if (round == null) {
+                        break;
+                    }
+                    field = round.getField();
+                    screenType = ScreenType.GAME;
+                    inputHandler.processGameCommand(keyType, round);
+                    drawMapCommand = new DrawMapCommand(view, field);
+                    drawMapCommand.execute();
+                    break;
+                case EXIT:
+                    view.closeAll();
+                    notExit = false;
+                    break;
+            }
+        }
+    }
+
+
+    /**
+     * Process different behaviors of game
+     * @param keyType current screen key type
+     */
+    private void gameProcessing(KeyType keyType) {
+        boolean finished = inputHandler.processGameCommand(keyType, round);
+        if (finished) {
+            screenType = ScreenType.MAIN_MENU;
+            drawMainMenuCommand = new DrawMainMenuCommand(view, mainMenuState);
+            drawMainMenuCommand.execute();
+        } else {
+            view.drawMap(field);
+            if (keyType == KeyType.Escape) {
+                screenType = ScreenType.MENU;
+                drawMenuCommand = new DrawMenuCommand(view, menuState);
+                drawMenuCommand.execute();
+            }
+        }
+    }
+
+
+    /**
+     * Process different behaviors of menu
+     * @param keyType current screen key type
+     */
+    private void menuProcessing(KeyType keyType) throws FileNotFoundException {
+        menuState = inputHandler.processMenuCommand(keyType, menuState);
+        drawMenuCommand = new DrawMenuCommand(view, menuState);
+        drawMenuCommand.execute();
+        // TODO: Move the processing of KeyType.Enter to the InputHandler
+        if (keyType == KeyType.Enter) {
+            switch (menuState) {
+                case CONTINUE:
+                    // TODO: continue game
+                    drawMapCommand = new DrawMapCommand(view, field);
+                    drawMapCommand.execute();
+                    screenType = ScreenType.GAME;
+                    break;
+                case SAVE_AND_EXIT:
+                    GameSaverLoader.saveGame(round);
+                    screenType = ScreenType.MAIN_MENU;
+                    drawMainMenuCommand = new DrawMainMenuCommand(view, mainMenuState);
+                    drawMainMenuCommand.execute();
+                    break;
+                case EXIT:
+                    screenType = ScreenType.MAIN_MENU;
+                    drawMainMenuCommand = new DrawMainMenuCommand(view, mainMenuState);
+                    drawMainMenuCommand.execute();
+                    break;
+            }
+        }
+    }
+
+    private void ask_size(KeyType keyType, KeyStroke keyStroke) {
+        if (keyType == KeyType.Enter) {
+            if (curFillIsWidth) {
+                curFillIsWidth = false;
+            } else {
+                enterInput();
+            }
+        } else if (keyType == KeyType.Character) {
+            var c = inputHandler.getNumber(keyStroke);
+            if (c != null) {
+                if (curFillIsWidth) {
+                    if (fieldWidth == null) {
+                        fieldWidth = Character.getNumericValue(c);
+                        drawAskSizeCommand = new DrawAskSizeCommand(view, c, null, true, false);
+                        drawAskSizeCommand.execute();
+                    } else {
+                        fieldWidth = fieldWidth * 10 + Character.getNumericValue(c);
+                        drawAskSizeCommand = new DrawAskSizeCommand(view, c, null, true, false);
+                        drawAskSizeCommand.execute();
+                        curFillIsWidth = false;
+                    }
+                } else {
+                    if (fieldHeight == null) {
+                        fieldHeight = Character.getNumericValue(c);
+                        drawAskSizeCommand = new DrawAskSizeCommand(view, null, c, true, false);
+                        drawAskSizeCommand.execute();
+                    } else {
+                        fieldHeight = fieldHeight * 10 + Character.getNumericValue(c);
+                        enterInput();
+                    }
+                }
+            }
+        } else if (keyType == KeyType.Backspace) {
+            generation = new MapGenerator("maps/map.txt");
+            startGame(generation);
+            screenType = ScreenType.GAME;
+            drawMapCommand = new DrawMapCommand(view, field);
+            drawMapCommand.execute();
+        }
     }
 
 }

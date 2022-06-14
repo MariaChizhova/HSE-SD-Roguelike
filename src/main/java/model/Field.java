@@ -2,9 +2,8 @@ package model;
 
 import java.io.Serializable;
 import java.util.List;
-
-import controller.Generation;
 import model.enemy.Enemy;
+import controller.MapGenerator;
 
 
 /**
@@ -21,24 +20,36 @@ public class Field implements Serializable {
     public Field(int width, int height) {
         this.width = width;
         this.height = height;
-        field = new Cell[width][height];
+        createField();
     }
 
+    private void createField() {
+        field = new Cell[width][height];
+    }
 
     /**
      * Creating Field instance
-     * @param generation - field generation
+     * @param mapGenerator - field generation
      */
-    public Field(Generation generation) {
-        this.width = generation.getWidth();
-        this.height = generation.getHeight();
-        field = new Cell[width][height];
-        fillField(generation.getGeneration());
+    public Field(MapGenerator mapGenerator) {
+        this.width = mapGenerator.getWidth();
+        this.height = mapGenerator.getHeight();
+        createField();
+        fillField(mapGenerator.getGeneration());
     }
 
-    private void fillField(List<GenerationResult> fieldGeneration) {
-        for (GenerationResult r : fieldGeneration) {
-            field[r.getX()][r.getY()] = r.getCell();
+    /**
+     * Updating generation of field
+     * @param mapGenerator - field generation
+     */
+    public void updateGeneration(MapGenerator mapGenerator) {
+        createField();
+        fillField(mapGenerator.getGeneration());
+    }
+
+    private void fillField(List<GeneratedMap> fieldGeneration) {
+        for (GeneratedMap r : fieldGeneration) {
+            field[r.x][r.y] = r.cell;
         }
     }
 
@@ -51,34 +62,54 @@ public class Field implements Serializable {
     }
 
     /**
+     * @param x - x on the field
+     * @param y - y on the field
+     * @return the cell of the field
+     */
+    public Cell getCell(int x, int y) {
+        return field[x][y];
+    }
+
+    /**
      * Checks whether the position does not go beyond the boundaries of the field
      * @param position on the field
      * @return whether the position is valid
      */
-    public boolean isValidPosition(Position position) {
+    public boolean isInsideBounds(Position position) {
         return position.getX() < width && position.getX() >= 0 && position.getY() < height && position.getY() >= 0;
+    }
+
+    /**
+     * Checks whether the position does not go beyond the boundaries of the field
+     * @param x - x on the field
+     * @param y - y on the field
+     * @return whether the position is valid
+     */
+    public boolean isInsideBounds(int x, int y) {
+        return x < width && x >= 0 && y < height && y >= 0;
     }
 
     /**
      * Creates an empty cell in the player's old place
      * The player is moved to a new cell
-     * @param position - the player's old place
+     * @param newPlayerPosition - the player's new place
      * @param player - its player
      */
-    public void movePlayer(Position position, Player player) {
+    public void movePlayer(Position newPlayerPosition, Player player) {
         field[player.getPosition().getX()][player.getPosition().getY()] = new EmptyCell();
-        field[position.getX()][position.getY()] = player;
+        field[newPlayerPosition.getX()][newPlayerPosition.getY()] = player;
+        player.move(newPlayerPosition);
     }
 
     /**
      * Creates an empty cell in the enemy's old place
      * The enemy is moved to a new cell
-     * @param position - the enemy's old place
+     * @param newEnemyPosition - the enemy's new place
      * @param enemy - its enemy
      */
-    public void moveEnemy(Position position, Enemy enemy) {
+    public void moveEnemy(Position newEnemyPosition, Enemy enemy) {
         field[enemy.getPosition().getX()][enemy.getPosition().getY()] = new EmptyCell();
-        field[position.getX()][position.getY()] = enemy;
+        field[newEnemyPosition.getX()][newEnemyPosition.getY()] = enemy;
     }
 
     /**
@@ -99,7 +130,6 @@ public class Field implements Serializable {
     }
 
     /**
-<<<<<<< HEAD
      * Getting width of map
      *
      * @return width

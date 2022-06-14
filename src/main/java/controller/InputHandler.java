@@ -9,6 +9,27 @@ import view.MenuState;
 public class InputHandler {
 
     /**
+     * Gives next ordinal number
+     * @param value current ordinal number of state
+     * @param mod total number of elements in enum with states
+     * @return
+     */
+
+    private Integer next(Integer value, Integer mod) {
+        return (value + 1 + mod) % mod;
+    }
+
+    /**
+     * Gives previous ordinal number
+     * @param value current ordinal number of state
+     * @param mod total number of elements in enum with states
+     * @return
+     */
+    private Integer prev(Integer value, Integer mod) {
+        return (value - 1 + mod) % mod;
+    }
+
+    /**
      * Processing main menu commands
      * @param command Input command
      */
@@ -16,10 +37,10 @@ public class InputHandler {
         MainMenuState nextMainMenuState;
         switch (command) {
             case ArrowUp:
-                nextMainMenuState = MainMenuState.values()[(mainMenuState.ordinal() - 1 + 3) % 3];
+                nextMainMenuState =  MainMenuState.values()[prev(mainMenuState.ordinal(), MainMenuState.values().length)];
                 break;
             case ArrowDown:
-                nextMainMenuState = MainMenuState.values()[(mainMenuState.ordinal() + 1 + 3) % 3];
+                nextMainMenuState = MainMenuState.values()[next(mainMenuState.ordinal(), MainMenuState.values().length)];
                 break;
             // case Enter:
             default:
@@ -36,10 +57,10 @@ public class InputHandler {
         MenuState nextMenuState;
         switch (command) {
             case ArrowUp:
-                nextMenuState = MenuState.values()[(menuState.ordinal() - 1 + 3) % 3];
+                nextMenuState = MenuState.values()[prev(menuState.ordinal(), MenuState.values().length)];
                 break;
             case ArrowDown:
-                nextMenuState = MenuState.values()[(menuState.ordinal() + 1 + 3) % 3];
+                nextMenuState = MenuState.values()[next(menuState.ordinal(), MenuState.values().length)];
                 break;
             //  case Enter:
             default:
