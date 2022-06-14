@@ -3,7 +3,8 @@ package model.enemy;
 import model.Cell;
 import model.Character;
 import model.Position;
-import model.strategies.CowardStrategy;
+import model.state.OkStateEnenmy;
+import model.state.StateEnemy;
 import model.strategies.StrategyEnemy;
 
 import java.io.Serializable;
@@ -21,9 +22,9 @@ public class Enemy implements Character, Cell, Serializable {
     private int experience;
     private int visibility;
     private Position position;
-    private StrategyEnemy currentStrategy;
     private final StrategyEnemy strategy;
     private final String name;
+    private StateEnemy state;
 
     private Position playerLastPos;
 
@@ -41,9 +42,16 @@ public class Enemy implements Character, Cell, Serializable {
         this.visibility = 5;
         this.position = position;
         this.strategy = strategy;
-        this.currentStrategy = strategy;
         this.name = name;
         this.playerLastPos = null;
+        this.state = new OkStateEnenmy();
+    }
+
+    /**
+     * Set state
+     */
+    public void setState(StateEnemy state) {
+        this.state = state;
     }
 
     /**
@@ -60,7 +68,7 @@ public class Enemy implements Character, Cell, Serializable {
     public void increaseHealth() {
         health = Math.min(health + 2, maxHealth);
         if (health > healthLevel) {
-            currentStrategy = strategy;
+            state.changeState(this);
         }
     }
 
@@ -120,7 +128,7 @@ public class Enemy implements Character, Cell, Serializable {
     public void beAttacked(Character character) {
         health -= character.getDamage() * (1 - (0.06 * armor) / (1 + 0.06 * armor));
         if (health <= healthLevel) {
-            currentStrategy = new CowardStrategy();
+            state.changeState(this);
         }
     }
 
@@ -139,7 +147,7 @@ public class Enemy implements Character, Cell, Serializable {
      * @return enemy strategy
      */
     public StrategyEnemy getStrategy() {
-        return currentStrategy;
+        return state.getStrategy(strategy);
     }
 
     /**
