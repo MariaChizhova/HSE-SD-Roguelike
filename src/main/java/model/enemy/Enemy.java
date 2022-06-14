@@ -8,6 +8,7 @@ import model.state.StateEnemy;
 import model.strategies.StrategyEnemy;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Represents enemy who is a character and who stands on some square of the field
@@ -141,6 +142,15 @@ public class Enemy implements Character, Cell, Serializable {
     public Position move(Position position) {
         this.position = position;
         return position;
+    }
+
+    /**
+     * Returns new enemy's positions depending on the strategy
+     * @param playerPos - player's positions
+     * @param emptyPositions - empty positions
+     */
+    public Position getNewPosition(Position playerPos, ArrayList<Position>  emptyPositions) {
+        return getStrategy().nextMove(playerPos, position, visibility, emptyPositions);
     }
 
     /**
