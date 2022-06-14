@@ -6,32 +6,32 @@ package model;
 public interface Character {
 
     /**
-     * @return character's health
+     * Returns character's health
      */
     public int getHealth();
 
     /**
-     * @return character's experience
+     * Returns character's experience
      */
     public int getExperience();
 
     /**
-     * @return character's damage
+     * Returns character's damage
      */
     public int getDamage();
 
     /**
-     * @return character's armor
+     * Returns character's armor
      */
     public int getArmor();
 
     /**
-     * @return whether the character has died
+     * Returns whether the character has died
      */
     public Boolean isDead();
 
     /**
-     * @return character's position
+     * Returns character's position
      */
     public Position getPosition();
 
@@ -50,7 +50,7 @@ public interface Character {
     /**
      * The character's position changes
      * @param position depending on the type of character
-     * @return new position
+     * Returns new position
      */
     public Position move(Position position);
 

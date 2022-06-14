@@ -11,7 +11,7 @@ public class GameSaverLoader {
      * Saving game to the file
      * @param round The round to save
      */
-    public static void saveGame(Round round) throws FileNotFoundException {
+    public static void saveGame(Round round) {
         try(FileOutputStream fileOutputStream = new FileOutputStream(filename);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
             objectOutputStream.writeObject(round);

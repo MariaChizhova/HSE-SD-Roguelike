@@ -126,7 +126,6 @@ public class Player implements Character, Cell, Serializable {
 
     /**
      * Add an artifact
-     * @param artifact
      */
     public void addArtifact(Artifact artifact) {
         inventory.addArtifact(artifact);

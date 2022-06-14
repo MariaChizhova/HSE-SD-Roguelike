@@ -54,6 +54,7 @@ public class Field implements Serializable {
     }
 
     /**
+     * Get cell by position
      * @param position on the field
      * @return the cell of the field
      */
@@ -62,6 +63,7 @@ public class Field implements Serializable {
     }
 
     /**
+     * Get cell by x and y
      * @param x - x on the field
      * @param y - y on the field
      * @return the cell of the field
@@ -131,7 +133,6 @@ public class Field implements Serializable {
 
     /**
      * Getting width of map
-     *
      * @return width
      */
     public int getWidth() {
@@ -140,7 +141,6 @@ public class Field implements Serializable {
 
     /**
      * Getting width of map
-     *
      * @return width
      */
     public int getHeight() {

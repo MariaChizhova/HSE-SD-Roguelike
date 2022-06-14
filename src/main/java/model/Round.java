@@ -19,7 +19,7 @@ public class Round implements Serializable {
     private final Player player;
     private ArrayList<Enemy> enemies;
     private final Field field;
-    private final static int p = 4;
+    private final static int probabilityOfCloning = 4;
 
     /**
      * Creating Round instance
@@ -135,7 +135,7 @@ public class Round implements Serializable {
 
                     if (Objects.equals(enemy.getName(), "clone")) {
                         Random rand = new Random();
-                        if (rand.nextInt(p) == 0) {
+                        if (rand.nextInt(probabilityOfCloning) == 0) {
                             ArrayList<Position> positions = getEmptyPositions(newPosition);
                             if (positions.size() != 0) {
                                 Position positionEnemy = positions.get(0);
