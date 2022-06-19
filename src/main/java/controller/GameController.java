@@ -17,6 +17,13 @@ import view.ScreenType;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+/**
+ * Represents GameController that responsible for choosing the mode of the game such as:
+ * mode in the main menu (start, load game, exit),
+ * entering sizes of the screen,
+ * mode in the menu (continue, save and exit, exit)
+ * game
+ */
 public class GameController {
 
     private ConsoleDrawer view;
@@ -38,6 +45,14 @@ public class GameController {
     private DrawMainMenuCommand drawMainMenuCommand;
     private boolean notExit = true;
 
+    private final int minFieldHeight = 10;
+
+    private final int maxFieldHeight = 20;
+
+    private final int minFieldWidth = 10;
+
+    private final int maxFieldWidth = 23;
+
 
     /**
      * Creates GameController instance
@@ -53,7 +68,7 @@ public class GameController {
     }
 
     /**
-     * Select screen type
+     * Select screen type (MAIN_MENU, ASK_SIZE, GAME, MENU) depending on the screenType variable
      *
      * @throws IOException
      */
@@ -79,8 +94,8 @@ public class GameController {
     }
 
     private void enterInput() {
-        if (fieldHeight >= 20 || fieldHeight <= 10
-                || fieldWidth >= 23 || fieldWidth <= 10) {
+        if (fieldHeight >= maxFieldHeight || fieldHeight <= minFieldHeight
+                || fieldWidth >= maxFieldWidth || fieldWidth <= minFieldWidth) {
             drawAskSizeCommand = new DrawAskSizeCommand(view, null, null, false, false);
             drawAskSizeCommand.execute();
         } else {
@@ -106,6 +121,7 @@ public class GameController {
 
     /**
      * Process different behaviors of main menu
+     *
      * @param keyType current screen key type
      */
     public void mainMenuProcessing(KeyType keyType) throws IOException {
@@ -142,6 +158,7 @@ public class GameController {
 
     /**
      * Process different behaviors of game
+     *
      * @param keyType current screen key type
      */
     private void gameProcessing(KeyType keyType) {
@@ -163,6 +180,7 @@ public class GameController {
 
     /**
      * Process different behaviors of menu
+     *
      * @param keyType current screen key type
      */
     private void menuProcessing(KeyType keyType) throws FileNotFoundException {

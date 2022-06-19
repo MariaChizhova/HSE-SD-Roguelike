@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Represents searching enemy strategy
+ */
 public class SearchingStrategy implements StrategyEnemy, Serializable {
 
     /**

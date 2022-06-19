@@ -8,6 +8,9 @@ import com.googlecode.lanterna.screen.Screen;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents class that responsible for drawing artifacts
+ */
 public class ArtifactDrawer {
     private record ArtifactChar(char elem, TextColor color, int col_pos, int row_pos) {
     }

@@ -5,6 +5,9 @@ import java.util.List;
 
 import model.Position;
 
+/**
+ * Represents aggressive enemy strategy
+ */
 public class AggressiveStrategy implements StrategyEnemy, Serializable {
 
     /**

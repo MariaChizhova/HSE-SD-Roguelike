@@ -4,13 +4,16 @@ import model.enemy.Enemy;
 import model.strategies.CowardStrategy;
 import model.strategies.StrategyEnemy;
 
+/**
+ * Represents panic state of enemy
+ */
 public class PanicStateEnemy implements StateEnemy{
     /**
      * Change to a different state
      */
     @Override
     public void changeState(Enemy enemy) {
-        enemy.setState(new OkStateEnenmy());
+        enemy.setState(new OkStateEnemy());
     }
 
     /**

@@ -3,7 +3,10 @@ package model.state;
 import model.enemy.Enemy;
 import model.strategies.StrategyEnemy;
 
-public class OkStateEnenmy implements StateEnemy{
+/**
+ * Represents good state of enemy
+ */
+public class OkStateEnemy implements StateEnemy{
     /**
      * Change to a different state
      */

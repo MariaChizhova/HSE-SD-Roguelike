@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Represents inventory
+ */
 public class Inventory {
     public final static int INVENTORY_SIZE = 6;
     private final Map<ArtifactName, Artifact> artifacts;

@@ -72,6 +72,10 @@ public class MapGenerator {
         generatePlayer();
     }
 
+    /**
+     * Responsible for map generation from the file
+     * @param fileName name of the file
+     */
     public MapGenerator(String fileName) {
         List<List<String>> fieldText = new ArrayList<>();
         try {
@@ -89,11 +93,6 @@ public class MapGenerator {
         this.width = fieldText.get(0).size();
         this.height = fieldText.size();
         isFilled = new Boolean[width][height];
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                isFilled[x][y] = false;
-            }
-        }
 
         Random rand = new Random();
         for (int y = 0; y < height; y++) {

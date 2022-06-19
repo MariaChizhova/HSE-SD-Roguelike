@@ -26,9 +26,9 @@ import java.util.List;
  */
 public class ConsoleDrawer {
 
-    DefaultTerminalFactory defaultTerminalFactory = new DefaultTerminalFactory();
-    Terminal terminal = null;
-    Screen screen = null;
+    private DefaultTerminalFactory defaultTerminalFactory = new DefaultTerminalFactory();
+    private Terminal terminal = null;
+    private Screen screen = null;
 
     private String height = "";
     private String width = "";
@@ -568,7 +568,7 @@ public class ConsoleDrawer {
                 }
             }
 
-            String enterLabel = "Enter the field size (10 <= width <= 20, 10 <= height <= 23)";
+            String enterLabel = "Enter the field size (10 <= width <= 23, 10 <= height <= 20)";
             String spaceLabel = "Press BACKSPACE to load game from file";
             String widthLabel = "width:";
             String heightLabel = "height:";

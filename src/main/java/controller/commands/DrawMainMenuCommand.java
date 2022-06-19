@@ -13,7 +13,7 @@ public class DrawMainMenuCommand extends Command {
      * Creates DrawMainMenuCommand with given arguments
      */
     public DrawMainMenuCommand(ConsoleDrawer view, MainMenuState mainMenuState) {
-        this.view = view;
+        setView(view);
         this.mainMenuState = mainMenuState;
     }
 
@@ -22,6 +22,6 @@ public class DrawMainMenuCommand extends Command {
      */
     @Override
     public void execute() {
-        view.drawMainMenu(mainMenuState);
+        getView().drawMainMenu(mainMenuState);
     }
 }

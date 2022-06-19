@@ -8,13 +8,13 @@ import view.ConsoleDrawer;
  */
 public class DrawMapCommand extends Command {
 
-    protected Field field;
+    private Field field;
 
     /**
      * Creates DrawMapCommand with given arguments
      */
     public DrawMapCommand(ConsoleDrawer view, Field field) {
-        this.view = view;
+        setView(view);
         this.field = field;
     }
 
@@ -23,6 +23,6 @@ public class DrawMapCommand extends Command {
      */
     @Override
     public void execute() {
-        view.drawMap(field);
+        getView().drawMap(field);
     }
 }

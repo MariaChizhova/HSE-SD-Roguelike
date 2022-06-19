@@ -3,7 +3,7 @@ package model.enemy;
 import model.Cell;
 import model.Character;
 import model.Position;
-import model.state.OkStateEnenmy;
+import model.state.OkStateEnemy;
 import model.state.StateEnemy;
 import model.strategies.StrategyEnemy;
 
@@ -45,7 +45,7 @@ public class Enemy implements Character, Cell, Serializable {
         this.strategy = strategy;
         this.name = name;
         this.playerLastPos = null;
-        this.state = new OkStateEnenmy();
+        this.state = new OkStateEnemy();
     }
 
     /**

@@ -4,6 +4,9 @@ import model.Round;
 
 import java.io.*;
 
+/**
+ * Responsible for saving and loading game
+ */
 public class GameSaverLoader {
 
     private final static String filename = "saved_game.bin";

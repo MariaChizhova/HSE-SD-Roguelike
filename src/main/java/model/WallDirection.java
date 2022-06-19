@@ -2,6 +2,9 @@ package model;
 
 import java.util.Random;
 
+/**
+ * Represents directions of Wall
+ */
 public enum WallDirection {
     RIGHT,
     LEFT,

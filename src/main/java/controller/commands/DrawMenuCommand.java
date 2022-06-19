@@ -14,7 +14,7 @@ public class DrawMenuCommand extends Command {
      * Creates DrawMenuCommand with given arguments
      */
     public DrawMenuCommand(ConsoleDrawer view, MenuState menuState) {
-        this.view = view;
+        setView(view);
         this.menuState = menuState;
     }
 
@@ -23,6 +23,6 @@ public class DrawMenuCommand extends Command {
      */
     @Override
     public void execute() {
-        view.drawMenu(menuState);
+        getView().drawMenu(menuState);
     }
 }

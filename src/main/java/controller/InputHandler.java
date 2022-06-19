@@ -6,6 +6,9 @@ import model.Round;
 import view.MainMenuState;
 import view.MenuState;
 
+/**
+ * Responsible for processing of user input
+ */
 public class InputHandler {
 
     /**

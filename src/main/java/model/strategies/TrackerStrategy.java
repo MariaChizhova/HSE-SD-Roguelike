@@ -5,6 +5,9 @@ import java.util.List;
 
 import model.Position;
 
+/**
+ * Represents tracker enemy strategy
+ */
 public class TrackerStrategy implements StrategyEnemy, Serializable {
 
     /**
