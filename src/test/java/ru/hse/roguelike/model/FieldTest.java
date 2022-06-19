@@ -1,4 +1,4 @@
-package model;
+package ru.hse.roguelike.model;
 
 import ru.hse.roguelike.model.EmptyCell;
 import ru.hse.roguelike.model.Field;

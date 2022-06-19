@@ -1,4 +1,4 @@
-package contoller;
+package ru.hse.roguelike.controller;
 
 import ru.hse.roguelike.controller.MapGenerator;
 import ru.hse.roguelike.model.Field;

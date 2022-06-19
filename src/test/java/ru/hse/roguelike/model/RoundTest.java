@@ -1,4 +1,4 @@
-package model;
+package ru.hse.roguelike.model;
 
 import ru.hse.roguelike.controller.MapGenerator;
 import org.junit.jupiter.api.Assertions;
