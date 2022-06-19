@@ -4,10 +4,12 @@ import ru.hse.roguelike.model.enemy.Enemy;
 import ru.hse.roguelike.model.strategies.CowardStrategy;
 import ru.hse.roguelike.model.strategies.StrategyEnemy;
 
+import java.io.Serializable;
+
 /**
  * Represents panic state of enemy
  */
-public class PanicStateEnemy implements StateEnemy{
+public class PanicStateEnemy implements StateEnemy, Serializable {
     /**
      * Change to a different state
      */

@@ -1,5 +1,6 @@
 package ru.hse.roguelike.model.inventory;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.Map;
 /**
  * Represents inventory
  */
-public class Inventory {
+public class Inventory implements Serializable {
     public final static int INVENTORY_SIZE = 6;
     private final Map<ArtifactName, Artifact> artifacts;
     private final List<ArtifactName> boxes;

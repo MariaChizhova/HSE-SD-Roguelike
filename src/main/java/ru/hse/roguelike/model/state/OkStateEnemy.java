@@ -3,10 +3,12 @@ package ru.hse.roguelike.model.state;
 import ru.hse.roguelike.model.enemy.Enemy;
 import ru.hse.roguelike.model.strategies.StrategyEnemy;
 
+import java.io.Serializable;
+
 /**
  * Represents good state of enemy
  */
-public class OkStateEnemy implements StateEnemy{
+public class OkStateEnemy implements StateEnemy, Serializable {
     /**
      * Change to a different state
      */
