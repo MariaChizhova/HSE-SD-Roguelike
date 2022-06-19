@@ -1,7 +1,7 @@
 package contoller;
 
-import controller.MapGenerator;
-import model.Field;
+import ru.hse.roguelike.controller.MapGenerator;
+import ru.hse.roguelike.model.Field;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

@@ -119,7 +119,7 @@
 
 ![](https://github.com/MariaChizhova/HSE-SD-Roguelike/blob/task-2-impl/img/Logic.png)
 
-### Main
+### ru.hse.roguelike.Main
 Данный класс отвечает за запуск логики всего процесса. Запускает GameController.
 
 ### GameController

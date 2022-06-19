@@ -1,6 +1,7 @@
 package model;
 
-import model.strategies.SimpleStrategy;
+import ru.hse.roguelike.model.Position;
+import ru.hse.roguelike.model.strategies.SimpleStrategy;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

@@ -1,8 +1,9 @@
 package model;
 
-import controller.MapGenerator;
+import ru.hse.roguelike.controller.MapGenerator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import ru.hse.roguelike.model.*;
 
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;

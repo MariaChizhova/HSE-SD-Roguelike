@@ -1,7 +1,11 @@
 package model;
 
-import model.enemy.Enemy;
-import model.strategies.CowardStrategy;
+import ru.hse.roguelike.model.EmptyCell;
+import ru.hse.roguelike.model.Field;
+import ru.hse.roguelike.model.Player;
+import ru.hse.roguelike.model.Position;
+import ru.hse.roguelike.model.enemy.Enemy;
+import ru.hse.roguelike.model.strategies.CowardStrategy;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 

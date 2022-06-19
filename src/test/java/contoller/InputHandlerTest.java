@@ -1,17 +1,14 @@
 package contoller;
 
-import java.awt.Menu;
-
-import controller.InputHandler;
-import controller.MapGenerator;
-import model.EmptyCell;
-import model.Field;
-import model.Position;
-import model.Round;
-import model.Wall;
+import ru.hse.roguelike.controller.InputHandler;
+import ru.hse.roguelike.controller.MapGenerator;
+import ru.hse.roguelike.model.EmptyCell;
+import ru.hse.roguelike.model.Field;
+import ru.hse.roguelike.model.Position;
+import ru.hse.roguelike.model.Round;
 import org.junit.jupiter.api.Test;
-import view.MainMenuState;
-import view.MenuState;
+import ru.hse.roguelike.view.MainMenuState;
+import ru.hse.roguelike.view.MenuState;
 
 import static com.googlecode.lanterna.input.KeyType.ArrowDown;
 import static com.googlecode.lanterna.input.KeyType.ArrowLeft;

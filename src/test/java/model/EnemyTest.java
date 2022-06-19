@@ -1,8 +1,10 @@
 package model;
 
 
-import model.enemy.Enemy;
-import model.strategies.SimpleStrategy;
+import ru.hse.roguelike.model.Player;
+import ru.hse.roguelike.model.Position;
+import ru.hse.roguelike.model.enemy.Enemy;
+import ru.hse.roguelike.model.strategies.SimpleStrategy;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 
