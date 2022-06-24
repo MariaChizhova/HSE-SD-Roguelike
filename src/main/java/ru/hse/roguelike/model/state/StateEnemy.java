@@ -1,5 +1,6 @@
 package ru.hse.roguelike.model.state;
 
+import ru.hse.roguelike.model.decorator.StrategyDecorator;
 import ru.hse.roguelike.model.enemy.Enemy;
 import ru.hse.roguelike.model.strategies.StrategyEnemy;
 
@@ -13,9 +14,9 @@ public interface StateEnemy {
     void changeState(Enemy enemy);
 
     /**
-     * Get enemy's strategy depending on the state
-     * @param strategy - default enemy's strategy
-     * @return current enemy's strategy
+     * Get enemy's strategy in decorator depending on the state
+     * @param decorator - default enemy's decorator
+     * @return current enemy's decorator
      */
-    StrategyEnemy getStrategy(StrategyEnemy strategy);
+    StrategyDecorator getStrategy(StrategyDecorator decorator);
 }

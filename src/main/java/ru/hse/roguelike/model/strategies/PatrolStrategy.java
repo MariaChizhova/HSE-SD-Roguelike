@@ -29,7 +29,7 @@ public class PatrolStrategy implements StrategyEnemy, Serializable  {
      */
     @Override
     public Position nextMove(Position playerPosition, Position enemyPosition, int visibility, List<Position> emptyPositions) {
-        if (isPlayerVisible(playerPosition, enemyPosition, visibility)) {
+        if (isPlayerInvisible(playerPosition, enemyPosition, visibility)) {
             return enemyPosition;
         }
         if (emptyPositions.size() == 0) {

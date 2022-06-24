@@ -1,5 +1,7 @@
 package ru.hse.roguelike.model.state;
 
+import ru.hse.roguelike.model.decorator.ConfuseStrategyDecorator;
+import ru.hse.roguelike.model.decorator.StrategyDecorator;
 import ru.hse.roguelike.model.enemy.Enemy;
 import ru.hse.roguelike.model.strategies.CowardStrategy;
 import ru.hse.roguelike.model.strategies.StrategyEnemy;
@@ -19,12 +21,12 @@ public class PanicStateEnemy implements StateEnemy, Serializable {
     }
 
     /**
-     * Returns coward strategy
-     * @param strategy - default enemy's strategy
-     * @return current enemy's strategy
+     * Returns coward strategy in decorator
+     * @param decorator - default enemy's decorator
+     * @return current enemy's decorator
      */
     @Override
-    public StrategyEnemy getStrategy(StrategyEnemy strategy) {
-        return new CowardStrategy();
+    public StrategyDecorator getStrategy(StrategyDecorator decorator) {
+        return new ConfuseStrategyDecorator(new CowardStrategy(), 0);
     }
 }

@@ -1,11 +1,11 @@
-package view;
+package ru.hse.roguelike.view;
 
 import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.screen.Screen;
-import model.Player;
-import model.inventory.ArtifactName;
-import model.inventory.Inventory;
+import ru.hse.roguelike.model.Player;
+import ru.hse.roguelike.model.inventory.ArtifactName;
+import ru.hse.roguelike.model.inventory.Inventory;
 
 import java.util.ArrayList;
 import java.util.List;

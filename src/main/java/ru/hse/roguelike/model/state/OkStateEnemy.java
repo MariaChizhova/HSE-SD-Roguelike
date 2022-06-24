@@ -1,5 +1,6 @@
 package ru.hse.roguelike.model.state;
 
+import ru.hse.roguelike.model.decorator.StrategyDecorator;
 import ru.hse.roguelike.model.enemy.Enemy;
 import ru.hse.roguelike.model.strategies.StrategyEnemy;
 
@@ -18,12 +19,12 @@ public class OkStateEnemy implements StateEnemy, Serializable {
     }
 
     /**
-     * Returns default enemy's strategy
-     * @param strategy - default enemy's strategy
+     * Returns default enemy's decorator
+     * @param decorator - default enemy's strategy
      * @return current enemy's strategy
      */
     @Override
-    public StrategyEnemy getStrategy(StrategyEnemy strategy) {
-        return strategy;
+    public StrategyDecorator getStrategy(StrategyDecorator decorator) {
+        return decorator;
     }
 }

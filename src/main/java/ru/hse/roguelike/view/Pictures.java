@@ -1,4 +1,4 @@
-package view;
+package ru.hse.roguelike.view;
 
 public enum Pictures {
     CAT("AAAWAAAAAAAAAWAAA" +

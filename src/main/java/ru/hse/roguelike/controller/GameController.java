@@ -3,10 +3,7 @@ package ru.hse.roguelike.controller;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
-import ru.hse.roguelike.controller.commands.DrawAskSizeCommand;
-import ru.hse.roguelike.controller.commands.DrawMainMenuCommand;
-import ru.hse.roguelike.controller.commands.DrawMapCommand;
-import ru.hse.roguelike.controller.commands.DrawMenuCommand;
+import ru.hse.roguelike.controller.commands.*;
 import ru.hse.roguelike.model.Field;
 import ru.hse.roguelike.model.Round;
 import ru.hse.roguelike.view.ConsoleDrawer;
@@ -43,6 +40,7 @@ public class GameController {
     private DrawAskSizeCommand drawAskSizeCommand;
     private DrawMenuCommand drawMenuCommand;
     private DrawMainMenuCommand drawMainMenuCommand;
+    private DrawExceptionCommand drawExceptionCommand;
     private boolean notExit = true;
 
     private final int minFieldHeight = 10;
@@ -197,10 +195,17 @@ public class GameController {
                     screenType = ScreenType.GAME;
                     break;
                 case SAVE_AND_EXIT:
-                    GameSaverLoader.saveGame(round);
-                    screenType = ScreenType.MAIN_MENU;
-                    drawMainMenuCommand = new DrawMainMenuCommand(view, mainMenuState);
-                    drawMainMenuCommand.execute();
+                    try {
+                        GameSaverLoader.saveGame(round);
+                        screenType = ScreenType.MAIN_MENU;
+                        drawMainMenuCommand = new DrawMainMenuCommand(view, mainMenuState);
+                        drawMainMenuCommand.execute();
+                    } catch (Exception ex) {
+                        screenType = ScreenType.MAIN_MENU;
+                        drawMainMenuCommand = new DrawMainMenuCommand(view, mainMenuState);
+                        drawMainMenuCommand.execute();
+                        drawExceptionCommand = new DrawExceptionCommand(view, ex.getMessage());
+                    }
                     break;
                 case EXIT:
                     screenType = ScreenType.MAIN_MENU;

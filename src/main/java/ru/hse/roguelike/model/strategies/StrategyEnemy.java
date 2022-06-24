@@ -32,7 +32,7 @@ public interface StrategyEnemy {
      * @param visibility - visibility radius
      * @return whether the player is visible
      */
-    public default boolean isPlayerVisible(Position playerPosition, Position enemyPosition, int visibility) {
+    public default boolean isPlayerInvisible(Position playerPosition, Position enemyPosition, int visibility) {
         return Math.abs(playerPosition.getX() - enemyPosition.getX()) >= visibility
                 || Math.abs(playerPosition.getY() - enemyPosition.getY()) >= visibility;
     }
@@ -105,23 +105,13 @@ public interface StrategyEnemy {
     }
 
     /**
-     * Gets one of enemies strategies
-     * @return new strategy
+     * @return all possible strategies
      */
-    public static StrategyEnemy getRandomStrategy() {
-        Random rand = new Random();
-        switch(rand.nextInt(StrategyType.values().length)) {
-            case 0:
-                return new SimpleStrategy();
-            case 1:
-                return new AggressiveStrategy();
-            case 2:
-                return new CowardStrategy();
-            case 3:
-                return new PatrolStrategy();
-            case 4:
-                return new SearchingStrategy();
-        }
-        return new SimpleStrategy();
+    public static List<StrategyEnemy> getAllStrategies() {
+        return List.of(new SimpleStrategy(),
+                new AggressiveStrategy(), new CowardStrategy(),
+                new PatrolStrategy(),
+                new SearchingStrategy(),
+                new SimpleStrategy());
     }
 }
