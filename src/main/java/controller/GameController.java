@@ -193,7 +193,7 @@ public class GameController {
      * Process different behaviors of menu
      * @param keyType current screen key type
      */
-    private void menuProcessing(KeyType keyType) throws FileNotFoundException {
+    private void menuProcessing(KeyType keyType) {
         menuState = inputHandler.processMenuCommand(keyType, menuState);
         view.drawMenu(menuState);
         // TODO: Move the processing of KeyType.Enter to the InputHandler

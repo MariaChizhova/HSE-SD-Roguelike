@@ -51,6 +51,8 @@ public class MapGenerator {
     private int width;
     private int height;
 
+    private Random rand;
+
     /**
      * Creating MapGenerator instance
      */
@@ -63,6 +65,7 @@ public class MapGenerator {
                 isFilled[x][y] = false;
             }
         }
+        rand = new Random();
         generateWalls();
         generateEnemies();
         generateArtifacts();
@@ -93,7 +96,6 @@ public class MapGenerator {
             }
         }
 
-        Random rand = new Random();
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 String ch = fieldText.get(y).get(x);
@@ -167,7 +169,6 @@ public class MapGenerator {
 
     private void generateEnemiesDependsOnStrategy(int maxNum, StrategyType strategyType) {
         int cntOfEnemies = 0;
-        Random rand = new Random();
 
         int numOfEnemies = rand.nextInt(maxNum) + 1;
         while (cntOfEnemies != numOfEnemies) {
@@ -205,7 +206,6 @@ public class MapGenerator {
 
     private void generateArtifacts() {
         int cntOfArtifacts = 0;
-        Random rand = new Random();
         var artifactList = getArtifactList();
 
         int numOfArtifacts = rand.nextInt(MAX_NUM_OF_ARTIFACTS) + 1;
@@ -223,7 +223,6 @@ public class MapGenerator {
 
     private void generateFood() {
         int cntOfFood = 0;
-        Random rand = new Random();
 
         int numOfFood = rand.nextInt(MAX_NUM_OF_FOOD) + 1;
         while (cntOfFood != numOfFood) {
@@ -239,7 +238,6 @@ public class MapGenerator {
     }
 
     private void generatePlayer() {
-        Random rand = new Random();
         while (true) {
             int playerXPos = rand.nextInt(width);
             int playerYPos = rand.nextInt(height);

@@ -3,6 +3,7 @@ package model.enemy;
 import model.Cell;
 import model.Character;
 import model.Position;
+import model.decorator.ConfuseStrategyDecorator;
 import model.strategies.StrategyEnemy;
 
 import java.io.Serializable;
@@ -20,7 +21,7 @@ public class Enemy implements Character, Cell, Serializable {
     private int experience;
     private int visibility;
     private Position position;
-    private StrategyEnemy strategy;
+    private ConfuseStrategyDecorator strategy;
     private String name;
 
     /**
@@ -34,9 +35,9 @@ public class Enemy implements Character, Cell, Serializable {
         this.damage = damage;
         this.armor = armor;
         this.experience = experience;
-        this.visibility = 5;
+        this.visibility = DEFAULT;
         this.position = position;
-        this.strategy = strategy;
+        this.strategy = new ConfuseStrategyDecorator(strategy, DEFAULT);
         this.name = name;
     }
 
@@ -120,7 +121,7 @@ public class Enemy implements Character, Cell, Serializable {
      *
      * @return enemy strategy
      */
-    public StrategyEnemy getStrategy() {
+    public ConfuseStrategyDecorator getStrategy() {
         return strategy;
     }
 

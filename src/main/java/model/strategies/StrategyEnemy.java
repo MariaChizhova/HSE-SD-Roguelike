@@ -1,5 +1,6 @@
 package model.strategies;
 
+import java.util.List;
 import java.util.Random;
 import model.Position;
 
@@ -33,16 +34,8 @@ public interface StrategyEnemy {
      * Gets one of enemies strategies
      * @return new strategy
      */
-    public static StrategyEnemy getRandomStrategy() {
-        Random rand = new Random();
-        switch(rand.nextInt(3)) {
-            case 0:
-                return new SimpleStrategy();
-            case 1:
-                return new AggressiveStrategy();
-            case 2:
-                return new CowardStrategy();
-        }
-        return new SimpleStrategy();
+    public static List<StrategyEnemy> getAllStrategies() {
+        return List.of(new SimpleStrategy(),
+                new AggressiveStrategy(), new CowardStrategy());
     }
 }
