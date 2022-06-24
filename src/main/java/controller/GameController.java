@@ -174,21 +174,6 @@ public class GameController {
         }
     }
 
-
-    /**
-     * Process different behaviors of game
-     * @param keyType current screen key type
-     */
-    private void gameProcessing(KeyType keyType) {
-        inputHandler.processGameCommand(keyType, round);
-        view.drawMap(field);
-        if (keyType == KeyType.Escape) {
-            screenType = ScreenType.MENU;
-            view.drawMenu(menuState);
-        }
-    }
-
-
     /**
      * Process different behaviors of menu
      * @param keyType current screen key type

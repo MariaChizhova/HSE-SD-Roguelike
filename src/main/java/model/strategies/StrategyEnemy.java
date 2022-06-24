@@ -25,7 +25,7 @@ public interface StrategyEnemy {
      * @param visibility - visibility radius
      * @return whether the player is visible
      */
-    public default boolean isPlayerVisible(Position playerPosition, Position enemyPosition, int visibility) {
+    public default boolean isPlayerUnvisible(Position playerPosition, Position enemyPosition, int visibility) {
         return Math.abs(playerPosition.getX() - enemyPosition.getX()) >= visibility
                 || Math.abs(playerPosition.getY() - enemyPosition.getY()) >= visibility;
     }
