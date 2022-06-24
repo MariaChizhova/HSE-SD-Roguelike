@@ -190,9 +190,15 @@ public class GameController {
                     screenType = ScreenType.GAME;
                     break;
                 case SAVE_AND_EXIT:
-                    GameSaverLoader.saveGame(round);
-                    screenType = ScreenType.MAIN_MENU;
-                    view.drawMainMenu(mainMenuState);
+                    try {
+                        GameSaverLoader.saveGame(round);
+                        screenType = ScreenType.MAIN_MENU;
+                        view.drawMainMenu(mainMenuState);
+                    } catch (Exception ex) {
+                        screenType = ScreenType.MAIN_MENU;
+                        view.drawMainMenu(mainMenuState);
+                        view.drawException(ex.getMessage());
+                    }
                     break;
                 case EXIT:
                     screenType = ScreenType.MAIN_MENU;

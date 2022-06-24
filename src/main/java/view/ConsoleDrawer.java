@@ -313,4 +313,13 @@ public class ConsoleDrawer {
         }
     }
 
+    /**
+     * Print exception message on screen
+     */
+    public void drawException(String exceptionMsg) {
+        int exceptionCol = 20;
+        int exceptionRow = 28;
+        ElementDrawer.drawLabel(screen, exceptionMsg, exceptionCol, exceptionRow, TextColor.ANSI.RED);
+    }
+
 }

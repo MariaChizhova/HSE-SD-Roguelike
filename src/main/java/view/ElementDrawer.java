@@ -192,7 +192,10 @@ public class ElementDrawer {
         }
     }
 
-    private static void drawInfoLabel(Screen screen, String label, int start_column, int start_row, TextColor color) {
+    /**
+     * Draw text on the screen
+     */
+    public static void drawLabel(Screen screen, String label, int start_column, int start_row, TextColor color) {
         TextGraphics expGraphics = screen.newTextGraphics();
         expGraphics.setForegroundColor(color);
         expGraphics.putString(start_column, start_row, label);
@@ -206,7 +209,7 @@ public class ElementDrawer {
         TextCharacter heart = new TextCharacter(
                 Symbols.HEART, TextColor.ANSI.RED, TextColor.ANSI.DEFAULT);
 
-        drawInfoLabel(screen, livesLabel, start_column, start_row, TextColor.ANSI.RED);
+        drawLabel(screen, livesLabel, start_column, start_row, TextColor.ANSI.RED);
 
         for (int i = 0; i < (defaultHp / hpPerHeart); i++) {
             if ((i + 1) * hpPerHeart <= health) {
@@ -216,11 +219,11 @@ public class ElementDrawer {
 
         int expIndent = 23;
 
-        drawInfoLabel(screen, expLabel, start_column + expIndent + livesLabel.length(), start_row, TextColor.ANSI.GREEN);
+        drawLabel(screen, expLabel, start_column + expIndent + livesLabel.length(), start_row, TextColor.ANSI.GREEN);
 
         String levelLabel = "LVL: " + level;
         int lvlIndent = 26;
 
-        drawInfoLabel(screen, levelLabel, start_column + lvlIndent + livesLabel.length() + expLabel.length(), start_row, TextColor.ANSI.WHITE);
+        drawLabel(screen, levelLabel, start_column + lvlIndent + livesLabel.length() + expLabel.length(), start_row, TextColor.ANSI.WHITE);
     }
 }
