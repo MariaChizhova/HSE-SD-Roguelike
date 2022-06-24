@@ -15,7 +15,7 @@ public class AggressiveStrategy implements StrategyEnemy, Serializable {
      */
     @Override
     public Position nextMove(Position playerPosition, Position enemyPosition, int visibility) {
-        if (isPlayerVisible(playerPosition, enemyPosition, visibility)) {
+        if (isPlayerUnvisible(playerPosition, enemyPosition, visibility)) {
             return enemyPosition;
         }
         int diffX = playerPosition.getX() - enemyPosition.getX();

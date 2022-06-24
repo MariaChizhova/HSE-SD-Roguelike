@@ -1,5 +1,6 @@
 package model;
 
+import model.enemy.Enemy;
 import model.strategies.SimpleStrategy;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
@@ -37,7 +38,7 @@ public class FieldTest {
     public void testMoveEnemy() {
         var oldPosition = new Position(10, 10);
         var newPosition = new Position(12, 12);
-        var enemy = new Enemy(oldPosition, new SimpleStrategy());
+        var enemy = new Enemy(oldPosition, new SimpleStrategy(), "default", 5, 5, 5);
         var field = new Field(19, 13);
         field.moveEnemy(newPosition, enemy);
         Assertions.assertTrue(field.getCell(oldPosition) instanceof EmptyCell);

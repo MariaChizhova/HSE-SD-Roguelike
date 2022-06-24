@@ -8,19 +8,16 @@ import java.util.List;
 import java.util.Random;
 
 import model.Cell;
-import model.Enemy;
+import model.enemy.*;
 import model.GeneratedMap;
 import model.Player;
 import model.Position;
-import model.strategies.AggressiveStrategy;
-import model.strategies.CowardStrategy;
-import model.strategies.SimpleStrategy;
+import model.strategies.*;
 import model.Wall;
 import model.inventory.Artifact;
 import model.inventory.ArtifactWithPosition;
 import model.inventory.Food;
 import model.inventory.FoodWithPosition;
-import model.strategies.StrategyEnemy;
 
 import static model.WallDirection.getRandomDirection;
 import static model.inventory.Artifact.getArtifactList;
@@ -29,6 +26,13 @@ import static model.inventory.Artifact.getArtifactList;
  * Random generation of the map
  */
 public class MapGenerator {
+
+    private EnemyFactory enemyFactory = new DefaultEnemyFactory();
+
+    public void setEnemyFactory(EnemyFactory enemyFactory) {
+        this.enemyFactory = enemyFactory;
+    }
+
     private final int MAX_NUM_OF_AGGRESSIVE_ENEMIES = 3;
     private final int MAX_NUM_OF_PASSIVE_ENEMIES = 5;
     private final int MAX_NUM_OF_COWARD_ENEMIES = 4;
@@ -47,6 +51,8 @@ public class MapGenerator {
     private int width;
     private int height;
 
+    private Random rand;
+
     /**
      * Creating MapGenerator instance
      */
@@ -59,6 +65,7 @@ public class MapGenerator {
                 isFilled[x][y] = false;
             }
         }
+        rand = new Random();
         generateWalls();
         generateEnemies();
         generateArtifacts();
@@ -89,7 +96,6 @@ public class MapGenerator {
             }
         }
 
-        Random rand = new Random();
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 String ch = fieldText.get(y).get(x);
@@ -98,15 +104,15 @@ public class MapGenerator {
                     var foodWithPos = new FoodWithPosition(new Position(x, y), food);
                     setCellValue(x, y, foodWithPos);
                 } else if (ch.equals("E")) {
-                    var enemy = new Enemy(new Position(x, y), new AggressiveStrategy());
+                    var enemy = enemyFactory.createAggressiveEnemy(new Position(x, y));
                     enemies.add(enemy);
                     setCellValue(x, y, enemy);
                 } else if (ch.equals("S")) {
-                    var enemy = new Enemy(new Position(x, y), new SimpleStrategy());
+                    var enemy = enemyFactory.createPassiveEnemy(new Position(x, y));
                     enemies.add(enemy);
                     setCellValue(x, y, enemy);
                 } else if (ch.equals("C")) {
-                    var enemy = new Enemy(new Position(x, y), new CowardStrategy());
+                    var enemy = enemyFactory.createCowardEnemy(new Position(x, y));
                     enemies.add(enemy);
                     setCellValue(x, y, enemy);
                 } else if (ch.equals("A")) {
@@ -156,21 +162,41 @@ public class MapGenerator {
     }
 
     private void generateEnemies() {
-        generateEnemiesDependsOnStrategy(MAX_NUM_OF_PASSIVE_ENEMIES, new SimpleStrategy());
-        generateEnemiesDependsOnStrategy(MAX_NUM_OF_AGGRESSIVE_ENEMIES, new AggressiveStrategy());
-        generateEnemiesDependsOnStrategy(MAX_NUM_OF_COWARD_ENEMIES, new CowardStrategy());
+        generateEnemiesDependsOnStrategy(MAX_NUM_OF_PASSIVE_ENEMIES, StrategyType.SIMPLE);
+        generateEnemiesDependsOnStrategy(MAX_NUM_OF_AGGRESSIVE_ENEMIES, StrategyType.AGGRESSIVE);
+        generateEnemiesDependsOnStrategy(MAX_NUM_OF_COWARD_ENEMIES, StrategyType.COWARD);
     }
 
-    private void generateEnemiesDependsOnStrategy(int maxNum, StrategyEnemy strategyEnemy) {
+    private void generateEnemiesDependsOnStrategy(int maxNum, StrategyType strategyType) {
         int cntOfEnemies = 0;
-        Random rand = new Random();
 
         int numOfEnemies = rand.nextInt(maxNum) + 1;
         while (cntOfEnemies != numOfEnemies) {
             int enemyXPos = rand.nextInt(width);
             int enemyYPos = rand.nextInt(height);
             if (!isFilled[enemyXPos][enemyYPos]) {
-                var enemy = new Enemy(new Position(enemyXPos, enemyYPos), strategyEnemy);
+                Enemy enemy;
+                int factory = rand.nextInt(4);
+                if (factory == 0) {
+                    setEnemyFactory(new DefaultEnemyFactory());
+                } else if(factory == 1)  {
+                    setEnemyFactory(new CloneEnemyFactory());
+                } else if(factory == 2) {
+                    setEnemyFactory(new SkeletonEnemyFactory());
+                } else {
+                    setEnemyFactory(new DragonEnemyFactory());
+                }
+                switch (strategyType) {
+                    case AGGRESSIVE:
+                        enemy = enemyFactory.createAggressiveEnemy(new Position(enemyXPos, enemyYPos));
+                        break;
+                    case COWARD:
+                        enemy = enemyFactory.createCowardEnemy(new Position(enemyXPos, enemyYPos));
+                        break;
+                    default:
+                        enemy = enemyFactory.createPassiveEnemy(new Position(enemyXPos, enemyYPos));
+                        break;
+                }
                 enemies.add(enemy);
                 setCellValue(enemyXPos, enemyYPos, enemy);
                 cntOfEnemies++;
@@ -180,7 +206,6 @@ public class MapGenerator {
 
     private void generateArtifacts() {
         int cntOfArtifacts = 0;
-        Random rand = new Random();
         var artifactList = getArtifactList();
 
         int numOfArtifacts = rand.nextInt(MAX_NUM_OF_ARTIFACTS) + 1;
@@ -198,7 +223,6 @@ public class MapGenerator {
 
     private void generateFood() {
         int cntOfFood = 0;
-        Random rand = new Random();
 
         int numOfFood = rand.nextInt(MAX_NUM_OF_FOOD) + 1;
         while (cntOfFood != numOfFood) {
@@ -214,7 +238,6 @@ public class MapGenerator {
     }
 
     private void generatePlayer() {
-        Random rand = new Random();
         while (true) {
             int playerXPos = rand.nextInt(width);
             int playerYPos = rand.nextInt(height);

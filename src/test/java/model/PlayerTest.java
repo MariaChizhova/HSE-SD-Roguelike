@@ -1,5 +1,6 @@
 package model;
 
+import model.enemy.Enemy;
 import model.inventory.Artifact;
 import model.inventory.ArtifactName;
 import model.strategies.SimpleStrategy;
@@ -68,7 +69,7 @@ public class PlayerTest {
     @Test
     public void attackEnemyTest() {
         var player = new Player(new Position(5, 5));
-        var enemy = new Enemy(new Position(5, 4), new SimpleStrategy());
+        var enemy = new Enemy(new Position(5, 4), new SimpleStrategy(), "default", 5, 5, 5);
         player.attack(enemy);
         Assertions.assertEquals(92, enemy.getHealth());
     }
@@ -77,7 +78,7 @@ public class PlayerTest {
     public void killEnemyTest() {
         var player = new Player(new Position(5, 5));
         var oldExp = player.getExperience();
-        var enemy = new Enemy(new Position(5, 4), new SimpleStrategy());
+        var enemy = new Enemy(new Position(5, 4), new SimpleStrategy(), "default", 5, 5, 5);
         for(int i = 0; i < 12; i++) {
             player.attack(enemy);
             Assertions.assertFalse(enemy.isDead());
@@ -94,7 +95,7 @@ public class PlayerTest {
         var oldDamage = player.getDamage();
         var oldArmor = player.getArmor();
         for(int i = 0; i < 4; i++) {
-            var enemy = new Enemy(new Position(5, 4), new SimpleStrategy());
+            var enemy = new Enemy(new Position(5, 4), new SimpleStrategy(), "default", 5, 5, 5);
             for (int j = 0; j < 13; j++) {
                 player.attack(enemy);
             }

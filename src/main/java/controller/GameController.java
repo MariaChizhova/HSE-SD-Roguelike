@@ -1,5 +1,6 @@
 package controller;
 
+import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
 import model.Field;
@@ -24,6 +25,9 @@ public class GameController {
     private Field field;
     private MapGenerator mapGenerator;
     private boolean notExit = true;
+    private Integer fieldWidth = null;
+    private Integer fieldHeight = null;
+    private boolean curFillIsWidth = true;
 
     /**
      * Creates GameController instance
@@ -45,10 +49,14 @@ public class GameController {
      */
     public void selectMode() throws IOException {
         while (notExit) {
-            KeyType keyType = screen.readInput().getKeyType();
+            KeyStroke keyStroke = screen.readInput();
+            KeyType keyType = keyStroke.getKeyType();
             switch (screenType) {
                 case MAIN_MENU:
                     mainMenuProcessing(keyType);
+                    break;
+                case ASK_SIZE:
+                    inputSizeProcessing(keyStroke, keyType);
                     break;
                 case GAME:
                     boolean finished = inputHandler.processGameCommand(keyType, round);
@@ -73,8 +81,8 @@ public class GameController {
     /**
      * Starting the new game
      */
-    public void gamePreparing() {
-        mapGenerator = new MapGenerator(19, 13);
+    public void gamePreparing(int fieldWidth, int fieldHeight) {
+        mapGenerator = new MapGenerator(fieldWidth, fieldHeight);
         field = new Field(mapGenerator);
         round = new Round(mapGenerator.getPlayer(), mapGenerator.getEnemies(), field);
     }
@@ -90,10 +98,8 @@ public class GameController {
         if (keyType == KeyType.Enter) {
             switch (mainMenuState) {
                 case START:
-                    gamePreparing();
-                    screenType = ScreenType.GAME;
-                    inputHandler.processGameCommand(keyType, round);
-                    view.drawMap(field);
+                    screenType = ScreenType.ASK_SIZE;
+                    view.drawAskSize(null, null, true, true);
                     break;
                 case LOAD_GAME:
                     round = GameSaverLoader.loadGame();
@@ -110,26 +116,69 @@ public class GameController {
         }
     }
 
-
-    /**
-     * Process different behaviors of game
-     * @param keyType current screen key type
-     */
-    private void gameProcessing(KeyType keyType) {
-        inputHandler.processGameCommand(keyType, round);
-        view.drawMap(field);
-        if (keyType == KeyType.Escape) {
-            screenType = ScreenType.MENU;
-            view.drawMenu(menuState);
+    private void checkFieldCorrectness(KeyType keyType) {
+        if (fieldHeight > 20 || fieldHeight < 10
+                || fieldWidth > 23 || fieldWidth < 10) {
+            view.drawAskSize(null, null, false, false);
+        } else {
+            startGame(keyType);
         }
+        fieldHeight = null;
+        fieldWidth = null;
+        curFillIsWidth = true;
     }
 
+    private void startGame(KeyType keyType) {
+        gamePreparing(fieldWidth, fieldHeight);
+        screenType = ScreenType.GAME;
+        inputHandler.processGameCommand(keyType, round);
+        view.drawMap(field);
+    }
+
+    private void inputSizeProcessing(KeyStroke keyStroke, KeyType keyType) throws IOException {
+        switch (keyType) {
+            case Enter:
+                if (curFillIsWidth) {
+                    curFillIsWidth = false;
+                } else {
+                    checkFieldCorrectness(keyType);
+                }
+                break;
+            case Character:
+                var c = inputHandler.getNumber(keyStroke);
+                if (c != null) {
+                    if (curFillIsWidth) {
+                        if (fieldWidth == null) {
+                            fieldWidth = Character.getNumericValue(c);
+                            view.drawAskSize(c, null, true, false);
+                        } else {
+                            fieldWidth = fieldWidth * 10 + Character.getNumericValue(c);
+                            view.drawAskSize(c, null, true, false);
+                            curFillIsWidth = false;
+                            break;
+                        }
+                    } else {
+                        if (fieldHeight == null) {
+                            fieldHeight = Character.getNumericValue(c);
+                            view.drawAskSize(null, c, true, false);
+                        } else {
+                            fieldHeight = fieldHeight * 10 + Character.getNumericValue(c);
+                            checkFieldCorrectness(keyType);
+                        }
+                    }
+                }
+                break;
+            case Backspace:
+                startGame(keyType);
+                break;
+        }
+    }
 
     /**
      * Process different behaviors of menu
      * @param keyType current screen key type
      */
-    private void menuProcessing(KeyType keyType) throws FileNotFoundException {
+    private void menuProcessing(KeyType keyType) {
         menuState = inputHandler.processMenuCommand(keyType, menuState);
         view.drawMenu(menuState);
         // TODO: Move the processing of KeyType.Enter to the InputHandler
@@ -141,9 +190,15 @@ public class GameController {
                     screenType = ScreenType.GAME;
                     break;
                 case SAVE_AND_EXIT:
-                    GameSaverLoader.saveGame(round);
-                    screenType = ScreenType.MAIN_MENU;
-                    view.drawMainMenu(mainMenuState);
+                    try {
+                        GameSaverLoader.saveGame(round);
+                        screenType = ScreenType.MAIN_MENU;
+                        view.drawMainMenu(mainMenuState);
+                    } catch (Exception ex) {
+                        screenType = ScreenType.MAIN_MENU;
+                        view.drawMainMenu(mainMenuState);
+                        view.drawException(ex.getMessage());
+                    }
                     break;
                 case EXIT:
                     screenType = ScreenType.MAIN_MENU;

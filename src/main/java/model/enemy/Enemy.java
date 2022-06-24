@@ -1,5 +1,9 @@
-package model;
+package model.enemy;
 
+import model.Cell;
+import model.Character;
+import model.Position;
+import model.decorator.ConfuseStrategyDecorator;
 import model.strategies.StrategyEnemy;
 
 import java.io.Serializable;
@@ -17,21 +21,24 @@ public class Enemy implements Character, Cell, Serializable {
     private int experience;
     private int visibility;
     private Position position;
-    private StrategyEnemy strategy;
+    private ConfuseStrategyDecorator strategy;
+    private String name;
 
     /**
      * Enemy Constructor
      * @param position the enemy is in
      * @param strategy that the enemy will follow
+     * @param name enemy name
      */
-    public Enemy(Position position, StrategyEnemy strategy) {
+    public Enemy(Position position, StrategyEnemy strategy, String name, int damage, int armor, int experience) {
         this.health = maxHealth;
-        this.damage = DEFAULT;
-        this.armor = DEFAULT;
-        this.experience = 5;
-        this.visibility = 5;
+        this.damage = damage;
+        this.armor = armor;
+        this.experience = experience;
+        this.visibility = DEFAULT;
         this.position = position;
-        this.strategy = strategy;
+        this.strategy = new ConfuseStrategyDecorator(strategy, DEFAULT);
+        this.name = name;
     }
 
     /**
@@ -110,11 +117,34 @@ public class Enemy implements Character, Cell, Serializable {
         return position;
     }
 
-    public StrategyEnemy getStrategy() {
+    /**
+     *
+     * @return enemy strategy
+     */
+    public ConfuseStrategyDecorator getStrategy() {
         return strategy;
     }
 
+    /**
+     * @return visibility
+     */
     public int getVisibility() {
         return visibility;
+    }
+
+    /**
+     * @param position for clone of enemy
+     * @param enemy - its enemy
+     * @return clone of enemy
+     */
+    public Enemy clone(Position position, Enemy enemy) {
+        return new Enemy(position, strategy, enemy.getName(), enemy.getDamage(), enemy.getArmor(), enemy.getExperience());
+    }
+
+    /**
+     * @return enemy name
+     */
+    public String getName() {
+        return name;
     }
 }

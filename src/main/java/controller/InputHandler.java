@@ -1,5 +1,6 @@
 package controller;
 
+import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import model.Round;
 import view.MainMenuState;
@@ -115,5 +116,18 @@ public class InputHandler {
                 break;
         }
         return finished;
+    }
+
+    /**
+     * Processing game commands
+     * @param keyStroke Input character
+     * @return the digit
+     */
+    public Character getNumber(KeyStroke keyStroke) {
+        Character character = keyStroke.getCharacter();
+        if (Character.isDigit(character)) {
+            return character;
+        }
+        return null;
     }
 }

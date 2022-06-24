@@ -1,7 +1,7 @@
 package model.strategies;
 
+import java.util.List;
 import java.util.Random;
-
 import model.Position;
 
 /**
@@ -25,7 +25,7 @@ public interface StrategyEnemy {
      * @param visibility - visibility radius
      * @return whether the player is visible
      */
-    public default boolean isPlayerVisible(Position playerPosition, Position enemyPosition, int visibility) {
+    public default boolean isPlayerUnvisible(Position playerPosition, Position enemyPosition, int visibility) {
         return Math.abs(playerPosition.getX() - enemyPosition.getX()) >= visibility
                 || Math.abs(playerPosition.getY() - enemyPosition.getY()) >= visibility;
     }
@@ -34,16 +34,8 @@ public interface StrategyEnemy {
      * Gets one of enemies strategies
      * @return new strategy
      */
-    public static StrategyEnemy getRandomStrategy() {
-        Random rand = new Random();
-        switch(rand.nextInt(3)) {
-            case 0:
-                return new SimpleStrategy();
-            case 1:
-                return new AggressiveStrategy();
-            case 2:
-                return new CowardStrategy();
-        }
-        return new SimpleStrategy();
+    public static List<StrategyEnemy> getAllStrategies() {
+        return List.of(new SimpleStrategy(),
+                new AggressiveStrategy(), new CowardStrategy());
     }
 }
