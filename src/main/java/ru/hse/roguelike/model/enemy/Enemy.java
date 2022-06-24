@@ -3,6 +3,8 @@ package ru.hse.roguelike.model.enemy;
 import ru.hse.roguelike.model.Cell;
 import ru.hse.roguelike.model.Character;
 import ru.hse.roguelike.model.Position;
+import ru.hse.roguelike.model.decorator.ConfuseStrategyDecorator;
+import ru.hse.roguelike.model.decorator.StrategyDecorator;
 import ru.hse.roguelike.model.state.OkStateEnemy;
 import ru.hse.roguelike.model.state.StateEnemy;
 import ru.hse.roguelike.model.strategies.StrategyEnemy;
@@ -23,11 +25,16 @@ public class Enemy implements Character, Cell, Serializable {
     private int experience;
     private int visibility;
     private Position position;
-    private final StrategyEnemy strategy;
+    private StrategyDecorator strategy;
     private final String name;
     private StateEnemy state;
 
     private Position playerLastPos;
+
+    private final int VISIBILITY = 5;
+
+    private final int CONFUSION = 10;
+
 
     /**
      * Enemy Constructor
@@ -40,9 +47,9 @@ public class Enemy implements Character, Cell, Serializable {
         this.damage = damage;
         this.armor = armor;
         this.experience = experience;
-        this.visibility = 5;
+        this.visibility = VISIBILITY;
         this.position = position;
-        this.strategy = strategy;
+        this.strategy = new ConfuseStrategyDecorator(strategy, CONFUSION);
         this.name = name;
         this.playerLastPos = null;
         this.state = new OkStateEnemy();
@@ -154,9 +161,9 @@ public class Enemy implements Character, Cell, Serializable {
     }
 
     /**
-     * @return enemy strategy
+     * @return enemy decorator
      */
-    public StrategyEnemy getStrategy() {
+    public StrategyDecorator getStrategy() {
         return state.getStrategy(strategy);
     }
 

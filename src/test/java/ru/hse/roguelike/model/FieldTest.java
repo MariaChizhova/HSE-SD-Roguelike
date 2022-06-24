@@ -59,4 +59,11 @@ public class FieldTest {
         field.clearCage(newPosition);
         Assertions.assertTrue(field.getCell(newPosition) instanceof EmptyCell);
     }
+
+    @Test
+    public void testIsClearCage() {
+        var field = new Field(19, 13);
+        Assertions.assertFalse(field.isInsideBounds(new Position(100, 100)));
+        Assertions.assertTrue(field.isInsideBounds(new Position(1, 1)));
+    }
 }

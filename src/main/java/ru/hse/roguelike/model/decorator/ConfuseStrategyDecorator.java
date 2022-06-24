@@ -6,12 +6,15 @@ import ru.hse.roguelike.model.strategies.StrategyType;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Confusing decorator of enemy strategy
  */
 public class ConfuseStrategyDecorator extends StrategyDecorator implements Serializable {
     private int confusedNumber;
+    private final List<StrategyEnemy> strategies;
+    private Random rand;
 
     /**
      * Creates ConfusedStrategyDecorator instance
@@ -21,6 +24,8 @@ public class ConfuseStrategyDecorator extends StrategyDecorator implements Seria
     public ConfuseStrategyDecorator(StrategyEnemy decorate, int confusedNumber) {
         super(decorate);
         this.confusedNumber = confusedNumber;
+        this.strategies = StrategyEnemy.getAllStrategies();
+        this.rand = new Random();
     }
 
     /**
@@ -43,7 +48,7 @@ public class ConfuseStrategyDecorator extends StrategyDecorator implements Seria
     public Position nextMove(Position playerPosition, Position enemyPosition, int visibility, List<Position> emptyPositions) {
         if (confusedNumber > 0) {
             --confusedNumber;
-            return StrategyEnemy.getRandomStrategy().nextMove(playerPosition, enemyPosition, visibility, emptyPositions);
+            return strategies.get(rand.nextInt(strategies.size())).nextMove(playerPosition, enemyPosition, visibility, emptyPositions);
         }
         return decorate.nextMove(playerPosition, enemyPosition, visibility, emptyPositions);
     }

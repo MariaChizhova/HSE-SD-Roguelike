@@ -18,6 +18,10 @@ public class Field implements Serializable {
      * Creating Field instance
      */
     public Field(int width, int height) {
+        createField(width, height);
+    }
+
+    private void createField(int width, int height) {
         this.width = width;
         this.height = height;
         createField();
@@ -43,7 +47,9 @@ public class Field implements Serializable {
      * @param mapGenerator - field generation
      */
     public void updateGeneration(MapGenerator mapGenerator) {
-        createField();
+        this.width = mapGenerator.getWidth();
+        this.height = mapGenerator.getHeight();
+        field = new Cell[width][height];
         fillField(mapGenerator.getGeneration());
     }
 

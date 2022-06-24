@@ -33,12 +33,8 @@ public class MapGenerator {
         this.enemyFactory = enemyFactory;
     }
 
-    private final int MAX_NUM_OF_AGGRESSIVE_ENEMIES = 3;
     private final int MAX_NUM_OF_PASSIVE_ENEMIES = 2;
-    private final int MAX_NUM_OF_COWARD_ENEMIES = 3;
-    private final int MAX_NUM_OF_PATROL_ENEMIES = 2;
     private final int MAX_NUM_OF_TRACKER_ENEMIES = 1;
-    private final int MAX_NUM_OF_ENEMIES = 15;
     private final int MAX_NUM_OF_ARTIFACTS = 8;
     private final int MAX_NUM_OF_FOOD = 8;
 
@@ -53,8 +49,10 @@ public class MapGenerator {
     private int width;
     private int height;
 
+    private Random rand;
+
     /**
-     * Creating Generation instance
+     * Creating MapGenerator instance
      */
     public MapGenerator(int width, int height) {
         this.width = width;
@@ -65,6 +63,7 @@ public class MapGenerator {
                 isFilled[x][y] = false;
             }
         }
+        this.rand = new Random();
         generateWalls();
         generateEnemies();
         generateArtifacts();
@@ -94,7 +93,6 @@ public class MapGenerator {
         this.height = fieldText.size();
         isFilled = new Boolean[width][height];
 
-        Random rand = new Random();
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 String ch = fieldText.get(y).get(x);
@@ -170,7 +168,6 @@ public class MapGenerator {
 
     private void generateEnemiesDependsOnStrategy(int maxNum, StrategyType strategyType) {
         int cntOfEnemies = 0;
-        Random rand = new Random();
         int numOfEnemies = rand.nextInt(maxNum) + 1;
         while (cntOfEnemies != numOfEnemies) {
             int enemyXPos = rand.nextInt(width);
@@ -213,7 +210,6 @@ public class MapGenerator {
 
     private void generateArtifacts() {
         int cntOfArtifacts = 0;
-        Random rand = new Random();
         var artifactList = getArtifactList();
 
         int numOfArtifacts = rand.nextInt(MAX_NUM_OF_ARTIFACTS) + 1;
@@ -231,7 +227,6 @@ public class MapGenerator {
 
     private void generateFood() {
         int cntOfFood = 0;
-        Random rand = new Random();
 
         int numOfFood = rand.nextInt(MAX_NUM_OF_FOOD) + 1;
         while (cntOfFood != numOfFood) {
@@ -247,7 +242,6 @@ public class MapGenerator {
     }
 
     private void generatePlayer() {
-        Random rand = new Random();
         while (true) {
             int playerXPos = rand.nextInt(width);
             int playerYPos = rand.nextInt(height);

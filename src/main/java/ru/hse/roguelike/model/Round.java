@@ -149,7 +149,7 @@ public class Round implements Serializable {
                     enemy.attack((Player) cell);
                     return player.isDead();
                 }
-                if (!enemy.getStrategy().isPlayerVisible(player.getPosition(), newPosition, enemy.getVisibility())) {
+                if (!enemy.getStrategy().isPlayerInvisible(player.getPosition(), newPosition, enemy.getVisibility())) {
                     for (Enemy otherEnemy : enemies) {
                         if (otherEnemy != enemy && otherEnemy.getStrategy().getStrategyType() == StrategyType.TRACKER) {
                             otherEnemy.setPlayerLastPos(player.getPosition());
