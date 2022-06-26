@@ -1,0 +1,42 @@
+package ru.hse.roguelike.model.inventory;
+
+import ru.hse.roguelike.model.Cell;
+import ru.hse.roguelike.model.Position;
+
+import java.io.Serializable;
+
+/**
+ * Represents food itself
+ */
+public class FoodWithPosition implements Cell, Serializable {
+
+    private final Position position;
+    private final Food food;
+
+    /**
+     * Creating FoodWithPosition instance
+     * @param position Its position
+     * @param food Food itself
+     */
+    public FoodWithPosition(Position position, Food food) {
+        this.position = position;
+        this.food = food;
+    }
+
+    /**
+     * Getting food
+     * @return food
+     */
+    public Food getFood() {
+        return food;
+    }
+
+    /**
+     * Getting position of the food
+     * @return position of the food
+     */
+    public Position getPosition() {
+        return position;
+    }
+
+}
