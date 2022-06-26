@@ -1,7 +1,6 @@
 package ru.hse.roguelike.model.strategies;
 
 import java.util.List;
-import java.util.Random;
 
 import ru.hse.roguelike.model.Position;
 

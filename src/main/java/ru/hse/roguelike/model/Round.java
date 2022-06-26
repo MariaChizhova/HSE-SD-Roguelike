@@ -7,6 +7,7 @@ import ru.hse.roguelike.model.strategies.StrategyType;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
@@ -17,7 +18,7 @@ import java.util.Random;
 public class Round implements Serializable {
 
     private final Player player;
-    private ArrayList<Enemy> enemies;
+    private List<Enemy> enemies;
     private final Field field;
     private final static int probabilityOfCloning = 4;
 
@@ -27,7 +28,7 @@ public class Round implements Serializable {
      * @param enemies Its enemies
      * @param field Its filed
      */
-    public Round(Player player, ArrayList<Enemy> enemies, Field field) {
+    public Round(Player player, List<Enemy> enemies, Field field) {
         this.player = player;
         this.enemies = enemies;
         this.field = field;

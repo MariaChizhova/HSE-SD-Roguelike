@@ -1,9 +1,9 @@
 package ru.hse.roguelike.model;
 
-import ru.hse.roguelike.controller.MapGenerator;
+import ru.hse.roguelike.controller.MapGeneration;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import ru.hse.roguelike.model.*;
+import ru.hse.roguelike.controller.RandomMapBuilder;
 
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
@@ -40,9 +40,9 @@ public class RoundTest {
 
     void testMovePlayer(UnaryOperator<Position> positionStep, Consumer<Round> moveAction) {
         var field = new Field(19, 13);
-        MapGenerator mapGenerator = new MapGenerator(19, 13);
-        field = new Field(mapGenerator);
-        Round round = new Round(mapGenerator.getPlayer(), mapGenerator.getEnemies(), field);
+        MapGeneration mapGeneration = new RandomMapBuilder(19, 13).build();
+        field = new Field(mapGeneration);
+        Round round = new Round(mapGeneration.getPlayer(), mapGeneration.getEnemies(), field);
         Position currentPosition = round.getPlayer().getPosition();
         Position movePosition = positionStep.apply(currentPosition);
         if (checkPosition(field, movePosition)) {

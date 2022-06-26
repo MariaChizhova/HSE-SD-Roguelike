@@ -26,7 +26,7 @@ public class GameSaverLoader {
      */
     public static Round loadGame() {
         try(FileInputStream fileInputStream = new FileInputStream(filename);
-            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);) {
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
             return (Round) objectInputStream.readObject();
         } catch (Exception ex) {
             ex.printStackTrace();

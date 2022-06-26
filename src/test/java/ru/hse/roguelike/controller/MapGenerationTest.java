@@ -1,6 +1,5 @@
 package ru.hse.roguelike.controller;
 
-import ru.hse.roguelike.controller.MapGenerator;
 import ru.hse.roguelike.model.Field;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -8,8 +7,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class MapGeneratorTest {
-    MapGenerator map = new MapGenerator(19, 13);
+public class MapGenerationTest {
+    MapGeneration map = new RandomMapBuilder(19, 13).build();
 
     @Test
     public void testGetPlayer() {

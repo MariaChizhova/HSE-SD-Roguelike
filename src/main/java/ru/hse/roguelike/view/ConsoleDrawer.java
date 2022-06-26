@@ -14,10 +14,8 @@ import ru.hse.roguelike.model.enemy.CloneEnemyFactory;
 import ru.hse.roguelike.model.enemy.DragonEnemyFactory;
 import ru.hse.roguelike.model.enemy.Enemy;
 import ru.hse.roguelike.model.enemy.SkeletonEnemyFactory;
-import ru.hse.roguelike.model.inventory.ArtifactName;
 import ru.hse.roguelike.model.inventory.ArtifactWithPosition;
 import ru.hse.roguelike.model.inventory.FoodWithPosition;
-import ru.hse.roguelike.model.inventory.Inventory;
 
 import java.io.IOException;
 import java.lang.Character;

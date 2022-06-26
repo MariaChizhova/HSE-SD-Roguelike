@@ -3,7 +3,7 @@ package ru.hse.roguelike.model;
 import java.io.Serializable;
 import java.util.List;
 import ru.hse.roguelike.model.enemy.Enemy;
-import ru.hse.roguelike.controller.MapGenerator;
+import ru.hse.roguelike.controller.MapGeneration;
 
 
 /**
@@ -33,24 +33,24 @@ public class Field implements Serializable {
 
     /**
      * Creating Field instance
-     * @param mapGenerator - field generation
+     * @param mapGeneration - field generation
      */
-    public Field(MapGenerator mapGenerator) {
-        this.width = mapGenerator.getWidth();
-        this.height = mapGenerator.getHeight();
+    public Field(MapGeneration mapGeneration) {
+        this.width = mapGeneration.getWidth();
+        this.height = mapGeneration.getHeight();
         createField();
-        fillField(mapGenerator.getGeneration());
+        fillField(mapGeneration.getGeneration());
     }
 
     /**
      * Updating generation of field
-     * @param mapGenerator - field generation
+     * @param mapGeneration - field generation
      */
-    public void updateGeneration(MapGenerator mapGenerator) {
-        this.width = mapGenerator.getWidth();
-        this.height = mapGenerator.getHeight();
+    public void updateGeneration(MapGeneration mapGeneration) {
+        this.width = mapGeneration.getWidth();
+        this.height = mapGeneration.getHeight();
         field = new Cell[width][height];
-        fillField(mapGenerator.getGeneration());
+        fillField(mapGeneration.getGeneration());
     }
 
     private void fillField(List<GeneratedMap> fieldGeneration) {

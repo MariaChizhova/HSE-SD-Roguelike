@@ -32,7 +32,7 @@ public class GameController {
     private MenuState menuState;
     private Field field;
 
-    private MapGenerator generation;
+    private MapGeneration generation;
     private Integer fieldWidth = null;
     private Integer fieldHeight = null;
     private boolean curFillIsWidth = true;
@@ -97,7 +97,7 @@ public class GameController {
             drawAskSizeCommand = new DrawAskSizeCommand(view, null, null, false, false);
             drawAskSizeCommand.execute();
         } else {
-            generation = new MapGenerator(fieldWidth, fieldHeight);
+            generation = new RandomMapBuilder(fieldWidth, fieldHeight).build();
             startGame(generation);
             screenType = ScreenType.GAME;
             drawMapCommand = new DrawMapCommand(view, field);
@@ -112,9 +112,9 @@ public class GameController {
      * Starting the new game
      */
 
-    public void startGame(MapGenerator mapGenerator) {
-        field = new Field(mapGenerator);
-        round = new Round(mapGenerator.getPlayer(), mapGenerator.getEnemies(), field);
+    public void startGame(MapGeneration mapGeneration) {
+        field = new Field(mapGeneration);
+        round = new Round(mapGeneration.getPlayer(), mapGeneration.getEnemies(), field);
     }
 
     /**
@@ -249,7 +249,7 @@ public class GameController {
                 }
             }
         } else if (keyType == KeyType.Backspace) {
-            generation = new MapGenerator("maps/map.txt");
+            generation = new FileMapBuilder("maps/map.txt").build();
             startGame(generation);
             screenType = ScreenType.GAME;
             drawMapCommand = new DrawMapCommand(view, field);

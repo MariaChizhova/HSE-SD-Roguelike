@@ -1,37 +1,34 @@
 package ru.hse.roguelike.controller;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 import ru.hse.roguelike.model.Cell;
-import ru.hse.roguelike.model.enemy.*;
 import ru.hse.roguelike.model.GeneratedMap;
 import ru.hse.roguelike.model.Player;
 import ru.hse.roguelike.model.Position;
-import ru.hse.roguelike.model.strategies.*;
 import ru.hse.roguelike.model.Wall;
+import ru.hse.roguelike.model.enemy.CloneEnemyFactory;
+import ru.hse.roguelike.model.enemy.DefaultEnemyFactory;
+import ru.hse.roguelike.model.enemy.DragonEnemyFactory;
+import ru.hse.roguelike.model.enemy.Enemy;
+import ru.hse.roguelike.model.enemy.EnemyFactory;
+import ru.hse.roguelike.model.enemy.SkeletonEnemyFactory;
 import ru.hse.roguelike.model.inventory.Artifact;
 import ru.hse.roguelike.model.inventory.ArtifactWithPosition;
 import ru.hse.roguelike.model.inventory.Food;
 import ru.hse.roguelike.model.inventory.FoodWithPosition;
+import ru.hse.roguelike.model.strategies.StrategyType;
 
 import static ru.hse.roguelike.model.WallDirection.getRandomDirection;
 import static ru.hse.roguelike.model.inventory.Artifact.getArtifactList;
 
 /**
- * Random generation of the map
- */
-public class MapGenerator {
-
+ * Random map builder
+ **/
+public class RandomMapBuilder implements MapBuilder {
     private EnemyFactory enemyFactory = new DefaultEnemyFactory();
-
-    public void setEnemyFactory(EnemyFactory enemyFactory) {
-        this.enemyFactory = enemyFactory;
-    }
 
     private final int MAX_NUM_OF_PASSIVE_ENEMIES = 2;
     private final int MAX_NUM_OF_TRACKER_ENEMIES = 1;
@@ -54,7 +51,7 @@ public class MapGenerator {
     /**
      * Creating MapGenerator instance
      */
-    public MapGenerator(int width, int height) {
+    public RandomMapBuilder(int width, int height) {
         this.width = width;
         this.height = height;
         isFilled = new Boolean[width][height];
@@ -64,67 +61,24 @@ public class MapGenerator {
             }
         }
         this.rand = new Random();
+    }
+
+    /**
+     * Builds MapGenerator
+     * @return new mapGenerator
+     **/
+    @Override
+    public MapGeneration build() {
         generateWalls();
         generateEnemies();
         generateArtifacts();
         generateFood();
         generatePlayer();
+        return new MapGeneration(width, height, player, enemies, generation);
     }
 
-    /**
-     * Responsible for map generation from the file
-     * @param fileName name of the file
-     */
-    public MapGenerator(String fileName) {
-        List<List<String>> fieldText = new ArrayList<>();
-        try {
-            BufferedReader in = new BufferedReader(new FileReader(fileName));
-            while (in.ready()) {
-                String line = in.readLine();
-                List<String> characters = Arrays.asList(line.split(""));
-                fieldText.add(characters);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-        this.width = fieldText.get(0).size();
-        this.height = fieldText.size();
-        isFilled = new Boolean[width][height];
-
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                String ch = fieldText.get(y).get(x);
-                if (ch.equals("F")) {
-                    Food food = new Food(rand.nextInt(16) + 5);
-                    var foodWithPos = new FoodWithPosition(new Position(x, y), food);
-                    setCellValue(x, y, foodWithPos);
-                } else if (ch.equals("E")) {
-                    var enemy = enemyFactory.createAggressiveEnemy(new Position(x, y));
-                    enemies.add(enemy);
-                    setCellValue(x, y, enemy);
-                } else if (ch.equals("S")) {
-                    var enemy = enemyFactory.createPassiveEnemy(new Position(x, y));
-                    enemies.add(enemy);
-                    setCellValue(x, y, enemy);
-                } else if (ch.equals("C")) {
-                    var enemy = enemyFactory.createCowardEnemy(new Position(x, y));
-                    enemies.add(enemy);
-                    setCellValue(x, y, enemy);
-                } else if (ch.equals("A")) {
-                    var artifactList = getArtifactList();
-                    Artifact randomArtifact = artifactList.get(rand.nextInt(artifactList.size()));
-                    var artifact = new ArtifactWithPosition(new Position(x, y), randomArtifact);
-                    setCellValue(x, y, artifact);
-                } else if (ch.equals("#")) {
-                    setCellValue(x, y, new Wall());
-                } else if (ch.equals("P")) {
-                    player = new Player(new Position(x, y));
-                    setCellValue(x, y, player);
-                }
-            }
-        }
+    private void setEnemyFactory(EnemyFactory enemyFactory) {
+        this.enemyFactory = enemyFactory;
     }
 
     private void generateWalls() {
@@ -261,51 +215,5 @@ public class MapGenerator {
     private void setCellValue(int x, int y, Cell cell) {
         generation.add(new GeneratedMap(x, y, cell));
         isFilled[x][y] = true;
-    }
-
-
-    /**
-     * Getting player
-     *
-     * @return player
-     */
-    public Player getPlayer() {
-        return player;
-    }
-
-    /**
-     * Getting all enemies on map
-     *
-     * @return enemies
-     */
-    public ArrayList<Enemy> getEnemies() {
-        return enemies;
-    }
-
-    /**
-     * Getting generation of map
-     *
-     * @return generation
-     */
-    public List<GeneratedMap> getGeneration() {
-        return generation;
-    }
-
-    /**
-     * Getting width of map
-     *
-     * @return width
-     */
-    public int getWidth() {
-        return width;
-    }
-
-    /**
-     * Getting width of map
-     *
-     * @return width
-     */
-    public int getHeight() {
-        return height;
     }
 }

@@ -4,7 +4,6 @@ import ru.hse.roguelike.model.decorator.ConfuseStrategyDecorator;
 import ru.hse.roguelike.model.decorator.StrategyDecorator;
 import ru.hse.roguelike.model.enemy.Enemy;
 import ru.hse.roguelike.model.strategies.CowardStrategy;
-import ru.hse.roguelike.model.strategies.StrategyEnemy;
 
 import java.io.Serializable;
 

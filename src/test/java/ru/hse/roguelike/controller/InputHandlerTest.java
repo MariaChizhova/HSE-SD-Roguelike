@@ -1,7 +1,5 @@
 package ru.hse.roguelike.controller;
 
-import ru.hse.roguelike.controller.InputHandler;
-import ru.hse.roguelike.controller.MapGenerator;
 import ru.hse.roguelike.model.EmptyCell;
 import ru.hse.roguelike.model.Field;
 import ru.hse.roguelike.model.Position;
@@ -62,9 +60,9 @@ public class InputHandlerTest {
 
     @Test
     public void testProcessGameCommand() {
-        MapGenerator mapGenerator = new MapGenerator(19, 13);
-        var field = new Field(mapGenerator);
-        Round round = new Round(mapGenerator.getPlayer(), mapGenerator.getEnemies(), field);
+        MapGeneration mapGeneration = new RandomMapBuilder(19, 13).build();
+        var field = new Field(mapGeneration);
+        Round round = new Round(mapGeneration.getPlayer(), mapGeneration.getEnemies(), field);
         Position curPos = round.getPlayer().getPosition();
         if (field.isInsideBounds(curPos.getX(), curPos.getY() + 1)) {
             var cell = field.getCell(curPos.getX(), curPos.getY() + 1);
